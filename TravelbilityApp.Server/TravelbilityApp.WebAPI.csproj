@@ -17,9 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\travelbilityapp.client\travelbilityapp.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ProjectReference Include="..\TravelbilityApp.Core\TravelbilityApp.Core.csproj" />
   </ItemGroup>
 
 </Project>

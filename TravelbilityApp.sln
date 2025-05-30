@@ -5,7 +5,15 @@ VisualStudioVersion = 17.14.36121.58 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "travelbilityapp.client", "travelbilityapp.client\travelbilityapp.client.esproj", "{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Server", "TravelbilityApp.Server\TravelbilityApp.Server.csproj", "{2DA95F0C-91E2-4400-86D0-879B14D24477}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.WebAPI", "TravelbilityApp.Server\TravelbilityApp.WebAPI.csproj", "{2DA95F0C-91E2-4400-86D0-879B14D24477}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{1E1A8754-DAD8-4AF7-833C-ACF979537296}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Infrastructure", "TravelbilityApp.Infrastructure\TravelbilityApp.Infrastructure.csproj", "{AA3D690E-BABC-4EF7-A83C-9C44D29CE195}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Core", "TravelbilityApp.Core\TravelbilityApp.Core.csproj", "{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +31,23 @@ Global
 		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{2DA95F0C-91E2-4400-86D0-879B14D24477} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
+		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
+		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63FB29C8-8221-4AE0-B2F4-1FDCDB7A3A6E}
