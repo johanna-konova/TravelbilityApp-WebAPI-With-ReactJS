@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Constants\" />
     <Folder Include="Contracts\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
