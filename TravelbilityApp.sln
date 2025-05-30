@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "travelbilityapp.client", "travelbilityapp.client\travelbilityapp.client.esproj", "{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Server", "TravelbilityApp.Server\TravelbilityApp.Server.csproj", "{2DA95F0C-91E2-4400-86D0-879B14D24477}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA95F0C-91E2-4400-86D0-879B14D24477}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {63FB29C8-8221-4AE0-B2F4-1FDCDB7A3A6E}
+	EndGlobalSection
+EndGlobal
