@@ -7,6 +7,7 @@
     <SpaRoot>..\travelbilityapp.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:51092</SpaProxyServerUrl>
+    <UserSecretsId>8e4d527f-78d9-4d65-9c31-dde984c517b8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
