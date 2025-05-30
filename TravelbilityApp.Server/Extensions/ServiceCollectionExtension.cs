@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 using System.Text;
 
 using TravelbilityApp.Infrastructure.Data;
 using TravelbilityApp.Infrastructure.Data.Models;
+using TravelbilityApp.WebAPI.Contracts;
+using TravelbilityApp.WebAPI.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -17,6 +20,11 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddSingleton<IConnectionMultiplexer>(sp =>
+                ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"]));
+
+            services.AddScoped<ITokenStore, RedisTokenStore>();
+
             return services;
         }
 
