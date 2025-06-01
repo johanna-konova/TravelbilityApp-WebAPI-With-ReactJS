@@ -1,0 +1,79 @@
+.section-title {
+    display: block;
+    color: #7AB730;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.section-text {
+	font-weight: 600;
+    font-size: calc(1.375rem + 1.25vw);
+	color: black;
+}
+
+.newest {
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    transition: .5s;
+}
+
+.newest:hover {
+    box-shadow: 0 0 30px #CCCCCC;
+}
+
+.newest img {
+    width: 100%;
+    height: 230px;
+}
+
+.newest .name {
+    height: 50px;
+}
+
+.newest .property-info {
+    height: 164px;
+}
+
+.explore-all {
+    width: 100%;
+    text-align: center;
+    font-size: 1.25rem;
+    margin-top: 1rem;
+}
+
+.single-accessibility-container {
+    width: 200px;
+    margin: 10px;
+    background-color: white;
+    text-align: center;
+    padding: 15px 9px 8px;
+    border: 1px solid #d4d4d4;
+    border-radius: 10px;
+    transition: .5s;
+}
+
+.single-accessibility-container:hover {
+    box-shadow: 0 0 30px #CCCCCC;
+}
+
+.single-accessibility-container a:hover {
+    text-decoration: none;
+}
+
+.single-accessibility-container a div:hover {
+    color: #7AB730;
+}
+
+.single-accessibility-container div {
+	min-height: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+    color: #212121;
+}
+
+.single-accessibility-container img {
+    width: 165px;
+    height: 130px;
+}
