@@ -27,5 +27,20 @@ namespace TravelbilityApp.WebAPI.Services
 
         public Task RevokeRefreshTokenAsync(string token)
             => database.KeyDeleteAsync(token);
+
+        public Task StoreAccessTokenAsync(string jti, TimeSpan ttl)
+            => database.StringSetAsync($"access_{jti}", "valid", ttl);
+
+        public async Task<bool> ValidateAccessTokenAsync(string jti)
+        {
+            var entry = await database
+                .StringGetAsync($"access_{jti}")
+                .ConfigureAwait(false);
+
+            return entry.IsNullOrEmpty == false;
+        }
+
+        public Task RevokeAccessTokenAsync(string jti)
+            => database.KeyDeleteAsync($"access_{jti}");
     }
 }

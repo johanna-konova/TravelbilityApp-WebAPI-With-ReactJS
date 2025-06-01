@@ -137,12 +137,22 @@ namespace TravelbilityApp.WebAPI.Controllers
                 await tokenStore.RevokeRefreshTokenAsync(dto.RefreshToken);
             }
 
+            var jti = User.FindFirstValue(JwtRegisteredClaimNames.Jti);
+
+            if (string.IsNullOrEmpty(jti) == false)
+            {
+                await tokenStore.RevokeAccessTokenAsync(jti);
+            }
+
             return NoContent();
         }
 
         private async Task<(string token, DateTime expires, string refreshToken)> GenerateTokensAsync(ApplicationUser user)
         {
-            var token = GenerateJwtToken(user, out DateTime expires);
+            var (token, jti, expires) = GenerateJwtToken(user);
+
+            var ttlAccess = expires - DateTime.UtcNow;
+            await tokenStore.StoreAccessTokenAsync(jti, ttlAccess);
 
             var refreshToken = GenerateRefreshToken();
             var refreshTtlDays = int.Parse(configuration["Jwt:RefreshTokenDurationInDays"] ?? "7");
@@ -152,28 +162,32 @@ namespace TravelbilityApp.WebAPI.Controllers
             return (token, expires, refreshToken);
         }
 
-        private string GenerateJwtToken(ApplicationUser user, out DateTime expires)
+        private (string token, string jti, DateTime expires) GenerateJwtToken(ApplicationUser user)
         {
+            var jti = Guid.NewGuid().ToString();
+
             var authClaims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, jti),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var keyBytes = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
             var creds = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256);
 
-            expires = DateTime.UtcNow.AddMinutes(35);
+            var expires = DateTime.UtcNow.AddMinutes(35);
 
-            var token = new JwtSecurityToken(
+            var tokenDescriptor = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: authClaims,
                 expires: expires,
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+
+            return (token, jti, expires);
         }
 
         private static string GenerateRefreshToken()
