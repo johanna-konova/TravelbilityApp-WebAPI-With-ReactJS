@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36121.58 d17.14
+VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "travelbilityapp.client", "travelbilityapp.client\travelbilityapp.client.esproj", "{82D9D76B-1D68-E344-9BE5-95F0BAD9CA5A}"
 EndProject

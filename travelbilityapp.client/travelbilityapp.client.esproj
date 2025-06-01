@@ -10,5 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="public\" />
+    <Folder Include="src\components\" />
+    <Folder Include="src\hooks\" />
+    <Folder Include="src\contexts\" />
   </ItemGroup>
 </Project>
