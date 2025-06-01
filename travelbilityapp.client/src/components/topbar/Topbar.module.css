@@ -1,0 +1,11 @@
+.logout-btn {
+    background-color: white;
+}
+
+.logout-btn:hover {
+    background-color: #7ab730;
+}
+
+.logout-btn:disabled:hover {
+    background-color: white;
+}
