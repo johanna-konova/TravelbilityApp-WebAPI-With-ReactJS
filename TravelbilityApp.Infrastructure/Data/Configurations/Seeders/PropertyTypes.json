@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Entire homes & apartments"
+  },
+  {
+    "id": 2,
+    "name": "Apartments"
+  },
+  {
+    "id": 3,
+    "name": "Hotels"
+  },
+  {
+    "id": 4,
+    "name": "Guest houses"
+  },
+  {
+    "id": 5,
+    "name": "Villas"
+  }
+]

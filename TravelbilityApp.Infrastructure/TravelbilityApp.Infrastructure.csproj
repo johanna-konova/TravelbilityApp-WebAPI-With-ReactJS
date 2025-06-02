@@ -7,6 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\Configurations\Seeders\Facilities.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\Configurations\Seeders\Facilities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Configurations\Seeders\PropertyTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Data\Constants\" />

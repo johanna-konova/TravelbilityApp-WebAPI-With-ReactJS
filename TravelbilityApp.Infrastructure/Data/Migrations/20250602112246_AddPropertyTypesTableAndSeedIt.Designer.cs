@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelbilityApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TravelbilityApp.Infrastructure.Data;
 namespace TravelbilityApp.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TravelbilityAppDbContext))]
-    partial class TravelbilityAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250602112246_AddPropertyTypesTableAndSeedIt")]
+    partial class AddPropertyTypesTableAndSeedIt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,148 +220,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.Facility", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsForAccessibility")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Facilities");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsForAccessibility = true,
-                            Name = "Higher level toilet"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsForAccessibility = false,
-                            Name = "Airport shuttle"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsForAccessibility = false,
-                            Name = "Free WiFi"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsForAccessibility = false,
-                            Name = "Pets allowed"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsForAccessibility = true,
-                            Name = "Toilet with grab rails"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsForAccessibility = false,
-                            Name = "Room service"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsForAccessibility = true,
-                            Name = "Wheelchair accessible"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsForAccessibility = true,
-                            Name = "Visual aids: Tactile signs"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            IsForAccessibility = false,
-                            Name = "Swimming Pool"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            IsForAccessibility = true,
-                            Name = "Electric vehicle charging station"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            IsForAccessibility = false,
-                            Name = "Family rooms"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsForAccessibility = true,
-                            Name = "Visual aids: Braille"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            IsForAccessibility = true,
-                            Name = "Lower bathroom sink"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            IsForAccessibility = false,
-                            Name = "Fitness centre"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            IsForAccessibility = false,
-                            Name = "Non-smoking rooms"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            IsForAccessibility = true,
-                            Name = "Emergency cord in bathroom"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            IsForAccessibility = false,
-                            Name = "Parking"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            IsForAccessibility = false,
-                            Name = "Restaurant"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            IsForAccessibility = true,
-                            Name = "Auditory guidance"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            IsForAccessibility = false,
-                            Name = "Spa and wellness centre"
-                        });
                 });
 
             modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyType", b =>

@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Higher level toilet",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 2,
+    "name": "Airport shuttle",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 3,
+    "name": "Free WiFi",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 4,
+    "name": "Pets allowed",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 5,
+    "name": "Toilet with grab rails",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 6,
+    "name": "Room service",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 7,
+    "name": "Wheelchair accessible",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 8,
+    "name": "Visual aids: Tactile signs",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 9,
+    "name": "Swimming Pool",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 10,
+    "name": "Electric vehicle charging station",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 11,
+    "name": "Family rooms",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 12,
+    "name": "Visual aids: Braille",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 13,
+    "name": "Lower bathroom sink",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 14,
+    "name": "Fitness centre",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 15,
+    "name": "Non-smoking rooms",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 16,
+    "name": "Emergency cord in bathroom",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 17,
+    "name": "Parking",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 18,
+    "name": "Restaurant",
+    "IsForAccessibility": false
+  },
+  {
+    "id": 19,
+    "name": "Auditory guidance",
+    "IsForAccessibility": true
+  },
+  {
+    "id": 20,
+    "name": "Spa and wellness centre",
+    "IsForAccessibility": false
+  }
+]
