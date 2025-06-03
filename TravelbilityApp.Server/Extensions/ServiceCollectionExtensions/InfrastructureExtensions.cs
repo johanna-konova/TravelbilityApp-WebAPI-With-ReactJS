@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
+using TravelbilityApp.Core.Contracts;
+using TravelbilityApp.Core.Services;
+using TravelbilityApp.Infrastructure.Common;
 using TravelbilityApp.Infrastructure.Data;
 using TravelbilityApp.WebAPI.Contracts;
 using TravelbilityApp.WebAPI.Services;
@@ -18,6 +21,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<ITokenStore, RedisTokenStore>();
 
+            services.AddScoped<IPropertyTypeService, PropertyTypeService>();
+            services.AddScoped<IFacilityService, FacilityService>();
+
             return services;
         }
 
@@ -30,9 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<TravelbilityAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            //services.AddScoped<IRepository, Repository>();
-
-            //services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddScoped<IRepository, Repository>();
 
             return services;
         }
