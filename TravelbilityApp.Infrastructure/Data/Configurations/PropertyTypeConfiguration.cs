@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using TravelbilityApp.Infrastructure.Data.Models;
 
-using static TravelbillityApp.Infrastructure.Data.JsonSeeder;
+using static TravelbilityApp.Infrastructure.Data.JsonSeeder;
 
-namespace TravelbillityApp.Infrastructure.Data.Configurations
+namespace TravelbilityApp.Infrastructure.Data.Configurations
 {
     internal class PropertyTypeConfiguration : IEntityTypeConfiguration<PropertyType>
     {
