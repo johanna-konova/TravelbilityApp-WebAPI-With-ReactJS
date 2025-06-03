@@ -2,8 +2,8 @@
 
 namespace TravelbilityApp.WebAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class BaseController : ControllerBase
     {
     }

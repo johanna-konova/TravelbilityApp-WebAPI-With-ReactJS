@@ -23,7 +23,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         ITokenStore tokenStore) : BaseController
     {
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -66,7 +66,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -91,7 +91,7 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(new { user.Id, user.Email, AccessToken = token, Expires = expires, RefreshToken = refreshToken });
         }
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Refresh(RefreshRequestDto model)
@@ -120,7 +120,7 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(new { user.Id, user.Email, AccessToken = token, Expires = expires, RefreshToken = newRefreshToken });
         }
 
-        [HttpPost]
+        [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Logout(LogoutRequestDto dto)
