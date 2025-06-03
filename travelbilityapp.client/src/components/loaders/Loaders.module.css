@@ -1,0 +1,27 @@
+.wheelchair-tire-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    /* Пълна височина на екрана */
+}
+
+.wheelchair-tire-spinner img {
+    width: 100px;
+    /* Може да промениш размера на изображението */
+    height: 100px;
+    animation: spin 2s linear infinite;
+    /* Въртене на изображението */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+        /* Стартова позиция */
+    }
+
+    100% {
+        transform: rotate(360deg);
+        /* Краен ъгъл на въртенето */
+    }
+}
