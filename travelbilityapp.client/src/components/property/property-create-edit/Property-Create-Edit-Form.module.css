@@ -1,0 +1,142 @@
+.list-property-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 43px;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 1.20rem;
+  margin: 35px 0;
+  width: 90%;
+}
+
+.list-property-form {
+  background-color: white;
+  padding: 2.5rem;
+  border-radius: 25px;
+}
+
+.list-property-form input, textarea, select {
+  border-radius: 10px !important;
+}
+
+.moveall, .removeall {
+  border-radius: 10px;
+  margin: 0;
+  width: 100%;
+}
+
+.facilities {
+  font-size: 1rem;
+}
+
+/* Основен стил за checkbox */
+.custom-checkbox {
+  position: relative;
+  padding-left: 25px; /* Разстояние между текста и кутийката */
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* Скриване на оригиналния checkbox */
+.custom-checkbox input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+}
+
+/* Стил за кутийката */
+.custom-checkbox .checkmark {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border: 2px solid #ccc; /* Сива граница за немаркирани checkboxes */
+  border-radius: 4px; /* Закръглени ъгли */
+  background-color: white;
+}
+
+/* Стил за кутийката, когато е маркирана */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #7ab730; /* Зелен фон */
+  border-color: #7ab730; /* Зелена граница */
+}
+
+/* Стил за тикчето */
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid black; /* Черно тикче */
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Показване на тикчето, когато checkbox е маркиран */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  display: block;
+}
+
+.facilities label {
+  display: block;
+}
+
+.upload-box {
+    border: 2px dashed #ddd;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #fafafa;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    min-height: 190px;
+}
+
+.photo-preview {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-top: 20px;
+}
+
+.main-photo-label {
+  position: absolute;
+  top: -22px;
+  left: 10px;
+  background-color: #7ab730;
+  color: rgb(0, 0, 0);
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.photo-thumbnail {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+
+.photo-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: white;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #7ab730;
+}
