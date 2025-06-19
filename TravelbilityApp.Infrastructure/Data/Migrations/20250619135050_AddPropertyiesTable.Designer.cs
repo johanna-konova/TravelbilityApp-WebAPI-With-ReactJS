@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelbilityApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TravelbilityApp.Infrastructure.Data;
 namespace TravelbilityApp.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TravelbilityAppDbContext))]
-    partial class TravelbilityAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250619135050_AddPropertyiesTable")]
+    partial class AddPropertyiesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -415,42 +418,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                     b.ToTable("Properties");
                 });
 
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyFacility", b =>
-                {
-                    b.Property<Guid>("PropertyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("FacilityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PropertyId", "FacilityId");
-
-                    b.HasIndex("FacilityId");
-
-                    b.ToTable("PropertiesFacilities");
-                });
-
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PropertyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PropertyId");
-
-                    b.ToTable("PropertiesPhotos");
-                });
-
             modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyType", b =>
                 {
                     b.Property<int>("Id")
@@ -563,43 +530,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                     b.Navigation("PropertyType");
 
                     b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyFacility", b =>
-                {
-                    b.HasOne("TravelbilityApp.Infrastructure.Data.Models.Facility", "Facility")
-                        .WithMany()
-                        .HasForeignKey("FacilityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TravelbilityApp.Infrastructure.Data.Models.Property", "Property")
-                        .WithMany("Facilities")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Facility");
-
-                    b.Navigation("Property");
-                });
-
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyPhoto", b =>
-                {
-                    b.HasOne("TravelbilityApp.Infrastructure.Data.Models.Property", "Property")
-                        .WithMany("Photos")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Property");
-                });
-
-            modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.Property", b =>
-                {
-                    b.Navigation("Facilities");
-
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,9 @@ namespace TravelbilityApp.Infrastructure.Data
 
         public DbSet<PropertyType> PropertyTypes { get; init; }
         public DbSet<Facility> Facilities { get; init; }
+        public DbSet<Property> Properties { get; init; }
+        public DbSet<PropertyFacility> PropertiesFacilities { get; init; }
+        public DbSet<PropertyPhoto> PropertiesPhotos { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
