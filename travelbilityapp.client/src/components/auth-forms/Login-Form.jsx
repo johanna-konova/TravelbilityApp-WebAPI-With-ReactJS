@@ -13,14 +13,14 @@ export default function LoginForm() {
     const navigate = useNavigate();
     const location = useLocation();
     const { loginHandler } = useLogin();
-    const [errorMessages, setErrorMessages] = useState([]);
+    const [menualErrors, setMenualErrors] = useState({});
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
         resolver: yupResolver(loginSchema),
     });
 
     useEffect(() => {
-        setErrorMessages([]);
+        setMenualErrors({});
         reset();
     }, [location.key, reset]);
 
@@ -29,7 +29,7 @@ export default function LoginForm() {
             await loginHandler(userData);
             navigate("/");
         } catch (error) {
-            setErrorMessages(error.messages)
+            setMenualErrors(error.errorsData)
         }
     }
 
@@ -46,25 +46,20 @@ export default function LoginForm() {
                             <Card.Body className="rounded-bottom bg-white p-5">
                                 <Form className={styles["auth-form"]} onSubmit={handleSubmit(login)}>
 
-                                    {errorMessages && (
-                                        <div className="mb-2">
-                                            {errorMessages.map((em, i) => (
-                                                <p key={i} className={styles["global-error-message"]}>
-                                                    {em}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    )}
+                                    {menualErrors.message && <p className="mb-2 text-danger text-center">{menualErrors.message}</p>}
 
                                     <Form.Group className="mb-3">
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control
-                                            type="email"
+                                            type="text"
                                             placeholder="Ex.: john.doe@mail.com"
                                             disabled={isSubmitting}
                                             {...register('email')}
                                         />
-                                        {errors.email && <p className="text-danger">{errors.email.message}</p>}
+                                        {errors.email
+                                            ? <p className="text-danger">{errors.email.message}</p>
+                                            : (menualErrors.Email && menualErrors.Email.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                                        }
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
@@ -75,7 +70,10 @@ export default function LoginForm() {
                                             disabled={isSubmitting}
                                             {...register('password')}
                                         />
-                                        {errors.password && <p className="text-danger">{errors.password.message}</p>}
+                                        {errors.password
+                                            ? <p className="text-danger">{errors.password.message}</p>
+                                            : (menualErrors.Password && menualErrors.Password.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                                        }
                                     </Form.Group>
 
                                     <Button variant="primary" type="submit" className={`${styles["submit-text"]} btn-block py-3`} disabled={isSubmitting}>

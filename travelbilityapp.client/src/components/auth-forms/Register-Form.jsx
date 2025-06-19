@@ -13,23 +13,24 @@ export default function RegisterForm() {
     const navigate = useNavigate();
     const location = useLocation();
     const { registerHandler } = useRegister();
-    const [errorMessages, setErrorMessages] = useState([]);
+    const [menualErrors, setMenualErrors] = useState({});
 
     const { register: registerInput, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
         resolver: yupResolver(registrationSchema),
     });
 
     useEffect(() => {
-        setErrorMessages([]);
+        setMenualErrors({});
         reset();
-    }, [location.key, setErrorMessages, reset]);
+    }, [location.key, setMenualErrors, reset]);
 
     async function register(userData) {
         try {
             await registerHandler(userData);
             navigate("/");
         } catch (error) {
-            setErrorMessages(error.messages)
+            debugger
+            setMenualErrors(error.errorsData)
         }
     }
 
@@ -45,26 +46,18 @@ export default function RegisterForm() {
                             <Card.Header className={`${styles["auth-card-header"]} card-header p-5`} />
                             <Card.Body className="rounded-bottom bg-white p-5">
                                 <Form className={styles["auth-form"]} onSubmit={handleSubmit(register)}>
-
-                                    {errorMessages && (
-                                        <div className="mb-2">
-                                            {errorMessages.map((em, i) => (
-                                                <p key={i} className={styles["global-error-message"]}>
-                                                    {em}
-                                                </p>
-                                            ))}
-                                        </div>
-                                    )}
-
                                     <Form.Group className="mb-3">
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control
-                                            type="email"
+                                            type="text"
                                             placeholder="Ex.: john.doe@mail.com"
                                             disabled={isSubmitting}
                                             {...registerInput('email')}
                                         />
-                                        {errors.email && <p className="text-danger">{errors.email.message}</p>}
+                                        {errors.email
+                                            ? <p className="text-danger">{errors.email.message}</p>
+                                            : (menualErrors.Email && menualErrors.Email.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                                        }
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
@@ -75,7 +68,10 @@ export default function RegisterForm() {
                                             disabled={isSubmitting}
                                             {...registerInput('password')}
                                         />
-                                        {errors.password && <p className="text-danger">{errors.password.message}</p>}
+                                        {errors.password
+                                            ? <p className="text-danger">{errors.password.message}</p>
+                                            : (menualErrors.Password && menualErrors.Password.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                                        }
                                     </Form.Group>
 
                                     <Form.Group className="mb-3">
@@ -86,7 +82,10 @@ export default function RegisterForm() {
                                             disabled={isSubmitting}
                                             {...registerInput('confirmedPassword')}
                                         />
-                                        {errors.confirmedPassword && <p className="text-danger">{errors.confirmedPassword.message}</p>}
+                                        {errors.confirmedPassword
+                                            ? <p className="text-danger">{errors.confirmedPassword.message}</p>
+                                            : (menualErrors.ConfirmedPassword && menualErrors.ConfirmedPassword.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                                        }
                                     </Form.Group>
 
                                     <Button variant="primary" type="submit" className={`${styles["submit-text"]} btn-block py-3`} disabled={isSubmitting}>

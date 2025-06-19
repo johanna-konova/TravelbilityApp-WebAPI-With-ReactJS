@@ -20,18 +20,16 @@ export async function requester(method, url, body) {
     }
 
     const request = await fetch(`${host}/${url}`, options);
-    debugger
+
     if (!request.ok) {
-        const errorData = await request.json();
+        const errorsData = await request.json();
+        console.log(errorsData);
 
         if ((request.status === 400 ||
              request.status === 409 ||
-             request.status === 401)) {
-            const messages = Object
-                .values(errorData)
-                .flat();
-            debugger
-            throw { status: request.status, messages };
+            request.status === 401)) {
+
+            throw { status: request.status, errorsData };
         }
 
         if (request.status === 403) {
