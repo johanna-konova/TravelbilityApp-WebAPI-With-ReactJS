@@ -2,6 +2,7 @@
 
 using static TravelbilityApp.Core.Constants.ModelsConstants;
 using static TravelbilityApp.Core.Constants.ModelsMessagesConstants;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Account;
 
 namespace TravelbilityApp.Core.DTOs.Account
 {
@@ -14,10 +15,10 @@ namespace TravelbilityApp.Core.DTOs.Account
         [Required(ErrorMessage = RequiredPassword)]
         [StringLength(PasswordMaxLength,
             MinimumLength = PasswordMinLength,
-            ErrorMessage = InvalidPasswordLength)]
+            ErrorMessage = InvalidStringLength)]
         public string Password { get; init; } = null!;
 
         [Compare(nameof(Password), ErrorMessage = MismatchedPasswords)]
-        public string ConfirmedPassword { get; init; } = null!;
+        public string ConfirmedPassword { get; init; } = string.Empty;
     }
 }

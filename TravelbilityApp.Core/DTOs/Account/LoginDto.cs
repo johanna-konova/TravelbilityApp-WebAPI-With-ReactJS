@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using static TravelbilityApp.Core.Constants.ModelsMessagesConstants;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Account;
 
 namespace TravelbilityApp.Core.DTOs.Account
 {
