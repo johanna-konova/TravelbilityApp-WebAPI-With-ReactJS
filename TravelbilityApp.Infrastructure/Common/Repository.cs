@@ -28,6 +28,9 @@ namespace TravelbilityApp.Infrastructure.Common
         public async Task AddAsync<T>(T entity) where T : class
             => await DbSet<T>().AddAsync(entity);
 
+        public async Task AddRangeAsync<T>(IEnumerable<T> entities) where T : class
+            => await DbSet<T>().AddRangeAsync(entities);
+
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();
     }
