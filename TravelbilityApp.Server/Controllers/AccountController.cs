@@ -170,7 +170,7 @@ namespace TravelbilityApp.WebAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, jti),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim("uid", user.Id.ToString())
             };
 
             var keyBytes = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
