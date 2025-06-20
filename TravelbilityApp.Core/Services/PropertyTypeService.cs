@@ -18,5 +18,10 @@ namespace TravelbilityApp.Core.Services
                     Name = pt.Name,
                 })
                 .ToListAsync();
+
+        public async Task<bool> HasPropertyTypeWithGivenIdAsync(int? id)
+            => await repository
+                .AllAsNoTracking<PropertyType>()
+                .AnyAsync(pt => pt.Id == id);
     }
 }

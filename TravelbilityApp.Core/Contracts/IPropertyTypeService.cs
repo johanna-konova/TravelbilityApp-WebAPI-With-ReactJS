@@ -5,5 +5,6 @@ namespace TravelbilityApp.Core.Contracts
     public interface IPropertyTypeService
     {
         Task<IEnumerable<PropertyTypeOptionDto>> GetAllAsync();
+        Task<bool> HasPropertyTypeWithGivenIdAsync(int? id);
     }
 }
