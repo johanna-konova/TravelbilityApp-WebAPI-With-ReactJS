@@ -1,3 +1,7 @@
+using FluentValidation;
+
+using TravelbilityApp.WebAPI.JsonConverters;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,7 +13,18 @@ builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
         options.SuppressModelStateInvalidFilter = true;
+    })
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.Converters.Add(new TimeOnlyNewtonsoftJsonConverter());
+
+        options.SerializerSettings.Error = (sender, args) =>
+        {
+            args.ErrorContext.Handled = true;
+        };
     });
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
