@@ -10,10 +10,9 @@ import toast from "react-hot-toast";
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { getFacilities } from '../../../services/facilitiesService';
-//import { create, edit } from '../../../services/propertiesService';
-//import { createPropertyFacility, deletePropertyFacility } from '../../../services/propertiesFacilitiesService';
+import { create, edit } from '../../../services/propertiesService';
 import { propertySchema } from '../../../validations';
-//import { constructPropertyDataForEditing } from '../../../utils/property-utils';
+import { formatCreatePropertyErrorsData } from '../../../utils/property-utils';
 
 import PropertyCreateEditFormStepOne from './Property-Create-Edit-Form-Step-One';
 import PropertyCreateEditFormStepTwo from './Property-Create-Edit-Form-Step-Two';
@@ -33,7 +32,7 @@ export default function PropertyCreateEditForm() {
 
     const navigate = useNavigate();
 
-    const { register, control, handleSubmit, trigger, formState: { errors, isSubmitting }, reset, watch } = useForm({
+    const { register, control, handleSubmit, trigger, formState: { errors, isSubmitting }, reset, watch, getValues } = useForm({
         defaultValues: {
             "step-2": {
                 commonFacilityIds: [],
@@ -51,8 +50,19 @@ export default function PropertyCreateEditForm() {
         }
     }, [propertyData, propertyFacilities, reset]);*/
 
-    const updateMenualErrorsHandler = (errors) =>
-        setMenualErrors(previousMenualErrors => ({ ...previousMenualErrors, ...errors }));
+    const updateMenualErrorsHandler = (errors) => {
+        if (errors.ImageUrls) {
+            setMenualErrors(previousMenualErrors => ({
+                ...previousMenualErrors,
+                "step-3": {
+                    ...previousMenualErrors["step-3"],
+                    ImageUrls: errors.ImageUrls
+                },
+            }));
+        } else {
+            setMenualErrors(previousMenualErrors => ({ ...previousMenualErrors, ...errors }));
+        }
+    }
 
     const nextStep = async () => {
         const isStepValid = await trigger(`step-${step}`);
@@ -67,9 +77,28 @@ export default function PropertyCreateEditForm() {
     const createHandler = async (data) => {
         const propertyData = {
             ...data["step-1"],
+            facilityIds: [...data["step-2"].commonFacilityIds, ...data["step-2"].accessibilityIds],
             imageUrls: data["step-3"].imageUrls.map(iu => iu.url)
         };
 
+        try {
+            await create(propertyData);
+
+            toast.success("You have successfully listed your property.");
+            navigate("/");
+        } catch (errorInfo) {
+            const errorsData = formatCreatePropertyErrorsData(getValues(), errorInfo.errorsData);
+
+            updateMenualErrorsHandler(errorsData);
+
+            if (Object.keys(errorsData["step-1"]).length > 0) {
+                setStep(1);
+            } else if (Object.keys(errorsData["step-2"]).length > 0) {
+                setStep(2);
+            } else if (Object.keys(errorsData["step-3"]).length > 0) {
+                setStep(3);
+            }
+        }
         /*const savedPropertyData = data.id
             ? await edit(data.id, propertyData)
             : await create(propertyData);
@@ -115,7 +144,7 @@ export default function PropertyCreateEditForm() {
                     {step === 1 && <PropertyCreateEditFormStepOne
                         propertyTypes={propertyTypes}
                         register={register}
-                        errors={errors["step-1"]}
+                        errors={{ ...errors["step-1"], ...menualErrors["step-1"] }}
                         nextStepHandler={nextStep}
                     />}
 
@@ -123,14 +152,14 @@ export default function PropertyCreateEditForm() {
                         facilities={facilities}
                         watch={watch}
                         register={register}
-                        errors={errors["step-2"]}
+                        errors={{ ...errors["step-2"], ...menualErrors["step-2"] }}
                         previousStepHandler={prevStep}
                         nextStepHandler={nextStep}
                     />}
 
                     {step === 3 && <PropertyCreateEditFormStepThree
                         control={control}
-                        errors={{ ...errors["step-3"], ...menualErrors }}
+                        errors={{ ...errors["step-3"], ...menualErrors["step-3"], imageUrl: menualErrors.imageUrl }}
                         updateMenualErrorsHandler={updateMenualErrorsHandler}
                         previousStepHandler={prevStep}
                         isSaving={isSubmitting}

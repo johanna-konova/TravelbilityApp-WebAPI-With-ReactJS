@@ -17,7 +17,10 @@ export default function PropertyCreateEditFormStepOne({
                         <Form.Group className="mb-3">
                             <Form.Label>Name</Form.Label>
                             <Form.Control {...register("step-1.name")} />
-                            {errors?.name && <p className="text-danger">{errors?.name.message}</p>}
+                            {errors?.name 
+                                ? <p className="text-danger">{errors?.name.message}</p>
+                                : (errors?.Name && errors.Name.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Form.Group>
                     </Col>
 
@@ -34,7 +37,10 @@ export default function PropertyCreateEditFormStepOne({
                                     <option key={pt.id} value={pt.id}>{pt.name}</option>
                                 ))}
                             </Form.Select>
-                            {errors?.typeId && <p className="text-danger">{errors?.typeId.message}</p>}
+                            {errors?.typeId
+                                ? <p className="text-danger">{errors?.typeId.message}</p>
+                                : (errors?.TypeId && errors.TypeId.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Form.Group>
                     </Col>
                 </Row>
@@ -55,7 +61,7 @@ export default function PropertyCreateEditFormStepOne({
                                     </option>
                                 ))}
                             </Form.Select>
-                            {errors?.starsCount && <p className="text-danger">{errors?.starsCount.message}</p>}
+                            {errors?.StarsCount && errors.StarsCount.map((message, index) => <div key={index} className="text-danger">{message}</div>)}
                         </Form.Group>
                     </Col>
 
@@ -66,7 +72,10 @@ export default function PropertyCreateEditFormStepOne({
                                 placeholder="HH:mm"
                                 {...register("step-1.checkIn")}
                             />
-                            {errors?.checkIn && <p className="text-danger">{errors?.checkIn.message}</p>}
+                            {errors?.checkIn
+                                ? <p className="text-danger">{errors?.checkIn.message}</p>
+                                : (errors?.CheckIn && errors.CheckIn.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Form.Group>
                     </Col>
 
@@ -77,7 +86,10 @@ export default function PropertyCreateEditFormStepOne({
                                 placeholder="HH:mm"
                                 {...register("step-1.checkOut")}
                             />
-                            {errors?.checkOut && <p className="text-danger">{errors?.checkOut.message}</p>}
+                            {errors?.checkOut
+                                ? <p className="text-danger">{errors?.checkOut.message}</p>
+                                : (errors?.CheckOut && errors.CheckOut.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Form.Group>
                     </Col>
                 </Row>
@@ -85,13 +97,19 @@ export default function PropertyCreateEditFormStepOne({
                 <Form.Group className="mb-3">
                     <Form.Label>Адрес</Form.Label>
                     <Form.Control {...register("step-1.address")} />
-                    {errors?.address && <p className="text-danger">{errors?.address.message}</p>}
+                    {errors?.address
+                        ? <p className="text-danger">{errors?.address.message}</p>
+                        : (errors?.Address && errors.Address.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                    }
                 </Form.Group>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Описание</Form.Label>
                     <Form.Control as="textarea" rows={7} {...register("step-1.description")} />
-                    {errors?.description && <p className="text-danger">{errors?.description.message}</p>}
+                    {errors?.description
+                        ? <p className="text-danger">{errors?.description.message}</p>
+                        : (errors?.Description && errors.Description.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                    }
                 </Form.Group>
 
                 <div className="d-flex justify-content-end mt-3">

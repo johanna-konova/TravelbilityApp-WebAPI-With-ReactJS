@@ -23,6 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddScoped<IPropertyTypeService, PropertyTypeService>();
             services.AddScoped<IFacilityService, FacilityService>();
+            services.AddScoped<IPropertyService, PropertyService>();
 
             return services;
         }

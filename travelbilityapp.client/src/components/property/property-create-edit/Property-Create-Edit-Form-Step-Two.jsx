@@ -38,7 +38,10 @@ export default function PropertyCreateEditFormStepTwo({
                                     <span>{cf.name}</span>
                                 </label>
                             ))}
-                            {errors?.commonFacilityIds && <p className="text-danger">{errors?.commonFacilityIds.message}</p>}
+                            {errors?.commonFacilityIds
+                                ? <p className="text-danger">{errors?.commonFacilityIds.message}</p>
+                                : (errors?.CommonFacilityIds && errors.CommonFacilityIds.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Col>
                         <Col lg={6}>
                             <h4 className="text-primary">Accessibility</h4>
@@ -54,7 +57,10 @@ export default function PropertyCreateEditFormStepTwo({
                                     <span>{a.name}</span>
                                 </label>
                             ))}
-                            {errors?.accessibilityIds && <p className="text-danger">{errors?.accessibilityIds.message}</p>}
+                            {errors?.accessibilityIds
+                                ? <p className="text-danger">{errors?.accessibilityIds.message}</p>
+                                : (errors?.AccessibilityIds && errors.AccessibilityIds.map((message, index) => <div key={index} className="text-danger">{message}</div>))
+                            }
                         </Col>
                     </Row>
                 </Form.Group>

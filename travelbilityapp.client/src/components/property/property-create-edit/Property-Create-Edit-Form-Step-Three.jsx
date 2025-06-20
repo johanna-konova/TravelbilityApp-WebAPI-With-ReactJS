@@ -26,12 +26,37 @@ export default function PropertyCreateEditFormStepThree({
         try {
             await imageUrlSchema.validate(trimmedCurrentImageUrl);
 
+            if (imageUrls.some(iu => iu.url === trimmedCurrentImageUrl)) {
+                throw new Error("You have already added this photo. Please, upload a new URL.");
+            }
+
             append({ url: trimmedCurrentImageUrl });
             setCurrentImageUrl("");
             updateMenualErrorsHandler({ imageUrl: "" });
         } catch (error) {
             updateMenualErrorsHandler({ imageUrl: error.message });
         }
+    };
+
+    const removeImageHandler = (index) => {
+        if (errors.ImageUrls && errors.ImageUrls[index] != undefined) {
+            delete errors.ImageUrls[index];
+
+            const reIndexedErrors = Object.entries(errors.ImageUrls)
+                .reduce((acc, [k, v]) => {
+                    if (k < index) {
+                        acc[k] = v;
+                    } else {
+                        acc[k - 1] = v;
+                    }
+
+                    return acc;
+                }, {});
+
+            updateMenualErrorsHandler({ ImageUrls: reIndexedErrors });
+        }
+
+        remove(index);
     };
 
     return (
@@ -89,17 +114,21 @@ export default function PropertyCreateEditFormStepThree({
                                         size="sm"
                                         className={styles["close-button"]}
                                         disabled={isSaving}
-                                        onClick={() => remove(index)}
+                                        onClick={() => removeImageHandler(index)}
                                     >
                                         X
                                     </Button>
                                 </div>
                             </div>
+                            {errors?.ImageUrls && errors.ImageUrls[index]?.map((message, index) => <div key={index} className="text-danger">{message}</div>)}
                         </Col>
                     ))}
                 </Row>
 
-                {errors.imageUrls && <p className="text-danger text-center">{errors.imageUrls.message}</p>}
+                {errors.imageUrls
+                    ? <p className="text-danger text-center">{errors.imageUrls.message}</p>
+                    : (errors?.ImageUrlsCount && errors.ImageUrlsCount.map((message, index) => <div key={index} className="text-danger text-center">{message}</div>))
+                }
 
                 <div className="d-flex justify-content-between mt-3">
                     <Button type="button" className="me-2" disabled={isSaving} onClick={previousStepHandler}>Back</Button>
