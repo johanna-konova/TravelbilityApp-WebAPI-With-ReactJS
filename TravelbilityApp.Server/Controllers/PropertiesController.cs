@@ -41,7 +41,6 @@ namespace TravelbilityApp.WebAPI.Controllers
         }
 
         [AllowAnonymous]
-
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -56,6 +55,15 @@ namespace TravelbilityApp.WebAPI.Controllers
             }
 
             return Ok(propertyData);
+        }
+
+        [HttpGet("listed")]
+        [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByUserId()
+        {
+            var propertiesData = await propertyService.GetByUserIdAsync(User.Id());
+
+            return Ok(propertiesData);
         }
     }
 }

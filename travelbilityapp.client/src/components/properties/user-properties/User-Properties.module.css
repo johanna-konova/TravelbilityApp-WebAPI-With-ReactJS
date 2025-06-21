@@ -1,0 +1,48 @@
+.no-properties {
+    min-height: calc(100vh - 170px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-size: 20px;
+}
+
+.property-card {
+    width: 320px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 25px 50px 25px;
+}
+
+.property-card img {
+    object-fit: cover;
+    height: 200px;
+}
+
+.property-card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.stars {
+    color: #ffb700;
+}
+
+.property-card p span {
+    font-style: italic;
+}
+
+.property-card .card-text {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.property-card .card-footer a,
+.property-card .card-footer button {
+    margin: 0;
+}

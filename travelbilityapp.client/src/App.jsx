@@ -12,6 +12,7 @@ import Home from "./components/home/Home";
 import RegisterForm from "./components/auth-forms/Register-Form";
 import LoginForm from "./components/auth-forms/Login-Form";
 import PropertyDetailsContainer from "./components/property/property-details/Property-Details-Container";
+import UserProperties from "./components/properties/user-properties/User-Properties";
 import PropertyCreateEditForm from "./components/property/property-create-edit/Property-Create-Edit-Form";
 import NotFound from "./components/not-found/Not-Found";
 
@@ -38,6 +39,7 @@ function App() {
 
                     <Route element={<AuthGuard />}>
                         <Route path="/list" element={<PropertyCreateEditForm />} />
+                        <Route path="/my-properties" element={<UserProperties />} />
                     </Route>
 
                     <Route path="*" element={<NotFound />} />

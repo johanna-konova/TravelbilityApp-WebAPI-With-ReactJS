@@ -8,7 +8,7 @@ export const getThreeNewestAdded = async () => api.get(`${endpoint}?sortBy=_crea
 
 export const getById = async (id) => api.get(`${endpoint}/${id}`);
 
-export const getByOwnerId = async (ownerId) => api.get(`${endpoint}?where=_ownerId%3D%22${ownerId}%22`);
+export const getByPublisherId = async () => api.get(`${endpoint}/listed`);
 
 export const create = async (data) => api.post(endpoint, data);
 

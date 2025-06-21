@@ -41,6 +41,21 @@ namespace TravelbilityApp.Core.Services
                 })
                 .SingleOrDefaultAsync();
 
+        public async Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.PublisherId == userId)
+                .Select(p => new UserPropertyDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    Address = p.Address,
+                    Description = p.Description,
+                    MainPhoto = p.Photos.First().Url,
+                })
+                .ToListAsync();
+
         public async Task<Guid> CreateAsync(CreatePropertyDto dto, Guid userId)
         {
             var newProperty = new Property()
