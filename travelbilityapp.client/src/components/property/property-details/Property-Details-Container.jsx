@@ -21,7 +21,7 @@ export default function PropertyDetailsContainer() {
                     ? <>
                         {propertyData.imageUrls && <PropertyDetailsImages imageUrls={propertyData.imageUrls} />}
 
-                        {(id === propertyData.publisherId) && <UserActions _id={propertyData._id} name={propertyData.name} />}
+                        {(id === propertyData.publisherId) && <UserActions id={propertyData.id} name={propertyData.name} />}
 
                         <PropertyDetails {...propertyData} />
                     </>

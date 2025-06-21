@@ -7,7 +7,7 @@ export const getCountryName = (address) =>
 
 export const constructPropertyDataForEditing = (propertyData, propertyFacilities) => {
     return {
-        "id": propertyData._id,
+        "id": propertyData.id,
         "step-1": {
             name: propertyData.name,
             typeId: propertyData.typeId,

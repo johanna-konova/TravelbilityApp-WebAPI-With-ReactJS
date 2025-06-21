@@ -12,7 +12,7 @@ import DeleteModal from '../modals/Delete-Modal';
 import styles from './User-Actions.module.css';
 
 export default function UserActions({
-    _id,
+    id,
     name,
     hasPaddingBottom
 }) {
@@ -42,7 +42,7 @@ export default function UserActions({
     return (
         <>
             <div className={`${styles["user-actions-container"]} ${hasPaddingBottom ? "pb-3" : ""}`}>
-                <Link to={`/edit/${_id}`} className={styles["edit"]} title="Edit">
+                <Link to={`/edit/${id}`} className={styles["edit"]} title="Edit">
                     <i className="fas fa-edit m-1"></i>
                 </Link>
                 <Button className={styles["delete"]} title="Delete" onClick={() => setIsDeleteModalShowed(true)}>
@@ -51,12 +51,12 @@ export default function UserActions({
             </div>
 
             <DeleteModal
-                propertyId={_id}
+                propertyId={id}
                 propertyName={name}
                 isModalShowed={isDeleteModalShowed}
                 isDeleting={isDeleting}
                 closeModalHandler={hideDeleteModalHandler}
-                deleteHandler={() => deleteHandler(_id)}
+                deleteHandler={() => deleteHandler(id)}
             />
         </>
     )

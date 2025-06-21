@@ -29,7 +29,7 @@ export function useBasicGetFetch(getDataCallbackFunction, initialData = [], depe
 
     const removeDataElement = (id) => {
         if (data.length) {
-            setData(previousData => previousData.filter(pd => pd._id !== id));
+            setData(previousData => previousData.filter(pd => pd.id !== id));
         }
     };
 

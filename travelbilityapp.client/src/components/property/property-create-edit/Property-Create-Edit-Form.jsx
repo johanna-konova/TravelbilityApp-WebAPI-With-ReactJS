@@ -45,7 +45,7 @@ export default function PropertyCreateEditForm() {
     });
 
     /*useEffect(() => {
-        if (propertyData._id !== undefined) {
+        if (propertyData.id !== undefined) {
             reset(constructPropertyDataForEditing(propertyData, propertyFacilities));
         }
     }, [propertyData, propertyFacilities, reset]);*/
@@ -112,7 +112,7 @@ export default function PropertyCreateEditForm() {
         for (const facilityId of facilityIds) {
             if (propertyFacilities.some(pf => pf.facilityId === facilityId) === false) {
                 await createPropertyFacility({
-                    propertyId: savedPropertyData._id,
+                    propertyId: savedPropertyData.id,
                     facilityId
                 });
             }
