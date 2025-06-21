@@ -1,4 +1,7 @@
 using FluentValidation;
+using Microsoft.AspNetCore.WebUtilities;
+
+using System.Text.Json;
 
 using TravelbilityApp.WebAPI.JsonConverters;
 
@@ -57,6 +60,26 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AllowMyServer");
+
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+
+    if (response.ContentType?.StartsWith("application/json") == true)
+    {
+        return;
+    }
+
+    response.ContentType = "application/json";
+
+    var payload = JsonSerializer.Serialize(new
+    {
+        status = response.StatusCode,
+        title = ReasonPhrases.GetReasonPhrase(response.StatusCode)
+    });
+    
+    await response.WriteAsync(payload);
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
