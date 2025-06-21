@@ -20,28 +20,16 @@ export async function requester(method, url, body) {
     }
 
     const request = await fetch(`${host}/${url}`, options);
+    const response = await request.json();
 
     if (!request.ok) {
-        const errorsData = await request.json();
-        console.log(errorsData);
+        debugger
+        console.log(response);
 
-        if ((request.status === 400 ||
-             request.status === 409 ||
-            request.status === 401)) {
-
-            throw { status: request.status, errorsData };
-        }
-
-        if (request.status === 403) {
-            //auth.removeUserData();
-        }
-        
-        throw await request.json();
+        throw { status: request.status, errorsData: response };
     }
 
-    if (request.status !== 204) {
-        return await request.json();
-    }
+    return response;
 }
 
 export const get = requester.bind(null, 'GET');
