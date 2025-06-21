@@ -36,11 +36,10 @@ export function useLogout() {
     const logoutHandler = async () => {
         try {
             await api.post(endpoints.LOGOUT, { refreshToken });
-            changeLoggedInUserData({});
         } catch (error) {
-            if (error.code === 403) {
-                changeLoggedInUserData({});
-            }
+
+        } finally {
+            changeLoggedInUserData({});
         }
     }
     
