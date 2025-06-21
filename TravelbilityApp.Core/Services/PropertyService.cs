@@ -1,4 +1,5 @@
-﻿using TravelbilityApp.Core.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using TravelbilityApp.Core.Contracts;
 using TravelbilityApp.Core.DTOs.Property;
 using TravelbilityApp.Infrastructure.Common;
 using TravelbilityApp.Infrastructure.Data.Models;
@@ -9,6 +10,37 @@ namespace TravelbilityApp.Core.Services
         IRepository repository,
         IFacilityService facilityService) : IPropertyService
     {
+        public async Task<PropertyDetailsDto?> GetByIdAsync(Guid id)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.Id == id)
+                .Select(p => new PropertyDetailsDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    CheckIn = p.CheckIn,
+                    CheckOut = p.CheckOut,
+                    Address = p.Address,
+                    Description = p.Description,
+                    PublisherId = p.PublisherId,
+                    Type = new PropertyTypeOptionDto()
+                    {
+                        Id = p.PropertyType.Id,
+                        Name = p.PropertyType.Name,
+                    },
+                    Facilities = p.Facilities
+                        .Select(f => new PropertyFacilityOptionDto()
+                        {
+                            Id = f.FacilityId,
+                            Name = f.Facility.Name,
+                            IsForAccessibility = f.Facility.IsForAccessibility,
+                        }),
+                    ImageUrls = p.Photos
+                        .Select(p => p.Url)
+                })
+                .SingleOrDefaultAsync();
+
         public async Task<Guid> CreateAsync(CreatePropertyDto dto, Guid userId)
         {
             var newProperty = new Property()

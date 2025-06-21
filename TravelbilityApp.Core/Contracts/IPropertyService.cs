@@ -4,6 +4,7 @@ namespace TravelbilityApp.Core.Contracts
 {
     public interface IPropertyService
     {
+        Task<PropertyDetailsDto> GetByIdAsync(Guid id);
         Task<Guid> CreateAsync(CreatePropertyDto dto, Guid userId);
     }
 }

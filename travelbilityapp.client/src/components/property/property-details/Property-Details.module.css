@@ -1,0 +1,60 @@
+.gallery-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 3px;
+  margin-bottom: 0.5rem;
+}
+
+.main-image {
+  width: 50%;
+  height: 307px;
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-container {
+  width: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 150px 150px;
+  gap: 7px;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Това е за да придадеш стил на мини изображенията */
+.thumbnail {
+  overflow: hidden;
+}
+
+.stars {
+  padding-top: 3px;
+  color: #ffb700;
+}
+
+.address {
+  font-style: italic;
+}
+
+.facilities {
+  width: 50%;
+}
+
+.facilities label {
+  margin-bottom: 0;
+  font-size: calc(1.275rem + 0.3vw);
+  font-weight: 600;
+}
+
+.facilities span {
+  font-size: 1.10rem;
+}

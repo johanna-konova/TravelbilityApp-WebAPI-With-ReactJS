@@ -9,7 +9,7 @@ using TravelbilityApp.Core.DTOs.Property;
 
 namespace TravelbilityApp.WebAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class PropertiesController(
         IValidator<CreatePropertyDto> validator,
         IPropertyService propertyService) : BaseController
@@ -38,6 +38,24 @@ namespace TravelbilityApp.WebAPI.Controllers
             var createdPropertyId = await propertyService.CreateAsync(dto, User.Id());
 
             return Created(string.Empty, new { id = createdPropertyId });
+        }
+
+        [AllowAnonymous]
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var propertyData = await propertyService.GetByIdAsync(id);
+
+            if (propertyData == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(propertyData);
         }
     }
 }
