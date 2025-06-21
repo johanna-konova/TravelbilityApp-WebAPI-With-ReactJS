@@ -1,0 +1,36 @@
+.user-actions-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 20px;
+    padding-right: 1rem;
+}
+
+.edit {
+    color: #ffa500 !important;
+}
+
+.delete {
+    all: unset;
+    color: #c82333;
+}
+
+.delete:hover {
+    all: unset;
+    color: #c82333;
+}
+
+.delete:focus {
+    all: unset;
+    color: #c82333;
+}
+
+.delete:not(:disabled):not(:disabled):active {
+    all: unset;
+    color: #c82333;
+}
+
+.delete:not(:disabled):not(:disabled):active:focus {
+    all: unset;
+    color: #c82333;
+}

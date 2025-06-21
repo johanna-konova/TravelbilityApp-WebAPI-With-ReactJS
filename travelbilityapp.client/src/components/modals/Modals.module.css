@@ -1,0 +1,45 @@
+.x-icon {
+    all: unset;
+    color: #7AB730;
+}
+
+.x-icon:disabled {
+    all: unset;
+    color: #7AB730;
+}
+
+.x-icon:hover {
+    all: unset;
+}
+
+.x-icon:focus {
+    all: unset;
+}
+
+.x-icon:not(:disabled):not(:disabled):active {
+    all: unset;
+}
+
+.x-icon:not(:disabled):not(:disabled):active:focus {
+    all: unset;
+}
+
+.modal-body {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.warning-message {
+    font-style: italic;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.agree-btn {
+    background-color: #c82333;
+}
+
+.deleting {
+    color: lightgray;
+}
