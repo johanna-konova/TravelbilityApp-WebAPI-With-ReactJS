@@ -1,0 +1,11 @@
+.not-found-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-found-text span {
+    font-size: 21px;
+    font-style: italic;
+    text-align: center;
+}
