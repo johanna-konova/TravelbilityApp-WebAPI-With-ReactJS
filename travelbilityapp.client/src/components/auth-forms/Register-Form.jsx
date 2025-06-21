@@ -29,7 +29,6 @@ export default function RegisterForm() {
             await registerHandler(userData);
             navigate("/");
         } catch (error) {
-            debugger
             setMenualErrors(error.errorsData)
         }
     }
