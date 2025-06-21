@@ -16,7 +16,7 @@ export default function AuthContextProvider(props) {
     const changeLoggedInUserData = (loggedInUserData) => setLoggedInUserData(loggedInUserData);
 
     const contextData = {
-        id: loggedInUserData._id,
+        id: loggedInUserData.id,
         email: loggedInUserData.email,
         accessToken: loggedInUserData.accessToken,
         refreshToken: loggedInUserData.refreshToken,
