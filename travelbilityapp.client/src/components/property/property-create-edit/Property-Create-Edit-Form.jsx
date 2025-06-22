@@ -5,14 +5,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Form } from 'react-bootstrap';
 import toast from "react-hot-toast";
 
-//import { usePropertyContext } from '../../../contexts/Property-Context';
+import { usePropertyContext } from '../../../contexts/Property-Context';
 
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { getFacilities } from '../../../services/facilitiesService';
 import { create, edit } from '../../../services/propertiesService';
 import { propertySchema } from '../../../validations';
-import { formatCreatePropertyErrorsData } from '../../../utils/property-utils';
+import { constructPropertyDataForEditing, formatCreatePropertyErrorsData } from '../../../utils/property-utils';
 
 import PropertyCreateEditFormStepOne from './Property-Create-Edit-Form-Step-One';
 import PropertyCreateEditFormStepTwo from './Property-Create-Edit-Form-Step-Two';
@@ -25,7 +25,7 @@ export default function PropertyCreateEditForm() {
     const { data: propertyTypes, isDataLoaded: isPropertyTypesLoaded } = useBasicGetFetch(() => getPropertyTypes());
     const { data: facilities } = useBasicGetFetch(() => getFacilities());
 
-    //const { propertyData, propertyFacilities } = usePropertyContext();
+    const { propertyData } = usePropertyContext();
 
     const [menualErrors, setMenualErrors] = useState({});
     const [step, setStep] = useState(1);
@@ -44,11 +44,11 @@ export default function PropertyCreateEditForm() {
         resolver: yupResolver(propertySchema),
     });
 
-    /*useEffect(() => {
+    useEffect(() => {
         if (propertyData.id !== undefined) {
-            reset(constructPropertyDataForEditing(propertyData, propertyFacilities));
+            reset(constructPropertyDataForEditing(propertyData));
         }
-    }, [propertyData, propertyFacilities, reset]);*/
+    }, [propertyData, reset]);
 
     const updateMenualErrorsHandler = (errors) => {
         if (errors.ImageUrls) {
@@ -80,12 +80,13 @@ export default function PropertyCreateEditForm() {
             facilityIds: [...data["step-2"].commonFacilityIds, ...data["step-2"].accessibilityIds],
             imageUrls: data["step-3"].imageUrls.map(iu => iu.url)
         };
+        debugger
 
         try {
-            await create(propertyData);
+            /*await create(propertyData);
 
             toast.success("You have successfully listed your property.");
-            navigate("/");
+            navigate("/");*/
         } catch (errorInfo) {
             const errorsData = formatCreatePropertyErrorsData(getValues(), errorInfo.errorsData);
 

@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import AuthGuard from "./components/common/Auth-Guard";
+import PublisherGuard from "./components/common/Publisher-Guard";
 
 import AuthContextProvider from "./contexts/Auth-Context";
 import PropertyContextProvider from "./contexts/Property-Context";
@@ -39,6 +40,15 @@ function App() {
 
                     <Route element={<AuthGuard />}>
                         <Route path="/list" element={<PropertyCreateEditForm />} />
+
+                        <Route path="/edit/:propertyId" element={
+                            <PropertyContextProvider>
+                                <PublisherGuard>
+                                    <PropertyCreateEditForm />
+                                </PublisherGuard>
+                            </PropertyContextProvider>
+                        } />
+
                         <Route path="/my-properties" element={<UserProperties />} />
                     </Route>
 

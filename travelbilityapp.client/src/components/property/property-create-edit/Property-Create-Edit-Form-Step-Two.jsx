@@ -31,7 +31,7 @@ export default function PropertyCreateEditFormStepTwo({
                                     <input
                                         type="checkbox"
                                         value={cf.id}
-                                        //checked={watch("step-2.commonFacilityIds")?.includes(cf.id)}
+                                        checked={watch("step-2.commonFacilityIds")?.includes(cf.id)}
                                         {...register("step-2.commonFacilityIds")}
                                     />
                                     <span className={styles["checkmark"]}></span>
@@ -50,7 +50,7 @@ export default function PropertyCreateEditFormStepTwo({
                                     <input
                                         type="checkbox"
                                         value={a.id}
-                                        //checked={watch("step-2.accessibilityIds")?.includes(a.id)}
+                                        checked={watch("step-2.accessibilityIds")?.includes(a.id)}
                                         {...register("step-2.accessibilityIds")}
                                     />
                                     <span className={styles["checkmark"]}></span>

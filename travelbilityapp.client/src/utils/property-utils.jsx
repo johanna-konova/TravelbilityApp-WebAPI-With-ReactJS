@@ -5,12 +5,13 @@ export const generateStarIcons = (starsCount) => new Array(starsCount)
 export const getCountryName = (address) =>
     address.substring(address.lastIndexOf(",") + 1).trim();
 
-export const constructPropertyDataForEditing = (propertyData, propertyFacilities) => {
+export const constructPropertyDataForEditing = (propertyData) => {
+    debugger
     return {
         "id": propertyData.id,
         "step-1": {
             name: propertyData.name,
-            typeId: propertyData.typeId,
+            typeId: propertyData.type.id,
             starsCount: propertyData.starsCount,
             checkIn: propertyData.checkIn,
             checkOut: propertyData.checkOut,
@@ -18,12 +19,12 @@ export const constructPropertyDataForEditing = (propertyData, propertyFacilities
             description: propertyData.description,
         },
         "step-2": {
-            commonFacilityIds: propertyFacilities
-                .filter(pf => pf.isForAccessibility === false)
-                .map(pf => pf.facilityId),
-            accessibilityIds: propertyFacilities
-                .filter(pf => pf.isForAccessibility)
-                .map(pf => pf.facilityId),
+            commonFacilityIds: propertyData.facilities
+                .filter(f => f.isForAccessibility === false)
+                .map(f => f.id),
+            accessibilityIds: propertyData.facilities
+                .filter(f => f.isForAccessibility)
+                .map(f => f.id),
         },
         "step-3": {
             imageUrls: propertyData.imageUrls?.map((iu, i) => ({ id: i + 1, url: iu })),
