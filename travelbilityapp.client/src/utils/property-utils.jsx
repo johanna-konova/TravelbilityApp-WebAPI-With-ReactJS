@@ -6,7 +6,6 @@ export const getCountryName = (address) =>
     address.substring(address.lastIndexOf(",") + 1).trim();
 
 export const constructPropertyDataForEditing = (propertyData) => {
-    debugger
     return {
         "id": propertyData.id,
         "step-1": {
@@ -21,10 +20,10 @@ export const constructPropertyDataForEditing = (propertyData) => {
         "step-2": {
             commonFacilityIds: propertyData.facilities
                 .filter(f => f.isForAccessibility === false)
-                .map(f => f.id),
+                .map(f => String(f.id)),
             accessibilityIds: propertyData.facilities
                 .filter(f => f.isForAccessibility)
-                .map(f => f.id),
+                .map(f => String(f.id)),
         },
         "step-3": {
             imageUrls: propertyData.imageUrls?.map((iu, i) => ({ id: i + 1, url: iu })),

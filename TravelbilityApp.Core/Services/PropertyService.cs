@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using TravelbilityApp.Core.Contracts;
 using TravelbilityApp.Core.DTOs.Property;
 using TravelbilityApp.Infrastructure.Common;
 using TravelbilityApp.Infrastructure.Data.Models;
+
+using static TravelbilityApp.Core.CommonHelpers;
 
 namespace TravelbilityApp.Core.Services
 {
@@ -13,7 +16,7 @@ namespace TravelbilityApp.Core.Services
         public async Task<PropertyDetailsDto?> GetByIdAsync(Guid id)
             => await repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.Id == id)
+                .Where(p => p.Id == id && p.IsDeleted == false)
                 .Select(p => new PropertyDetailsDto()
                 {
                     Id = p.Id,
@@ -44,7 +47,7 @@ namespace TravelbilityApp.Core.Services
         public async Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId)
             => await repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.PublisherId == userId)
+                .Where(p => p.PublisherId == userId && p.IsDeleted == false)
                 .Select(p => new UserPropertyDto()
                 {
                     Id = p.Id,
@@ -56,8 +59,21 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
-        public async Task<Guid> CreateAsync(CreatePropertyDto dto, Guid userId)
+        public async Task<bool> HasPropertyWithGivenIdAsync(Guid id)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .AnyAsync(p => p.Id == id && p.IsDeleted == false);
+
+        public async Task<bool> IsUserPropertyPublisherAsync(Guid propertyId, Guid userId)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .AnyAsync(p => p.Id == propertyId && p.PublisherId == userId && p.IsDeleted == false);
+
+        public async Task<Guid> CreateAsync(PropertyInputDto dto, Guid userId)
         {
+            var validSelectedFacilityIds = await facilityService.GetValidSelectedIdsAsync(dto.FacilityIds);
+            var validImageUrls = GetValidImageUrls(dto.ImageUrls);
+
             var newProperty = new Property()
             {
                 Name = dto.Name,
@@ -68,40 +84,88 @@ namespace TravelbilityApp.Core.Services
                 Description = dto.Description,
                 PropertyTypeId = (int)dto.TypeId!,
                 PublisherId = userId,
+                Facilities = validSelectedFacilityIds.Select(vsfi => new PropertyFacility() { FacilityId = vsfi}).ToList(),
+                Photos = validImageUrls.Select(viu => new PropertyPhoto() { Url = viu}).ToList()
             };
 
-            var selectedFacilityIds = dto.FacilityIds
-                .Distinct()
-                .Where(fi => fi != null);
-
-            var validSelectedFacilityIds = await facilityService.GetValidSelectedIdsAsync(selectedFacilityIds);
-
-            var newPropertyFacilities = validSelectedFacilityIds
-                .Select(vsfi => new PropertyFacility()
-                {
-                    PropertyId = newProperty.Id,
-                    FacilityId = vsfi,
-                });
-
-            var validImageUrls = dto.ImageUrls
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .Where(iu => Uri.TryCreate(iu, UriKind.Absolute, out var createdUrl) &&
-                             (createdUrl.Scheme == Uri.UriSchemeHttp || createdUrl.Scheme == Uri.UriSchemeHttps));
-
-            var newPropertyPhotos = validImageUrls
-                .Select(viu => new PropertyPhoto()
-                {
-                    Url = viu,
-                    PropertyId = newProperty.Id,
-                });
-
             await repository.AddAsync(newProperty);
-            await repository.AddRangeAsync(newPropertyFacilities);
-            await repository.AddRangeAsync(newPropertyPhotos);
-
             await repository.SaveChangesAsync();
 
             return newProperty.Id;
+        }
+        public async Task<Guid> EditAsync(Guid id, PropertyInputDto dto)
+        {
+            var propertyToEdit = await repository
+                .All<Property>()
+                .Include(p => p.Facilities)
+                .Include(p => p.Photos)
+                .SingleOrDefaultAsync(p => p.Id == id);
+
+            propertyToEdit!.Name = dto.Name;
+            propertyToEdit.StarsCount = dto.StarsCount;
+            propertyToEdit.CheckIn = (TimeOnly)dto.CheckIn!;
+            propertyToEdit.CheckOut = (TimeOnly)dto.CheckOut!;
+            propertyToEdit.Address = dto.Address;
+            propertyToEdit.Description = dto.Description;
+            propertyToEdit.PropertyTypeId = (int)dto.TypeId!;
+            propertyToEdit.UpdatedAt = DateTime.UtcNow;
+
+            var (facilitiesToAdd, facilitiesToRemove) = await GetFacilitiesToAddAndToRemoveAsync(propertyToEdit, dto.FacilityIds);
+            var (photosToAdd, photosToRemove) = GetPhotosToAddAndToRemove(propertyToEdit, dto.ImageUrls);
+
+            repository.RemoveRange(facilitiesToRemove);
+            await repository.AddRangeAsync(facilitiesToAdd);
+
+            repository.RemoveRange(photosToRemove);
+            await repository.AddRangeAsync(photosToAdd);
+
+            await repository.SaveChangesAsync();
+
+            return propertyToEdit.Id;
+        }
+
+        private async Task<(IEnumerable<PropertyFacility> facilitiesToAdd, IEnumerable<PropertyFacility> facilitiesToRemove)> GetFacilitiesToAddAndToRemoveAsync(
+            Property propertyToEdit,
+            IEnumerable<int?> selectedFacilityIds)
+        {
+            var validSelectedFacilityIds = await facilityService.GetValidSelectedIdsAsync(selectedFacilityIds);
+
+            var facilitiesToAdd = validSelectedFacilityIds
+                .Except(propertyToEdit.Facilities.Select(f => f.FacilityId))
+                .Select(vsfi => new PropertyFacility()
+                {
+                    PropertyId = propertyToEdit.Id,
+                    FacilityId = vsfi,
+                })
+                .ToList();
+
+            var facilitiesToRemove = propertyToEdit.Facilities
+                .Where(f => validSelectedFacilityIds.Contains(f.FacilityId) == false)
+                .ToList();
+
+            return (facilitiesToAdd, facilitiesToRemove);
+        }
+
+        private (IEnumerable<PropertyPhoto> photosToAdd, IEnumerable<PropertyPhoto> photosToRemove) GetPhotosToAddAndToRemove(
+            Property propertyToEdit,
+            IEnumerable<string> imageUrls)
+        {
+            var validImageUrls = GetValidImageUrls(imageUrls);
+
+            var photosToRemove = propertyToEdit.Photos
+                .Where(p => validImageUrls.Contains(p.Url, StringComparer.OrdinalIgnoreCase) == false)
+                .ToList();
+
+            var photosToAdd = validImageUrls
+                .Except(propertyToEdit.Photos.Select(p => p.Url), StringComparer.OrdinalIgnoreCase)
+                .Select(viu => new PropertyPhoto()
+                {
+                    Url = viu,
+                    PropertyId = propertyToEdit.Id,
+                })
+                .ToList();
+
+            return (photosToAdd, photosToRemove);
         }
     }
 }

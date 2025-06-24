@@ -6,7 +6,7 @@ using static TravelbilityApp.Infrastructure.Data.Constants.DataConstants.Propert
 
 namespace TravelbilityApp.Core.DTOs.Property
 {
-    public class CreatePropertyDto
+    public class PropertyInputDto
     {
         [Required(ErrorMessage = RequiredName)]
         [StringLength(NameMaxLength,

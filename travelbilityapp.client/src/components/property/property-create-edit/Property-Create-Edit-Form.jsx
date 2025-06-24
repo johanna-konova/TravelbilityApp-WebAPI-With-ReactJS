@@ -1,23 +1,23 @@
-import  { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
 import { Container, Form } from 'react-bootstrap';
+import { useForm } from 'react-hook-form';
 import toast from "react-hot-toast";
+import { useNavigate } from 'react-router-dom';
 
 import { usePropertyContext } from '../../../contexts/Property-Context';
 
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
-import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { getFacilities } from '../../../services/facilitiesService';
 import { create, edit } from '../../../services/propertiesService';
-import { propertySchema } from '../../../validations';
+import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { constructPropertyDataForEditing, formatCreatePropertyErrorsData } from '../../../utils/property-utils';
+import { propertySchema } from '../../../validations';
 
-import PropertyCreateEditFormStepOne from './Property-Create-Edit-Form-Step-One';
-import PropertyCreateEditFormStepTwo from './Property-Create-Edit-Form-Step-Two';
-import PropertyCreateEditFormStepThree from './Property-Create-Edit-Form-Step-Three';
 import { WheelchairTireSpinner } from '../../loaders/Loaders';
+import PropertyCreateEditFormStepOne from './Property-Create-Edit-Form-Step-One';
+import PropertyCreateEditFormStepThree from './Property-Create-Edit-Form-Step-Three';
+import PropertyCreateEditFormStepTwo from './Property-Create-Edit-Form-Step-Two';
 
 import styles from './Property-Create-Edit-Form.module.css';
 
@@ -75,7 +75,7 @@ export default function PropertyCreateEditForm() {
     const prevStep = () => setStep(step - 1);
 
     const createHandler = async (data) => {
-        const propertyData = {
+        const propertyDataToSave = {
             ...data["step-1"],
             facilityIds: [...data["step-2"].commonFacilityIds, ...data["step-2"].accessibilityIds],
             imageUrls: data["step-3"].imageUrls.map(iu => iu.url)
@@ -83,10 +83,12 @@ export default function PropertyCreateEditForm() {
         debugger
 
         try {
-            /*await create(propertyData);
+            const savedPropertyData = propertyData.id
+                ? await edit(propertyData.id, propertyDataToSave)
+                : await create(propertyDataToSave);
 
-            toast.success("You have successfully listed your property.");
-            navigate("/");*/
+            toast.success(`You have successfully ${propertyData.id === '' ? "listed" : "edited"} your property.`);
+            navigate(`/properties/${savedPropertyData.id}`);
         } catch (errorInfo) {
             const errorsData = formatCreatePropertyErrorsData(getValues(), errorInfo.errorsData);
 
@@ -100,31 +102,6 @@ export default function PropertyCreateEditForm() {
                 setStep(3);
             }
         }
-        /*const savedPropertyData = data.id
-            ? await edit(data.id, propertyData)
-            : await create(propertyData);
-
-        const facilityIds = [...data["step-2"].commonFacilityIds, ...data["step-2"].accessibilityIds];
-
-        const propertyFacilitiesToDelete = propertyFacilities
-            .filter(pf => facilityIds.includes(pf.facilityId) === false)
-            .map(pf => pf.recordId);
-
-        for (const facilityId of facilityIds) {
-            if (propertyFacilities.some(pf => pf.facilityId === facilityId) === false) {
-                await createPropertyFacility({
-                    propertyId: savedPropertyData.id,
-                    facilityId
-                });
-            }
-        }
-
-        for (const propertyFacilityToDelete of propertyFacilitiesToDelete) {
-            await deletePropertyFacility(propertyFacilityToDelete);
-        }
-
-        toast.success(`You have successfully ${data.id === undefined ? "listed" : "edited"} your property.`);
-        navigate("/my-properties");*/
     };
 
     return (
@@ -139,8 +116,6 @@ export default function PropertyCreateEditForm() {
                             <span><i className="far fa-images text-primary"></i> Photos</span>
                         </div>
                     </div>
-
-                    <input type="hidden" {...register("id")} />
 
                     {step === 1 && <PropertyCreateEditFormStepOne
                         propertyTypes={propertyTypes}

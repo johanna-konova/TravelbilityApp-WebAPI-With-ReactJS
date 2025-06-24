@@ -15,8 +15,8 @@ export default function PropertyCreateEditFormStepTwo({
     const [accessibility, setAccessibility] = useState([]);
 
     useEffect(() => {
-        setCommonFacilities(facilities.filter(f => f.isForAccessibility === false));
-        setAccessibility(facilities.filter(f => f.isForAccessibility));
+        setCommonFacilities(facilities.filter(f => f.isForAccessibility === false).map(f => ({ ...f, id: String(f.id) })));
+        setAccessibility(facilities.filter(f => f.isForAccessibility).map(f => ({ ...f, id: String(f.id) })));
     }, [facilities]);
 
     return (
