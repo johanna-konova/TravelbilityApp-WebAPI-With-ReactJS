@@ -5,10 +5,11 @@ using TravelbilityApp.Core.DTOs.Property;
 
 using static TravelbilityApp.Core.Constants.ModelsConstants;
 using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Property;
+using static TravelbilityApp.Core.CommonHelpers;
 
 namespace TravelbilityApp.WebAPI.Validators
 {
-    public class CreatePropertyDtoValidator : AbstractValidator<CreatePropertyDto>
+    public class CreatePropertyDtoValidator : AbstractValidator<PropertyInputDto>
     {
         public CreatePropertyDtoValidator(
             IPropertyTypeService propertyTypeService,
@@ -23,11 +24,7 @@ namespace TravelbilityApp.WebAPI.Validators
             RuleFor(cpd => cpd.FacilityIds)
                 .CustomAsync(async (facilityIds, validationContext, cancellationToken) =>
                 {
-                    var selectedFacilityIds = facilityIds
-                        .Where(fi => fi != null)
-                        .Distinct();
-
-                    var validSelectedFacilities = await facilityService.GetValidSelectedAsync(selectedFacilityIds);
+                    var validSelectedFacilities = await facilityService.GetValidSelectedAsync(facilityIds);
 
                     if (validSelectedFacilities.Any(vsf => vsf.IsForAccessibility == false) == false)
                     {
@@ -50,8 +47,7 @@ namespace TravelbilityApp.WebAPI.Validators
                     var url = imageUrls[i];
                     var key = $"ImageUrls[{i}]";
 
-                    if (Uri.TryCreate(url, UriKind.Absolute, out var createdUrl) == false ||
-                       (createdUrl.Scheme != Uri.UriSchemeHttp && createdUrl.Scheme != Uri.UriSchemeHttps))
+                    if (IsImageUrlValid(url) == false)
                         {
                             validationContext.AddFailure(key, RequiredImageUrlFormat);
                             continue;
