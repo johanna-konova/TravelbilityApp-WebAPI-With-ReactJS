@@ -11,8 +11,6 @@ import { WheelchairTireSpinner } from '../../loaders/Loaders';
 export default function PropertyDetailsContainer() {
     const { propertyData, isPropertyDataLoaded } = usePropertyContext();
     const { id } = useAuthContext();
-    console.log(propertyData.publisherId);
-    console.log(id);
 
     return (
         <>
