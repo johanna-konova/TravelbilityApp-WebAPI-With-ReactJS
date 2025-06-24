@@ -7,6 +7,7 @@
         Task<T?> GetByIdAsync<T>(Guid id) where T : class;
         Task AddAsync<T>(T entity) where T : class;
         Task AddRangeAsync<T>(IEnumerable<T> entities) where T : class;
+        void RemoveRange<T>(IEnumerable<T> entities) where T : class;
         Task<int> SaveChangesAsync();
     }
 }
