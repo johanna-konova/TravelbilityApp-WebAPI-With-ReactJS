@@ -21,8 +21,13 @@ namespace TravelbilityApp.Core.Services
                 .ToListAsync();
 
         public async Task<IEnumerable<PropertyFacilityOptionDto>> GetValidSelectedAsync(
-            IEnumerable<int?> selectedIds)
-            => await repository
+            IEnumerable<int?> rawSelectedIds)
+        {
+            var selectedIds = rawSelectedIds
+                .Where(rsi => rsi.HasValue)
+                .Distinct();
+
+            return await repository
                 .AllAsNoTracking<Facility>()
                 .Where(f => selectedIds.Contains(f.Id))
                 .Select(f => new PropertyFacilityOptionDto()
@@ -32,6 +37,7 @@ namespace TravelbilityApp.Core.Services
                     IsForAccessibility = f.IsForAccessibility,
                 })
                 .ToListAsync();
+        }
 
         public async Task<IEnumerable<int>> GetValidSelectedIdsAsync(IEnumerable<int?> selectedIds)
             => await repository
