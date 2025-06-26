@@ -9,5 +9,6 @@ namespace TravelbilityApp.Core.Contracts
             IEnumerable<int?> selectedIds);
         Task<IEnumerable<int>> GetValidSelectedIdsAsync(
             IEnumerable<int?> selectedIds);
+        Task<IEnumerable<PropertyFacilityOptionDto>> GetAccessibilityAsync();
     }
 }

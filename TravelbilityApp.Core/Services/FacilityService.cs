@@ -45,5 +45,17 @@ namespace TravelbilityApp.Core.Services
                 .Where(f => selectedIds.Contains(f.Id))
                 .Select(f => f.Id)
                 .ToListAsync();
+
+        public async Task<IEnumerable<PropertyFacilityOptionDto>> GetAccessibilityAsync()
+            => await repository
+                .AllAsNoTracking<Facility>()
+                .Where(f => f.IsForAccessibility)
+                .Select(f => new PropertyFacilityOptionDto()
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    IsForAccessibility = f.IsForAccessibility,
+                })
+                .ToListAsync();
     }
 }

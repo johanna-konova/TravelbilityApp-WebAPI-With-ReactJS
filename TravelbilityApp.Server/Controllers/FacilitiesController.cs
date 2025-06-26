@@ -12,11 +12,21 @@ namespace TravelbilityApp.WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(PropertyFacilityOptionDto), StatusCodes.Status200OK)]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> GetAll()
         {
             var propertyFacilities = await facilityService.GetAllAsync();
 
             return Ok(propertyFacilities);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("accessibility")]
+        [ProducesResponseType(typeof(PropertyFacilityOptionDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAccessibility()
+        {
+            var propertyAccessibility = await facilityService.GetAccessibilityAsync();
+
+            return Ok(propertyAccessibility);
         }
     }
 }
