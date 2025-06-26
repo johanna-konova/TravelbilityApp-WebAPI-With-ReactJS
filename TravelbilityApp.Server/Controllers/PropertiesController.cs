@@ -32,6 +32,25 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(propertiesData);
         }
 
+        [AllowAnonymous]
+        [HttpGet("newest")]
+        [ProducesResponseType(typeof(IEnumerable<PropertyInNewestAddedDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetNewestAdded([FromQuery] int count = 3)
+        {
+            var propertiesData = await propertyService.GetNewestAddedAsync(count);
+
+            return Ok(propertiesData);
+        }
+
+        [HttpGet("listed")]
+        [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetByUserId()
+        {
+            var propertiesData = await propertyService.GetByUserIdAsync(User.Id());
+
+            return Ok(propertiesData);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,15 +90,6 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(propertyData);
         }
 
-        [HttpGet("listed")]
-        [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetByUserId()
-        {
-            var propertiesData = await propertyService.GetByUserIdAsync(User.Id());
-
-            return Ok(propertiesData);
-        }
-
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -106,8 +116,6 @@ namespace TravelbilityApp.WebAPI.Controllers
             var editedPropertyId = await propertyService.EditAsync(id, dto);
 
             return Created(string.Empty, new { id = editedPropertyId });
-
-            //return Created(string.Empty, Guid.NewGuid());
         }
     }
 }

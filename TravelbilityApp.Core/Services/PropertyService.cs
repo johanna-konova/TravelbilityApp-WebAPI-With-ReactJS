@@ -75,6 +75,40 @@ namespace TravelbilityApp.Core.Services
             return propertiesData;
         }
 
+        public async Task<IEnumerable<PropertyInNewestAddedDto>> GetNewestAddedAsync(int count)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.IsDeleted == false)
+                .OrderByDescending(p => p.CreatedAt)
+                .Take(count)
+                .Select(p => new PropertyInNewestAddedDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    Address = p.Address,
+                    TypeName = p.PropertyType.Name,
+                    MainPhotoUrl = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
+                    PublisherId = p.PublisherId,
+                })
+                .ToListAsync();
+
+        public async Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.PublisherId == userId && p.IsDeleted == false)
+                .Select(p => new UserPropertyDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    Address = p.Address,
+                    Description = p.Description,
+                    MainPhoto = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
+                    PublisherId = p.PublisherId,
+                })
+                .ToListAsync();
+
         public async Task<PropertyDetailsDto?> GetByIdAsync(Guid id)
             => await repository
                 .AllAsNoTracking<Property>()
@@ -105,22 +139,6 @@ namespace TravelbilityApp.Core.Services
                         .Select(p => p.Url)
                 })
                 .SingleOrDefaultAsync();
-
-        public async Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId)
-            => await repository
-                .AllAsNoTracking<Property>()
-                .Where(p => p.PublisherId == userId && p.IsDeleted == false)
-                .Select(p => new UserPropertyDto()
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    StarsCount = p.StarsCount,
-                    Address = p.Address,
-                    Description = p.Description,
-                    MainPhoto = p.Photos.First().Url,
-                    PublisherId = p.PublisherId,
-                })
-                .ToListAsync();
 
         public async Task<bool> HasPropertyWithGivenIdAsync(Guid id)
             => await repository
