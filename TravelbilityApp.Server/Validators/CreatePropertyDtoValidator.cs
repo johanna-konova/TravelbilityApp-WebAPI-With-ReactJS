@@ -37,7 +37,7 @@ namespace TravelbilityApp.WebAPI.Validators
                     }
                 });
 
-            RuleFor(cpd => cpd.ImageUrls)
+            RuleFor(cpd => cpd.PhotoUrls)
                 .Custom((imageUrls, validationContext) =>
                 {
                     var validImageUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

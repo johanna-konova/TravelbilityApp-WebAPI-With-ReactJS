@@ -2,15 +2,15 @@ import { Container, Row } from "react-bootstrap";
 
 import PropertyShortGridView from "./Property-Short-Grid-View";
 
-export default function UserPropertiesContainer({ propertiesDataByOwnerId }) {
+export default function UserPropertiesContainer({ propertiesDataByPublisherId }) {
     return (
         <>
             <Container>
                 <Row className="justify-content-center">
-                    {propertiesDataByOwnerId.map(pdboi =>
+                    {propertiesDataByPublisherId.map(pdbpi =>
                         <PropertyShortGridView
-                            key={pdboi.id}
-                            propertyData={pdboi}
+                            key={pdbpi.id}
+                            propertyData={pdbpi}
                         />)
                     }
                 </Row>

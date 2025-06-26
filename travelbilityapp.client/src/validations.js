@@ -73,7 +73,7 @@ export const propertySchema = yup.object().shape({
     }),
 
     "step-3": yup.object({
-        imageUrls: yup
+        photoUrls: yup
             .array()
             .min(5, "Please, upload at least 5 Photos with a valid URL format."),
     }),

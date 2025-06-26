@@ -64,7 +64,7 @@ namespace TravelbilityApp.Core.Services
                     Name = p.Name,
                     StarsCount = p.StarsCount,
                     Address = p.Address,
-                    MainPhoto = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
+                    MainPhotoUrl = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
                     Accessibility = p.Facilities
                         .Where(f => f.Facility.IsForAccessibility)
                         .Select(f => f.Facility.Name),
@@ -104,7 +104,7 @@ namespace TravelbilityApp.Core.Services
                     StarsCount = p.StarsCount,
                     Address = p.Address,
                     Description = p.Description,
-                    MainPhoto = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
+                    MainPhotoUrl = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
                     PublisherId = p.PublisherId,
                 })
                 .ToListAsync();
@@ -135,7 +135,7 @@ namespace TravelbilityApp.Core.Services
                             Name = f.Facility.Name,
                             IsForAccessibility = f.Facility.IsForAccessibility,
                         }),
-                    ImageUrls = p.Photos
+                    PhotoUrls = p.Photos
                         .Select(p => p.Url)
                 })
                 .SingleOrDefaultAsync();
@@ -153,7 +153,7 @@ namespace TravelbilityApp.Core.Services
         public async Task<Guid> CreateAsync(PropertyInputDto dto, Guid userId)
         {
             var validSelectedFacilityIds = await facilityService.GetValidSelectedIdsAsync(dto.FacilityIds);
-            var validImageUrls = GetValidImageUrls(dto.ImageUrls);
+            var validImageUrls = GetValidImageUrls(dto.PhotoUrls);
 
             var newProperty = new Property()
             {
@@ -192,7 +192,7 @@ namespace TravelbilityApp.Core.Services
             propertyToEdit.UpdatedAt = DateTime.UtcNow;
 
             var (facilitiesToAdd, facilitiesToRemove) = await GetFacilitiesToAddAndToRemoveAsync(propertyToEdit, dto.FacilityIds);
-            var (photosToAdd, photosToRemove) = GetPhotosToAddAndToRemove(propertyToEdit, dto.ImageUrls);
+            var (photosToAdd, photosToRemove) = GetPhotosToAddAndToRemove(propertyToEdit, dto.PhotoUrls);
 
             repository.RemoveRange(facilitiesToRemove);
             await repository.AddRangeAsync(facilitiesToAdd);

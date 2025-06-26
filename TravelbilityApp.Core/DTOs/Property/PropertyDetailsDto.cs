@@ -7,7 +7,6 @@
         public TimeOnly CheckOut { get; init; }
         public string Description { get; init; } = null!;
         public IEnumerable<PropertyFacilityOptionDto> Facilities { get; init; } = null!;
-        public IEnumerable<string> ImageUrls { get; init; } = null!;
-        public Guid PublisherId { get; init; }
+        public IEnumerable<string> PhotoUrls { get; init; } = null!;
     }
 }

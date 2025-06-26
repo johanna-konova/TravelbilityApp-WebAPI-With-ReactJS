@@ -3,6 +3,6 @@
     public class UserPropertyDto : MainPropertyDto
     {
         public string Description { get; init; } = null!;
-        public string MainPhoto { get; init; } = null!;
+        public string MainPhotoUrl { get; init; } = null!;
     }
 }

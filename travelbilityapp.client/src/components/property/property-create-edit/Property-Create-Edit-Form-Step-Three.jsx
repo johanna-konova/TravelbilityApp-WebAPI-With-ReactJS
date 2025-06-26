@@ -15,9 +15,9 @@ export default function PropertyCreateEditFormStepThree({
 }) {
     const [currentImageUrl, setCurrentImageUrl] = useState('');
 
-    const { fields: imageUrls, append, remove } = useFieldArray({
+    const { fields: photoUrls, append, remove } = useFieldArray({
         control,
-        name: 'step-3.imageUrls'
+        name: 'step-3.photoUrls'
     });
 
     const uploadImageHandler = async () => {
@@ -26,7 +26,7 @@ export default function PropertyCreateEditFormStepThree({
         try {
             await imageUrlSchema.validate(trimmedCurrentImageUrl);
 
-            if (imageUrls.some(iu => iu.url === trimmedCurrentImageUrl)) {
+            if (photoUrls.some(iu => iu.url === trimmedCurrentImageUrl)) {
                 throw new Error("You have already added this photo. Please, upload a new URL.");
             }
 
@@ -97,7 +97,7 @@ export default function PropertyCreateEditFormStepThree({
 
                 {/* Визуализиране на снимките */}
                 <Row className={styles["upload-box"]}>
-                    {imageUrls.map(({ id, url }, index) => (
+                    {photoUrls.map(({ id, url }, index) => (
                         <Col key={id} md={4} className="mb-3">
                             <div className={styles["photo-preview"]}>
                                 {index === 0 && <div className={styles["main-photo-label"]}>Main photo</div>}
@@ -125,8 +125,8 @@ export default function PropertyCreateEditFormStepThree({
                     ))}
                 </Row>
 
-                {errors.imageUrls
-                    ? <p className="text-danger text-center">{errors.imageUrls.message}</p>
+                {errors.photoUrls
+                    ? <p className="text-danger text-center">{errors.photoUrls.message}</p>
                     : (errors?.ImageUrlsCount && errors.ImageUrlsCount.map((message, index) => <div key={index} className="text-danger text-center">{message}</div>))
                 }
 

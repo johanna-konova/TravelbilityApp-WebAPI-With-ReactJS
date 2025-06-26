@@ -2,7 +2,7 @@
 {
     public class PropertyInAllDto : MainPropertyDto
     {
-        public string MainPhoto { get; init; } = null!;
+        public string MainPhotoUrl { get; init; } = null!;
         public IEnumerable<string> Accessibility { get; init; } = null!;
     }
 }

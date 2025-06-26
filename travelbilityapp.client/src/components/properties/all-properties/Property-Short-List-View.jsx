@@ -11,7 +11,7 @@ import styles from './All-Properties.module.css';
 
 export default function PropertyShortListView({
     id,
-    mainPhoto,
+    mainPhotoUrl,
     name,
     starsCount,
     address,
@@ -26,7 +26,7 @@ export default function PropertyShortListView({
         <div className={styles["property-container"]}>
             <div className={styles["property-img-container"]}>
                 <Link to={`/properties/${id}`}>
-                    <img src={mainPhoto} alt={`${name}'s main photo`} />
+                    <img src={mainPhotoUrl} alt={`${name}'s main photo`} />
                 </Link>
             </div>
             <div className={styles["property-info-container"]}>

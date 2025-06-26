@@ -78,7 +78,7 @@ export default function PropertyCreateEditForm() {
         const propertyDataToSave = {
             ...data["step-1"],
             facilityIds: [...data["step-2"].commonFacilityIds, ...data["step-2"].accessibilityIds],
-            imageUrls: data["step-3"].imageUrls.map(iu => iu.url)
+            photoUrls: data["step-3"].photoUrls.map(iu => iu.url)
         };
         debugger
 

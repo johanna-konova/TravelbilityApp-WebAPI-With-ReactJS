@@ -13,18 +13,18 @@ import { WheelchairTireSpinner } from '../../loaders/Loaders';
 export default function UserProperties() {
     const { id } = useAuthContext();
     const {
-        data: propertiesDataByOwnerId,
-        isDataLoaded: isPropertiesDataByOwnerIdLoaded,
+        data: propertiesDataByPublisherId,
+        isDataLoaded: isPropertiesDataByPublisherIdLoaded,
         removeDataElement: deletePropertyByIdHandler } = useBasicGetFetch(() => getByPublisherId(id));
 
     return (
         <>
             <Container className="mt-5">
-                {isPropertiesDataByOwnerIdLoaded
-                    ? propertiesDataByOwnerId.length === 0
+                {isPropertiesDataByPublisherIdLoaded
+                    ? propertiesDataByPublisherId.length === 0
                         ? <NoProperties />
                         : <PropertiesContext.Provider value={{ deletePropertyByIdHandler }}>
-                            <UserPropertiesContainer propertiesDataByOwnerId={propertiesDataByOwnerId} />
+                            <UserPropertiesContainer propertiesDataByPublisherId={propertiesDataByPublisherId} />
                           </PropertiesContext.Provider>
                     : <WheelchairTireSpinner />
                 }

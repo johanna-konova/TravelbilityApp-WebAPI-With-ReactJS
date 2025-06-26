@@ -41,6 +41,6 @@ namespace TravelbilityApp.Core.DTOs.Property
 
         public IEnumerable<int?> FacilityIds { get; set; } = new HashSet<int?>();
 
-        public IList<string> ImageUrls { get; set; } = new List<string>();
+        public IList<string> PhotoUrls { get; set; } = new List<string>();
     }
 }

@@ -17,7 +17,7 @@ export default function PropertyDetailsContainer() {
             <Container className="mt-5">
                 {isPropertyDataLoaded
                     ? <>
-                        {propertyData.imageUrls && <PropertyDetailsImages imageUrls={propertyData.imageUrls} />}
+                        {propertyData.photoUrls && <PropertyDetailsImages photoUrls={propertyData.photoUrls} />}
 
                         {(id === propertyData.publisherId) && <UserActions id={propertyData.id} name={propertyData.name} />}
 

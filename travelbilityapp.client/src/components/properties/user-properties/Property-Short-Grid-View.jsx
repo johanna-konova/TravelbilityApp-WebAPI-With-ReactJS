@@ -12,7 +12,7 @@ export default function PropertyShortGridView({ propertyData }) {
         <>
             <Card className={styles["property-card"]}>
                 <Link to={`/properties/${propertyData.id}`}>
-                    <Card.Img variant="top" src={propertyData.mainPhoto} />
+                    <Card.Img variant="top" src={propertyData.mainPhotoUrl} />
                 </Link>
                 <Card.Body className="pb-0">
                     <Link to={`/properties/${propertyData.id}`}>

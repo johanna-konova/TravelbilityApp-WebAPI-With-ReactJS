@@ -26,7 +26,7 @@ export const constructPropertyDataForEditing = (propertyData) => {
                 .map(f => String(f.id)),
         },
         "step-3": {
-            imageUrls: propertyData.imageUrls?.map((iu, i) => ({ id: i + 1, url: iu })),
+            photoUrls: propertyData.photoUrls?.map((iu, i) => ({ id: i + 1, url: iu })),
         }
     };
 };
