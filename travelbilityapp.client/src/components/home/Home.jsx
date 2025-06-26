@@ -1,3 +1,6 @@
+import NewestAddedPropertiesContainer from "./newest-added-properties-container/Neweset-Added-Properties-Container";
+import AccessibilityConteiner from "./accessibility-container/Accessibility-Container";
+
 export default function Home() {
     return (
         <>
@@ -53,6 +56,10 @@ export default function Home() {
                 </div>
             </div>
             {/* Carousel End */}
+
+            <NewestAddedPropertiesContainer />
+
+            <AccessibilityConteiner />
         </>
     )
 };

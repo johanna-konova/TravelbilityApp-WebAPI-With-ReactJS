@@ -4,7 +4,7 @@ const endpoint = 'properties';
 
 export const getAll = async (params) => api.get(`${endpoint}?${params.toString()}`);
 
-export const getThreeNewestAdded = async () => api.get(`${endpoint}?sortBy=_createdOn%20desc&pageSize=3&load=typeData%3DtypeId%3ApropertyTypes`);
+export const getNewestAdded = async (count) => api.get(`${endpoint}/newest?count=${count}`);
 
 export const getById = async (id) => api.get(`${endpoint}/${id}`);
 
