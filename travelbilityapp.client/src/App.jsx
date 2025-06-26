@@ -13,9 +13,13 @@ import Home from "./components/home/Home";
 import RegisterForm from "./components/auth-forms/Register-Form";
 import LoginForm from "./components/auth-forms/Login-Form";
 import AllProperties from "./components/properties/all-properties/All-Properties";
+import Contact from "./components/contact/Contact";
+import OurMission from "./components/our-mission/Our-Mission";
 import PropertyDetailsContainer from "./components/property/property-details/Property-Details-Container";
 import UserProperties from "./components/properties/user-properties/User-Properties";
 import PropertyCreateEditForm from "./components/property/property-create-edit/Property-Create-Edit-Form";
+import Footer from "./components/Footer";
+import BackToTop from "./components/Back-To-Top";
 import NotFound from "./components/not-found/Not-Found";
 
 function App() {
@@ -34,6 +38,7 @@ function App() {
                     <Route path="/register" element={<RegisterForm />} />
 
                     <Route path="/properties" element={<AllProperties />} />
+                    <Route path="/our-mission" element={<OurMission />} />
 
                     <Route path="/properties/:propertyId" element={
                         <PropertyContextProvider>
@@ -55,9 +60,14 @@ function App() {
                         <Route path="/my-properties" element={<UserProperties />} />
                     </Route>
 
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </main>
+
+            <Footer />
+
+            <BackToTop />
         </AuthContextProvider >
   )
 }
