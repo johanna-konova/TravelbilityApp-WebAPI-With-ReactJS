@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Home from "./components/home/Home";
 import RegisterForm from "./components/auth-forms/Register-Form";
 import LoginForm from "./components/auth-forms/Login-Form";
+import AllProperties from "./components/properties/all-properties/All-Properties";
 import PropertyDetailsContainer from "./components/property/property-details/Property-Details-Container";
 import UserProperties from "./components/properties/user-properties/User-Properties";
 import PropertyCreateEditForm from "./components/property/property-create-edit/Property-Create-Edit-Form";
@@ -31,6 +32,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
+
+                    <Route path="/properties" element={<AllProperties />} />
 
                     <Route path="/properties/:propertyId" element={
                         <PropertyContextProvider>

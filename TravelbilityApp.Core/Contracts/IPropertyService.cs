@@ -4,6 +4,7 @@ namespace TravelbilityApp.Core.Contracts
 {
     public interface IPropertyService
     {
+        Task<IEnumerable<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto);
         Task<PropertyDetailsDto> GetByIdAsync(Guid id);
         Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId);
         Task<bool> HasPropertyWithGivenIdAsync(Guid id);

@@ -1,0 +1,187 @@
+.filters-container {
+    width: 32%;
+    margin-right: 20px;
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 35px;
+    max-height: 800px;
+}
+
+.filter-by {
+    background-color: #f7f7f7;
+    text-align: center;
+    font-size: 24px;
+    border-top-right-radius: 35px;
+    border-top-left-radius: 35px;
+    border-bottom: 1px dashed;
+}
+
+.filter-boxes {
+    margin: 17px;
+}
+
+.filter-boxes div {
+    margin-left: 10px;
+}
+
+.filter-boxes label {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.properties-container {
+    width: 68%;
+    padding-right: 7px;
+}
+
+.property-container {
+    display: flex;
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 35px;
+    margin-bottom: 30px;
+}
+
+.found {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+.property-img-container img {
+    object-fit: cover;
+    width: 100%;
+    height: 240px;
+    border-radius: 10px;
+}
+
+.property-img-container {
+	display: flex;
+    width: 40%;
+    margin: 20px 5px 20px 20px;
+}
+
+.property-info-container {
+    width: 60%;
+    margin: 20px 15px 20px 10px;
+}
+
+.property-info-container a {
+    color: #212121;
+}
+
+.property-info-container a div {
+    width: fit-content;
+}
+
+.address {
+    font-style: italic;
+}
+
+.no-properties {
+    min-height: calc(100vh - 170px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-size: 20px;
+}
+
+.property-card {
+    width: 320px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 25px 50px 25px;
+}
+
+.property-card .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.stars {
+    color: #ffb700;
+}
+
+.property-card p span {
+    font-style: italic;
+}
+
+.property-card .card-text {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.property-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.property-card .card-footer a,
+.property-card .card-footer button {
+    margin: 0;
+}
+
+.properties-container .accessibility-container {
+    min-height: 90px;
+    margin-top: 1rem;
+}
+
+/* Основен стил за checkbox */
+.custom-checkbox {
+    width: fit-content;
+    position: relative;
+    padding-left: 25px; /* Разстояние между текста и кутийката */
+    cursor: pointer;
+  }
+  
+  /* Скриване на оригиналния checkbox */
+  .custom-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+  }
+  
+  /* Стил за кутийката */
+  .custom-checkbox .checkmark {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    border: 2px solid #ccc; /* Сива граница за немаркирани checkboxes */
+    border-radius: 4px; /* Закръглени ъгли */
+    background-color: white;
+  }
+  
+  /* Стил за кутийката, когато е маркирана */
+  .custom-checkbox input[type="checkbox"]:checked + .checkmark {
+    background-color: #7ab730; /* Зелен фон */
+    border-color: #7ab730; /* Зелена граница */
+  }
+  
+  /* Стил за тикчето */
+  .custom-checkbox .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid black; /* Черно тикче */
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Показване на тикчето, когато checkbox е маркиран */
+  .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+    display: block;
+  }

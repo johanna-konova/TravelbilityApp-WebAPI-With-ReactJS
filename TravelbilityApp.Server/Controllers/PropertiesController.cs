@@ -15,6 +15,23 @@ namespace TravelbilityApp.WebAPI.Controllers
         IValidator<PropertyInputDto> validator,
         IPropertyService propertyService) : BaseController
     {
+        [AllowAnonymous]
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PropertyInAllDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll([FromQuery] DTOs.Property.PropertyQueryParamsDto dto)
+        {
+            var serviceDto = new Core.DTOs.Property.PropertyQueryParamsDto()
+            {
+                PropertyTypeIds = dto.PropertyTypeIds,
+                FacilityIds = dto.FacilityIds,
+                AccessibilityIds = dto.AccessibilityIds,
+            };
+
+            var propertiesData = await propertyService.GetAllAsync(serviceDto);
+
+            return Ok(propertiesData);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

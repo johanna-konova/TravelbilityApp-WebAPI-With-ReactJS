@@ -13,6 +13,68 @@ namespace TravelbilityApp.Core.Services
         IRepository repository,
         IFacilityService facilityService) : IPropertyService
     {
+        public async Task<IEnumerable<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto)
+        {
+            var propertiesDataAsQuery = repository
+                .AllAsNoTracking<Property>()
+                .Include(p => p.Facilities)
+                .Include(p => p.Photos)
+                .Where(p => p.IsDeleted == false);
+
+            if (dto.PropertyTypeIds?.Any() ?? false)
+            {
+                propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => dto.PropertyTypeIds.Contains(p.PropertyTypeId));
+            }
+
+            if (dto.FacilityIds?.Any() ?? false)
+            {
+                /*propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => dto.FacilityIds.All(fi => p.Facilities.Any(f => f.FacilityId == fi)));*/
+
+                var facilityIdsCount = dto.FacilityIds.Count();
+
+                propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => p.Facilities
+                        .Where(f => dto.FacilityIds.Contains(f.FacilityId))
+                        .Select(f => f.FacilityId)
+                        .Distinct()
+                        .Count() == facilityIdsCount);
+            }
+
+            if (dto.AccessibilityIds?.Any() ?? false)
+            {
+                /*propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => dto.AccessibilityIds.All(fi => p.Facilities.Any(f => f.FacilityId == fi)));*/
+
+                var accessibilityIdsCount = dto.AccessibilityIds.Count();
+
+                propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => p.Facilities
+                        .Where(f => dto.AccessibilityIds.Contains(f.FacilityId))
+                        .Select(f => f.FacilityId)
+                        .Distinct()
+                        .Count() == accessibilityIdsCount);
+            }
+
+            var propertiesData = await propertiesDataAsQuery
+                .Select(p => new PropertyInAllDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    Address = p.Address,
+                    MainPhoto = p.Photos.Any() ? p.Photos.First().Url : string.Empty,
+                    Accessibility = p.Facilities
+                        .Where(f => f.Facility.IsForAccessibility)
+                        .Select(f => f.Facility.Name),
+                    PublisherId = p.PublisherId,
+                })
+                .ToListAsync();
+
+            return propertiesData;
+        }
+
         public async Task<PropertyDetailsDto?> GetByIdAsync(Guid id)
             => await repository
                 .AllAsNoTracking<Property>()
@@ -56,6 +118,7 @@ namespace TravelbilityApp.Core.Services
                     Address = p.Address,
                     Description = p.Description,
                     MainPhoto = p.Photos.First().Url,
+                    PublisherId = p.PublisherId,
                 })
                 .ToListAsync();
 
