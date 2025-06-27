@@ -205,6 +205,16 @@ namespace TravelbilityApp.Core.Services
             return propertyToEdit.Id;
         }
 
+        public async Task DeleteByIdAsync(Guid id)
+        {
+            var propertyToDelete = await repository
+                .GetByIdAsync<Property>(id);
+
+            propertyToDelete!.IsDeleted = true;
+
+            await repository.SaveChangesAsync();
+        }
+
         private async Task<(IEnumerable<PropertyFacility> facilitiesToAdd, IEnumerable<PropertyFacility> facilitiesToRemove)> GetFacilitiesToAddAndToRemoveAsync(
             Property propertyToEdit,
             IEnumerable<int?> selectedFacilityIds)

@@ -26,11 +26,11 @@ export default function UserActions({
     const deleteHandler = async (id) => {
         try {
             setIsDeleting(true);
-            /*await Promise.all([deleteById(id), deletePropertyFacilities(id)]);
+            await deleteById(id);
             deletePropertyByIdHandler === undefined
                 ? navigate(-1)
                 : deletePropertyByIdHandler(id);
-            toast.success("You have successfully deleted the property.");*/
+            toast.success("You have successfully deleted the property.");
         // eslint-disable-next-line no-unused-vars
         } catch (error) {
             toast.error("An unexpected error occurred. Please try again or contact us.");

@@ -12,5 +12,6 @@ namespace TravelbilityApp.Core.Contracts
         Task<bool> IsUserPropertyPublisherAsync(Guid propertyId, Guid userId);
         Task<Guid> CreateAsync(PropertyInputDto dto, Guid userId);
         Task<Guid> EditAsync(Guid id, PropertyInputDto dto);
+        Task DeleteByIdAsync(Guid id);
     }
 }

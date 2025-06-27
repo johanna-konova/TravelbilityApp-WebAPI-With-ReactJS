@@ -18,9 +18,10 @@ namespace TravelbilityApp.WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PropertyInAllDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll([FromQuery] DTOs.Property.PropertyQueryParamsDto dto)
         {
-            var serviceDto = new Core.DTOs.Property.PropertyQueryParamsDto()
+            var serviceDto = new PropertyQueryParamsDto()
             {
                 PropertyTypeIds = dto.PropertyTypeIds,
                 FacilityIds = dto.FacilityIds,
@@ -35,6 +36,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet("newest")]
         [ProducesResponseType(typeof(IEnumerable<PropertyInNewestAddedDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetNewestAdded([FromQuery] int count = 3)
         {
             var propertiesData = await propertyService.GetNewestAddedAsync(count);
@@ -44,6 +46,8 @@ namespace TravelbilityApp.WebAPI.Controllers
 
         [HttpGet("listed")]
         [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByUserId()
         {
             var propertiesData = await propertyService.GetByUserIdAsync(User.Id());
@@ -54,6 +58,8 @@ namespace TravelbilityApp.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Create([FromBody] PropertyInputDto dto)
         {
             var result = await validator.ValidateAsync(dto);
@@ -82,6 +88,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -93,6 +100,10 @@ namespace TravelbilityApp.WebAPI.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty]
         [PropertyPublisher]
         public async Task<IActionResult> Edit(Guid id, [FromBody] PropertyInputDto dto)
@@ -116,6 +127,22 @@ namespace TravelbilityApp.WebAPI.Controllers
             var editedPropertyId = await propertyService.EditAsync(id, dto);
 
             return Created(string.Empty, new { id = editedPropertyId });
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        [PropertyPublisher]
+        public async Task<IActionResult> DeleteById(Guid id)
+        {
+            await propertyService.DeleteByIdAsync(id);
+
+            return Ok(id);
         }
     }
 }
