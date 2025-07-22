@@ -16,8 +16,18 @@ export function useBasicGetFetch(getDataCallbackFunction, initialData = [], depe
         )();
     }, dependencies);
 
+    const updateData = (elementData) => {
+        if (Array.isArray(data)) {
+            setData(previousData =>
+                previousData.some(pd => pd.id === elementData.id)
+                    ? previousData.map(pd => pd.id === elementData.id ? elementData : pd)
+                    : [...previousData, elementData]
+            );
+        }
+    };
+
     const removeDataElement = (id) => {
-        if (data.length) {
+        if (Array.isArray(data)) {
             setData(previousData => previousData.filter(pd => pd.id !== id));
         }
     };
@@ -25,6 +35,7 @@ export function useBasicGetFetch(getDataCallbackFunction, initialData = [], depe
     return {
         data,
         isDataLoaded,
+        updateData,
         removeDataElement,
     }
 }

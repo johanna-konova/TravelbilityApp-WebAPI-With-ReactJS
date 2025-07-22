@@ -31,7 +31,33 @@ export const constructPropertyDataForEditing = (propertyData) => {
     };
 };
 
-export const formatCreatePropertyErrorsData = (formEntries, rawErrorsData) => {
+export const constructRoomDataForEditing = (roomData) => {
+    return {
+        "id": roomData.id,
+        "step-1": {
+            roomTypeId: roomData.roomType.id,
+            maxGuests: roomData.maxGuests,
+            pricePerNight: roomData.pricePerNight,
+            mainBedTypeId: roomData.mainBedType.id,
+            size: roomData.size,
+            numberOfUnits: roomData.numberOfUnits,
+            description: roomData.description,
+        },
+        "step-2": {
+            commonFacilityIds: roomData.facilities
+                .filter(f => f.isForAccessibility === false)
+                .map(f => String(f.id)),
+            accessibilityIds: roomData.facilities
+                .filter(f => f.isForAccessibility)
+                .map(f => String(f.id)),
+        },
+        "step-3": {
+            photoUrls: roomData.photoUrls?.map((iu, i) => ({ id: i + 1, url: iu })),
+        }
+    };
+};
+
+export const formatErrorsData = (formEntries, rawErrorsData) => {
     const errorsData = Object.entries(formEntries)
         .reduce((acc, entry) => {
             if (entry[0].startsWith("step")) {
@@ -62,3 +88,6 @@ export const formatCreatePropertyErrorsData = (formEntries, rawErrorsData) => {
 
     return errorsData;
 };
+
+export const IsSelectedRoomAccessible = (roomTypes, selectedTypeId) =>
+    roomTypes.some(rt => (rt.id === Number(selectedTypeId) && rt.isForAccessibility === true))
