@@ -1,8 +1,7 @@
 ﻿using System.Web.Http.ModelBinding;
-
 using TravelbilityApp.WebAPI.ModelBinders;
 
-namespace TravelbilityApp.WebAPI.DTOs.Property
+namespace TravelbilityApp.WebAPI.DTOs
 {
     [ModelBinder(BinderType = typeof(CommaSeparatedModelBinder<int>))]
     public class PropertyQueryParamsDto
