@@ -6,6 +6,7 @@ import PublisherGuard from "./components/common/Publisher-Guard";
 
 import AuthContextProvider from "./contexts/Auth-Context";
 import PropertyContextProvider from "./contexts/Property-Context";
+import UserPropertyContextProvider from "./contexts/User-Property-Context";
 
 import Topbar from "./components/topbar/Topbar";
 import Navbar from "./components/Navbar";
@@ -17,7 +18,8 @@ import Contact from "./components/contact/Contact";
 import OurMission from "./components/our-mission/Our-Mission";
 import PropertyDetailsContainer from "./components/property/property-details/Property-Details-Container";
 import UserProperties from "./components/properties/user-properties/User-Properties";
-import PropertyCreateEditForm from "./components/property/property-create-edit/Property-Create-Edit-Form";
+import UserProperty from "./components/property/user-property/User-Property";
+import PropertyCreateEditForm from "./components/create-edit-forms/property-create-edit/Property-Create-Edit-Form";
 import Footer from "./components/Footer";
 import BackToTop from "./components/Back-To-Top";
 import NotFound from "./components/not-found/Not-Found";
@@ -50,14 +52,22 @@ function App() {
                         <Route path="/list" element={<PropertyCreateEditForm />} />
 
                         <Route path="/edit/:propertyId" element={
-                            <PropertyContextProvider>
+                            <UserPropertyContextProvider>
                                 <PublisherGuard>
                                     <PropertyCreateEditForm />
                                 </PublisherGuard>
-                            </PropertyContextProvider>
+                            </UserPropertyContextProvider>
                         } />
 
                         <Route path="/my-properties" element={<UserProperties />} />
+
+                        <Route path="/my-properties/:propertyId" element={
+                            <UserPropertyContextProvider>
+                                <PublisherGuard>
+                                    <UserProperty />
+                                </PublisherGuard>
+                            </UserPropertyContextProvider>
+                        } />
                     </Route>
 
                     <Route path="/contact" element={<Contact />} />
