@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using TravelbilityApp.Infrastructure.Data.Models.Enums;
+
 using static TravelbilityApp.Infrastructure.Data.Constants.DataConstants.Property;
 
 namespace TravelbilityApp.Infrastructure.Data.Models
@@ -13,6 +15,8 @@ namespace TravelbilityApp.Infrastructure.Data.Models
         [Required]
         [StringLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+
+        public int PropertyTypeId { get; set; }
 
         public int? StarsCount { get; set; }
 
@@ -32,9 +36,7 @@ namespace TravelbilityApp.Infrastructure.Data.Models
 
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public bool IsDeleted { get; set; }
-
-        public int PropertyTypeId { get; set; }
+        public PropertyStatus Status { get; set; } = PropertyStatus.Saved;
 
         [Required]
         [ForeignKey(nameof(PropertyTypeId))]
@@ -49,5 +51,7 @@ namespace TravelbilityApp.Infrastructure.Data.Models
         public IEnumerable<PropertyFacility> Facilities { get; set; } = null!;
 
         public IEnumerable<PropertyPhoto> Photos { get; set; } = null!;
+
+        public IEnumerable<Room> Rooms { get; set; } = null!;
     }
 }
