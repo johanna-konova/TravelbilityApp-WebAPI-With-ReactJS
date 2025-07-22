@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using Microsoft.EntityFrameworkCore.Storage;
 using TravelbilityApp.Infrastructure.Data;
 
 namespace TravelbilityApp.Infrastructure.Common
@@ -33,6 +33,9 @@ namespace TravelbilityApp.Infrastructure.Common
 
         public void RemoveRange<T>(IEnumerable<T> entities) where T : class
             => DbSet<T>().RemoveRange(entities);
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+            => await context.Database.BeginTransactionAsync();
 
         public async Task<int> SaveChangesAsync()
             => await context.SaveChangesAsync();

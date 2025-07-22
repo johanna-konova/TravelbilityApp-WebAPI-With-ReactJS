@@ -1,4 +1,6 @@
-﻿namespace TravelbilityApp.Infrastructure.Common
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace TravelbilityApp.Infrastructure.Common
 {
     public interface IRepository
     {
@@ -8,6 +10,7 @@
         Task AddAsync<T>(T entity) where T : class;
         Task AddRangeAsync<T>(IEnumerable<T> entities) where T : class;
         void RemoveRange<T>(IEnumerable<T> entities) where T : class;
+        Task<IDbContextTransaction> BeginTransactionAsync();
         Task<int> SaveChangesAsync();
     }
 }
