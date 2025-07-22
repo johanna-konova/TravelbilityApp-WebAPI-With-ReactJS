@@ -6,7 +6,10 @@ using System.Security.Claims;
 
 using TravelbilityApp.Core.Contracts;
 using TravelbilityApp.Core.DTOs.Property;
+using TravelbilityApp.Infrastructure.Data.Models.Enums;
 using TravelbilityApp.WebAPI.Filters;
+
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Property;
 
 namespace TravelbilityApp.WebAPI.Controllers
 {
@@ -19,7 +22,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PropertyInAllDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAll([FromQuery] DTOs.Property.PropertyQueryParamsDto dto)
+        public async Task<IActionResult> GetAll([FromQuery] DTOs.PropertyQueryParamsDto dto)
         {
             var serviceDto = new PropertyQueryParamsDto()
             {
@@ -48,11 +51,39 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByUserId()
+        public async Task<IActionResult> GetAllByUserId()
         {
             var propertiesData = await propertyService.GetByUserIdAsync(User.Id());
 
             return Ok(propertiesData);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("listed/{id:guid}")]
+        [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        public async Task<IActionResult> GetByUserId(Guid id)
+        {
+            var propertyData = await propertyService.GetByIdAsync(id);
+
+            return Ok(propertyData);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty(PropertyStatus.Published)]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var propertyData = await propertyService.GetByIdAsync(id, PropertyStatus.Published);
+
+            return Ok(propertyData);
         }
 
         [HttpPost]
@@ -81,20 +112,6 @@ namespace TravelbilityApp.WebAPI.Controllers
             var createdPropertyId = await propertyService.CreateAsync(dto, User.Id());
 
             return Created(string.Empty, new { id = createdPropertyId });
-        }
-
-        [AllowAnonymous]
-        [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(PropertyDetailsDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ExistingProperty]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var propertyData = await propertyService.GetByIdAsync(id);
-
-            return Ok(propertyData);
         }
 
         [HttpPut("{id:guid}")]
@@ -141,6 +158,27 @@ namespace TravelbilityApp.WebAPI.Controllers
         public async Task<IActionResult> DeleteById(Guid id)
         {
             await propertyService.DeleteByIdAsync(id);
+
+            return Ok(id);
+        }
+
+        [HttpPut("publish/{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        [PropertyPublisher]
+        public async Task<IActionResult> PublishById(Guid id)
+        {
+            if (await propertyService.HasAccessibleRoom(id) == false)
+            {
+                return BadRequest(RequiredAtLeastAccessibleRoom);
+            }
+
+            await propertyService.PublishByIdAsync(id);
 
             return Ok(id);
         }

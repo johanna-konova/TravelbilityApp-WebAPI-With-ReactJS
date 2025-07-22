@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-using static TravelbilityApp.Core.Constants.ModelsMessagesConstants;
-using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Property;
 using static TravelbilityApp.Infrastructure.Data.Constants.DataConstants.Property;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Common;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Property;
+using TravelbilityApp.Core.DTOs.Room;
 
 namespace TravelbilityApp.Core.DTOs.Property
 {
@@ -42,5 +43,7 @@ namespace TravelbilityApp.Core.DTOs.Property
         public IEnumerable<int?> FacilityIds { get; set; } = new HashSet<int?>();
 
         public IList<string> PhotoUrls { get; set; } = new List<string>();
+
+        public IEnumerable<RoomInputDto> Rooms { get; set; } = new HashSet<RoomInputDto>();
     }
 }

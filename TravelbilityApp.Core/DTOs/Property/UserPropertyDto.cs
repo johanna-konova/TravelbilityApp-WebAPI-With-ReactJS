@@ -4,5 +4,6 @@
     {
         public string Description { get; init; } = null!;
         public string MainPhotoUrl { get; init; } = null!;
+        public string Status { get; init; } = null!;
     }
 }

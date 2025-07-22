@@ -4,14 +4,14 @@ using TravelbilityApp.Core.Contracts;
 using TravelbilityApp.Core.DTOs.Property;
 
 using static TravelbilityApp.Core.Constants.ModelsConstants;
-using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Property;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Common;
 using static TravelbilityApp.Core.CommonHelpers;
 
 namespace TravelbilityApp.WebAPI.Validators
 {
-    public class CreatePropertyDtoValidator : AbstractValidator<PropertyInputDto>
+    public class PropertyInputDtoValidator : AbstractValidator<PropertyInputDto>
     {
-        public CreatePropertyDtoValidator(
+        public PropertyInputDtoValidator(
             IPropertyTypeService propertyTypeService,
             IFacilityService facilityService)
         {
