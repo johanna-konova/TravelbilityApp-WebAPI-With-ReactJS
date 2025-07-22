@@ -1,18 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using TravelbilityApp.Core.Contracts;
-using TravelbilityApp.Core.DTOs.Property;
+using TravelbilityApp.Core.DTOs.Facility;
 using TravelbilityApp.Infrastructure.Common;
 using TravelbilityApp.Infrastructure.Data.Models;
+using TravelbilityApp.Infrastructure.Data.Models.Enums;
 
 namespace TravelbilityApp.Core.Services
 {
     public class FacilityService(IRepository repository) : IFacilityService
     {
-        public async Task<IEnumerable<PropertyFacilityOptionDto>> GetAllAsync()
+        public async Task<IEnumerable<FacilityOptionDto>> GetAllAsync(WhereStatus whereStatus)
             => await repository
                 .AllAsNoTracking<Facility>()
-                .Select(f => new PropertyFacilityOptionDto()
+                .Where(f => f.WhereStatus == whereStatus || f.WhereStatus == WhereStatus.Both)
+                .Select(f => new FacilityOptionDto()
                 {
                     Id = f.Id,
                     Name = f.Name,
@@ -20,8 +22,9 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
-        public async Task<IEnumerable<PropertyFacilityOptionDto>> GetValidSelectedAsync(
-            IEnumerable<int?> rawSelectedIds)
+        public async Task<IEnumerable<FacilityOptionDto>> GetValidSelectedAsync(
+            IEnumerable<int?> rawSelectedIds,
+            WhereStatus whereStatus)
         {
             var selectedIds = rawSelectedIds
                 .Where(rsi => rsi.HasValue)
@@ -29,8 +32,8 @@ namespace TravelbilityApp.Core.Services
 
             return await repository
                 .AllAsNoTracking<Facility>()
-                .Where(f => selectedIds.Contains(f.Id))
-                .Select(f => new PropertyFacilityOptionDto()
+                .Where(f => (f.WhereStatus == whereStatus || f.WhereStatus == WhereStatus.Both) && selectedIds.Contains(f.Id))
+                .Select(f => new FacilityOptionDto()
                 {
                     Id = f.Id,
                     Name = f.Name,
@@ -39,18 +42,20 @@ namespace TravelbilityApp.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<int>> GetValidSelectedIdsAsync(IEnumerable<int?> selectedIds)
+        public async Task<IEnumerable<int>> GetValidSelectedIdsAsync(
+            IEnumerable<int?> selectedIds,
+            WhereStatus whereStatus)
             => await repository
                 .AllAsNoTracking<Facility>()
-                .Where(f => selectedIds.Contains(f.Id))
+                .Where(f => (f.WhereStatus == whereStatus || f.WhereStatus == WhereStatus.Both) && selectedIds.Contains(f.Id))
                 .Select(f => f.Id)
                 .ToListAsync();
 
-        public async Task<IEnumerable<PropertyFacilityOptionDto>> GetAccessibilityAsync()
+        public async Task<IEnumerable<FacilityOptionDto>> GetAccessibilityAsync()
             => await repository
                 .AllAsNoTracking<Facility>()
                 .Where(f => f.IsForAccessibility)
-                .Select(f => new PropertyFacilityOptionDto()
+                .Select(f => new FacilityOptionDto()
                 {
                     Id = f.Id,
                     Name = f.Name,
