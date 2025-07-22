@@ -43,3 +43,12 @@
 .deleting {
     color: lightgray;
 }
+
+.room-to-delete {
+    color: #212121;
+}
+
+.room-to-delete:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

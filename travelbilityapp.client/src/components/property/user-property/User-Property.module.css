@@ -1,0 +1,209 @@
+﻿.property-details-container {
+    display: flex;
+}
+
+.property-photos {
+    width: 35%;
+}
+
+.property-details {
+    width: 65%;
+    margin-left: 0.75rem;
+}
+
+.property-details-container .first-image {
+    width: 350px
+}
+
+.property-details-container .no-first-images-container {
+    display: grid;
+    grid-template-columns: 0.25fr 0.25fr 0.25fr;
+    gap: 5px 25px;
+}
+
+.property-details-container .no-first-image {
+    width: 100px;
+    margin-top: 0.75rem;
+}
+
+.property-type-name {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #7ab730;
+}
+
+.stars {
+    padding: 0 3px;
+    color: #ffb700;
+}
+
+.read-all-less {
+    color: #7ab730;
+    cursor: pointer;
+}
+
+.scrollbox {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 570px;
+    padding-right: 5px;
+}
+
+.add-room-text {
+    font-style: italic;
+    color: #c82333;
+}
+
+.no-rooms-container {
+    display: flex;
+    justify-content: center;
+    min-height: 400px;
+    align-content: center;
+}
+
+.upload-room-box {
+    justify-content: center;
+    border: 2px dashed #ddd;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 5px;
+    width: 282px;
+    height: 240px;
+    margin-bottom: 3rem;
+}
+
+.door {
+    font-size: 150px;
+    color: #7AB730;
+}
+
+.add-first-room {
+    font-size: 32px;
+    margin-top: 15px;
+    color: #7AB730;
+    text-align: center;
+}
+
+.room-preview {
+    background-color: beige;
+    padding: 7px;
+    margin-right: 3rem;
+    margin-bottom: 3rem;
+    width: 282px;
+}
+
+.room-photo-preview {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.room-type-label {
+    position: absolute;
+    top: -22px;
+    left: 15px;
+    background-color: #7ab730;
+    color: rgb(255, 255, 255);
+    padding: 2px 8px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+.room-photo-thumbnail {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.room-photo-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.room-info-preview span {
+    margin-right: 1rem;
+}
+
+.line {
+    background-color: grey;
+    height: 1px;
+    margin-top: 1rem;
+}
+
+.room-user-actions {
+    display: flex;
+    justify-content: end;
+    margin-top: 0.25rem;
+}
+
+.room-user-actions span {
+    margin-right: 1rem;
+}
+
+.view {
+    color: #7ab730;
+    cursor: pointer;
+}
+
+.edit {
+    color: orange;
+    cursor: pointer;
+}
+
+.delete {
+    color: #c82333;
+    cursor: pointer;
+}
+
+.room-details-container {
+    display: flex;
+}
+
+.room-details-container .first-image {
+    width: 350px
+}
+
+.room-details-container .no-first-images-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.93fr;
+}
+
+.room-details-container .no-first-image {
+    width: 100px;
+    margin-top: 0.75rem;
+}
+
+.room-type-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #7ab730;
+}
+
+.room-photos {
+    width: 40%;
+}
+
+.room-details {
+    width: 60%;
+    margin-left: 0.75rem;
+}
+
+.scrollbox {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 570px;
+    padding-right: 3px;
+}
+
+.scroll-to-button {
+    position: fixed;
+    left: 30px;
+    bottom: 30px;
+    z-index: 11;
+    font-size: 14px;
+    width: 130px;
+}
