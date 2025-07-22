@@ -5,3 +5,5 @@ const endpoint = 'facilities';
 export const getFacilities = async () => api.get(endpoint);
 
 export const getAccessibility = async () => api.get(`${endpoint}/accessibility`);
+
+export const getRoomFacilities = async () => api.get(`${endpoint}/in-room`);
