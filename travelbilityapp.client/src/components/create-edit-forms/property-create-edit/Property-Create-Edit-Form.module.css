@@ -1,0 +1,21 @@
+.list-property-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 43px;
+  border-radius: 10px;
+  background-color: white;
+  font-size: 1.20rem;
+  margin: 35px 0;
+  width: 90%;
+}
+
+.list-property-form {
+    background-color: white;
+    padding: 2.5rem 2.5rem 1rem;
+    border-radius: 25px;
+}
+
+.list-property-form input, textarea, select {
+  border-radius: 10px !important;
+}

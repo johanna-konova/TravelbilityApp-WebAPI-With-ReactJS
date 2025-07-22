@@ -1,31 +1,3 @@
-.list-property-nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  min-height: 43px;
-  border-radius: 10px;
-  background-color: white;
-  font-size: 1.20rem;
-  margin: 35px 0;
-  width: 90%;
-}
-
-.list-property-form {
-  background-color: white;
-  padding: 2.5rem;
-  border-radius: 25px;
-}
-
-.list-property-form input, textarea, select {
-  border-radius: 10px !important;
-}
-
-.moveall, .removeall {
-  border-radius: 10px;
-  margin: 0;
-  width: 100%;
-}
-
 .facilities {
   font-size: 1rem;
 }
@@ -86,6 +58,12 @@
   display: block;
 }
 
+.facilities-scrollbox {
+    overflow-y: auto;
+    max-height: 380px;
+    padding-right: 17px;
+}
+
 .upload-box {
     border: 2px dashed #ddd;
     padding: 20px;
@@ -94,7 +72,16 @@
     border-radius: 5px;
     position: relative;
     display: flex;
-    min-height: 190px;
+    min-height: 240px;
+}
+
+.upload-box-scrollbox {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.photos-container {
+    width: 90%;
 }
 
 .photo-preview {
