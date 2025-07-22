@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+﻿import { createContext, useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { getById } from "../services/propertiesService";
 
@@ -10,19 +10,23 @@ export const PropertyContext = createContext({
     isPropertyDataLoaded: false,
 });
 
-export default function PropertyContextProvider(props) {
+export default function PropertyContextProvider({
+    children,
+    getDataCallbackFunction = getById
+}) {
     const { propertyId } = useParams();
 
     const [propertyData, setPropertyData] = useState({});
     const [isPropertyDataLoaded, setIsPropertyDataLoaded] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (propertyId !== undefined) {
             (async () => {
                 try {
-                    const propertyData = await getById(propertyId);
+                    const propertyData = await getDataCallbackFunction(propertyId);
                     
                     setPropertyData(propertyData);
                     setIsPropertyDataLoaded(true);
@@ -35,7 +39,7 @@ export default function PropertyContextProvider(props) {
             }
             )()
         }
-    }, [propertyId]);
+    }, [propertyId, location.pathname]);
 
     const contextData = {
         propertyId,
@@ -47,7 +51,7 @@ export default function PropertyContextProvider(props) {
     return (
         <>
             <PropertyContext.Provider value={contextData}>
-                {props.children}
+                {children}
             </PropertyContext.Provider>
         </>
     )
