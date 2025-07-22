@@ -24,6 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IPropertyTypeService, PropertyTypeService>();
             services.AddScoped<IFacilityService, FacilityService>();
             services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IRoomTypeService, RoomTypeService>();
+            services.AddScoped<IBedTypeService, BedTypeService>();
+            services.AddScoped<IRoomService, RoomService>();
 
             return services;
         }
