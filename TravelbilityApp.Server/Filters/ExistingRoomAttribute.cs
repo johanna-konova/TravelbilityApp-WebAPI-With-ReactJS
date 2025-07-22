@@ -2,36 +2,35 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
 using TravelbilityApp.Core.Contracts;
-using TravelbilityApp.Infrastructure.Data.Models.Enums;
+
 using static TravelbilityApp.WebAPI.Filters.CommonFunctionalities;
 
 namespace TravelbilityApp.WebAPI.Filters
 {
-    public class ExistingPropertyAttribute(
-        PropertyStatus status = PropertyStatus.Saved) : ActionFilterAttribute
+    public class ExistingRoomAttribute : ActionFilterAttribute
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var parsedPropertyId = ParseId(context, ["id", "propertyid", "dto"]);
+            var parsedRoomId = ParseId(context, ["id", "roomid", "dto"]);
 
-            if (parsedPropertyId == Guid.Empty)
+            if (parsedRoomId == Guid.Empty)
             {
                 context.Result = new BadRequestResult();
                 return;
             }
 
-            IPropertyService? propertyService =
-                context.HttpContext.RequestServices.GetService<IPropertyService>();
+            IRoomService? roomService =
+                context.HttpContext.RequestServices.GetService<IRoomService>();
 
-            if (propertyService == null)
+            if (roomService == null)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 return;
             }
 
-            var hasPropertyWithGivenId = await propertyService.HasPropertyWithGivenIdAsync(parsedPropertyId, status);
+            var hasRoomWithGivenId = await roomService.HasRoomWithGivenIdAsync(parsedRoomId);
 
-            if (hasPropertyWithGivenId == false)
+            if (hasRoomWithGivenId == false)
             {
                 context.Result = new NotFoundResult();
                 return;

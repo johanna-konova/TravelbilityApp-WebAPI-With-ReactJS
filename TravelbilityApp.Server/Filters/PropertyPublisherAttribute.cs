@@ -5,14 +5,17 @@ using System.Security.Claims;
 
 using TravelbilityApp.Core.Contracts;
 
+using static TravelbilityApp.WebAPI.Filters.CommonFunctionalities;
+
 namespace TravelbilityApp.WebAPI.Filters
 {
     public class PropertyPublisherAttribute : ActionFilterAttribute
     {
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.ActionArguments.TryGetValue("id", out var rowId) == false ||
-                rowId is not Guid propertyId)
+            var parsedPropertyId = ParseId(context, ["id", "propertyid", "dto"]);
+
+            if (parsedPropertyId == Guid.Empty)
             {
                 context.Result = new BadRequestResult();
                 return;
@@ -29,7 +32,7 @@ namespace TravelbilityApp.WebAPI.Filters
 
             var userId = context.HttpContext.User.Id();
 
-            var isUserPropertyPublisher = await propertyService.IsUserPropertyPublisherAsync(propertyId, userId);
+            var isUserPropertyPublisher = await propertyService.IsUserPropertyPublisherAsync(parsedPropertyId, userId);
 
             if (isUserPropertyPublisher == false)
             {
