@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "Single Bed",
+    "description": "90 cm x 190 cm"
+  },
+  {
+    "id": 2,
+    "name": "Twin Bed",
+    "description": "90 cm x 190 cm each"
+  },
+  {
+    "id": 3,
+    "name": "Double Bed",
+    "description": "135 cm x 190 cm"
+  },
+  {
+    "id": 4,
+    "name": "Queen Bed",
+    "description": "150 cm x 200 cm"
+  },
+  {
+    "id": 5,
+    "name": "King Bed",
+    "description": "180 cm x 200 cm"
+  },
+  {
+    "id": 6,
+    "name": "Sofa Bed",
+    "description": "Size varies"
+  },
+  {
+    "id": 7,
+    "name": "Bunk Bed",
+    "description": "90 cm x 190 cm each"
+  },
+  {
+    "id": 8,
+    "name": "Trundle",
+    "description": "Size varies"
+  },
+  {
+    "id": 9,
+    "name": "Murphy Bed",
+    "description": "Size varies"
+  }
+]

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TravelbilityApp.Infrastructure.Data.Models.Enums;
 
 namespace TravelbilityApp.Infrastructure.Data.Models
 {
-    public class Facility
+    public class RoomType
     {
         [Key]
         public int Id { get; init; }
@@ -12,7 +11,5 @@ namespace TravelbilityApp.Infrastructure.Data.Models
         public string Name { get; set; } = null!;
 
         public bool IsForAccessibility { get; set; }
-
-        public WhereStatus WhereStatus { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelbilityApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TravelbilityApp.Infrastructure.Data;
 namespace TravelbilityApp.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TravelbilityAppDbContext))]
-    partial class TravelbilityAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250716091154_FixMaxGuestColumnNameInRoomsTable")]
+    partial class FixMaxGuestColumnNameInRoomsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -647,6 +650,9 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -659,9 +665,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("StarsCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -784,9 +787,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("MainBedTypeId")
                         .HasColumnType("int");

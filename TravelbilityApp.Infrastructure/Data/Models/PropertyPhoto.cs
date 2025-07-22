@@ -19,5 +19,10 @@ namespace TravelbilityApp.Infrastructure.Data.Models
 
         [ForeignKey(nameof(PropertyId))]
         public Property Property { get; init; } = null!;
+
+        public Guid? RoomId { get; init; }
+
+        [ForeignKey(nameof(RoomId))]
+        public Room? Room { get; init; }
     }
 }

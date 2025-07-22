@@ -7,14 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\Configurations\Seeders\BedTypes.json" />
     <None Remove="Data\Configurations\Seeders\Facilities.json" />
+    <None Remove="Data\Configurations\Seeders\RoomTypes.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Data\Configurations\Seeders\BedTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Configurations\Seeders\Facilities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Configurations\Seeders\PropertyTypes.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Configurations\Seeders\RoomTypes.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelbilityApp.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using TravelbilityApp.Infrastructure.Data;
 namespace TravelbilityApp.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(TravelbilityAppDbContext))]
-    partial class TravelbilityAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250703094915_AddIsForAccessibilityColumnInRoomTypesTable")]
+    partial class AddIsForAccessibilityColumnInRoomTypesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -647,6 +650,9 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -659,9 +665,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("StarsCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -678,28 +681,20 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("TravelbilityApp.Infrastructure.Data.Models.PropertyFacility", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("PropertyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("FacilityId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PropertyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("PropertyId", "FacilityId");
 
                     b.HasIndex("FacilityId");
 
                     b.HasIndex("RoomId");
-
-                    b.HasIndex("PropertyId", "FacilityId", "RoomId")
-                        .IsUnique()
-                        .HasFilter("[RoomId] IS NOT NULL");
 
                     b.ToTable("PropertiesFacilities");
                 });
@@ -785,13 +780,10 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<int>("MainBedTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MaxGuests")
+                    b.Property<int>("MaxGuestCapacity")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfUnits")
@@ -807,7 +799,7 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                     b.Property<int>("RoomTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("SizeInSquareMeters")
+                    b.Property<double>("Size")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -839,56 +831,6 @@ namespace TravelbilityApp.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsForAccessibility = false,
-                            Name = "Single Room"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsForAccessibility = false,
-                            Name = "Double Room"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsForAccessibility = false,
-                            Name = "Twin Room"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            IsForAccessibility = false,
-                            Name = "Deluxe Room"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            IsForAccessibility = false,
-                            Name = "Family Room"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsForAccessibility = false,
-                            Name = "Suite"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            IsForAccessibility = false,
-                            Name = "Studio"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            IsForAccessibility = true,
-                            Name = "Accessible Room"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

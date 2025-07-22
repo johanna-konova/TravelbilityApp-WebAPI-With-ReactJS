@@ -14,6 +14,9 @@ namespace TravelbilityApp.Infrastructure.Data
         {
         }
 
+        public DbSet<BedType> BedTypes { get; init; }
+        public DbSet<RoomType> RoomTypes { get; init; }
+        public DbSet<Room> Rooms { get; init; }
         public DbSet<PropertyType> PropertyTypes { get; init; }
         public DbSet<Facility> Facilities { get; init; }
         public DbSet<Property> Properties { get; init; }
