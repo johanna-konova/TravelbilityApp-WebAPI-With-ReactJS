@@ -12,6 +12,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(typeof(PropertyTypeOptionDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetAll()
         {
             var propertyTypes = await propertyTypeService.GetAllAsync();
