@@ -14,9 +14,18 @@ button {
     width: 320px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 0 25px 50px 25px;
+}
+
+.status-label {
+    position: absolute;
+    top: -15px;
+    left: 5px;
+    color: rgb(255, 255, 255);
+    padding: 2px 8px;
+    font-size: 16px;
+    border-radius: 3px;
 }
 
 .property-card img {
@@ -42,7 +51,24 @@ button {
     color: #555;
 }
 
+.hasNoAccessibleRoom {
+    margin: 1rem 1rem 0;
+    font-size: 14px;
+    font-style: italic;
+    color: #c82333;
+}
+.hasNoAccessibleRoom:hover {
+    color: #c82333;
+}
+
 .property-card .card-footer a,
 .property-card .card-footer button {
     margin: 0;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    align-items: center;
 }
