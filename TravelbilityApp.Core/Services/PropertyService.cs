@@ -73,7 +73,7 @@ namespace TravelbilityApp.Core.Services
                     MainPhotoUrl = p.Photos
                         .Where(p => p.RoomId == null)
                         .First().Url,
-                    Accessibility = p.Facilities
+                    AccessibilityNames = p.Facilities
                         .Where(f => f.Facility.IsForAccessibility)
                         .Select(f => f.Facility.Name),
                     PublisherId = p.PublisherId,
@@ -103,7 +103,7 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
-        public async Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId)
+        public async Task<IEnumerable<UserPropertyDto>> GetAllByUserIdAsync(Guid userId)
             => await repository
                 .AllAsNoTracking<Property>()
                 .Where(p => p.PublisherId == userId && p.Status != PropertyStatus.Deleted)
@@ -127,6 +127,61 @@ namespace TravelbilityApp.Core.Services
                 .AllAsNoTracking<Property>()
                 .Where(p => p.Id == id && p.Status >= status)
                 .Select(p => new PropertyDetailsDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    StarsCount = p.StarsCount,
+                    Address = p.Address,
+                    Description = p.Description,
+                    PublisherId = p.PublisherId,
+                    CommonFacilityNames = p.Facilities
+                        .Where(f => f.RoomId == null &&
+                               f.Facility.IsForAccessibility == false)
+                        .Select(f => f.Facility.Name),
+                    AccessibilityNames = p.Facilities
+                        .Where(f => f.RoomId == null &&
+                               f.Facility.IsForAccessibility == true)
+                        .Select(f => f.Facility.Name),
+                    PhotoUrls = p.Photos
+                        .Where(p => p.RoomId == null)
+                        .Select(p => p.Url)
+                })
+                .SingleAsync();
+
+        public async Task<UserPropertyDetailsDto> GetByUserIdAsync(Guid id, Guid userId, PropertyStatus status)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.Id == id && p.Status >= status)
+                .Select(p => new UserPropertyDetailsDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    TypeName = p.PropertyType.Name,
+                    StarsCount = p.StarsCount,
+                    CheckIn = p.CheckIn.ToString(),
+                    CheckOut = p.CheckOut.ToString(),
+                    Address = p.Address,
+                    Description = p.Description,
+                    PublisherId = p.PublisherId,
+                    CommonFacilityNames = p.Facilities
+                        .Where(f => f.RoomId == null &&
+                               f.Facility.IsForAccessibility == false)
+                        .Select(f => f.Facility.Name),
+                    AccessibilityNames = p.Facilities
+                        .Where(f => f.RoomId == null &&
+                               f.Facility.IsForAccessibility == true)
+                        .Select(f => f.Facility.Name),
+                    PhotoUrls = p.Photos
+                        .Where(p => p.RoomId == null)
+                        .Select(p => p.Url)
+                })
+                .SingleAsync();
+
+        public async Task<PropertyForEditDto> GetForEditByIdAsync(Guid id, PropertyStatus status)
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.Id == id && p.Status >= status)
+                .Select(p => new PropertyForEditDto()
                 {
                     Id = p.Id,
                     Name = p.Name,

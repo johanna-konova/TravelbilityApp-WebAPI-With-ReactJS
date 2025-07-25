@@ -7,8 +7,10 @@ namespace TravelbilityApp.Core.Contracts
     {
         Task<IEnumerable<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto);
         Task<IEnumerable<PropertyInNewestAddedDto>> GetNewestAddedAsync(int count);
-        Task<IEnumerable<UserPropertyDto>> GetByUserIdAsync(Guid userId);
+        Task<IEnumerable<UserPropertyDto>> GetAllByUserIdAsync(Guid userId);
         Task<PropertyDetailsDto> GetByIdAsync(Guid id, PropertyStatus status = PropertyStatus.Saved);
+        Task<UserPropertyDetailsDto> GetByUserIdAsync(Guid id, Guid userId, PropertyStatus status = PropertyStatus.Saved);
+        Task<PropertyForEditDto> GetForEditByIdAsync(Guid id, PropertyStatus status = PropertyStatus.Saved);
         Task<bool> IsUserPropertyPublisherAsync(Guid propertyId, Guid userId);
         Task<bool> HasPropertyWithGivenIdAsync(Guid id, PropertyStatus status = PropertyStatus.Saved);
         Task<bool> HasAccessibleRoom(Guid id);
