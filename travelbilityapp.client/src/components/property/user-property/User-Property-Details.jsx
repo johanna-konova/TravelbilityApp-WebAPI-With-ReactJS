@@ -5,8 +5,9 @@ import { useAuthContext } from "../../../contexts/Auth-Context";
 
 import { generateStarIcons } from "../../../utils/property-utils";
 
-import styles from './User-Property.module.css';
 import ScrollToButton from "./Scroll-To-Button";
+
+import styles from './User-Property.module.css';
 
 export default function UserPropertyDetails({ propertyData }) {
     const { id } = useAuthContext();
@@ -20,14 +21,6 @@ export default function UserPropertyDetails({ propertyData }) {
     const descriptionToShow = isDescriptionExpanded
         ? propertyData.description
         : propertyData.description.slice(0, descriptionMaxLengthToShow) + (shouldTruncate ? '...' : '');
-
-    const commonFacilityNames = [];
-    const accessibilityNames = [];
-
-    propertyData.facilities
-        .forEach(f => f.isForAccessibility
-            ? accessibilityNames.push(f.name)
-            : commonFacilityNames.push(f.name));
 
     return (
         <>
@@ -62,8 +55,8 @@ export default function UserPropertyDetails({ propertyData }) {
                 </div>
 
                 <Row className="mb-1">
-                    <Col sm={4} md={4} lg={4}>
-                        <span className="text-primary">Type:</span> {propertyData.type.name}
+                        <Col sm={4} md={4} lg={4}>
+                            <span className="text-primary">Type:</span> {propertyData.typeName}
                     </Col>
 
                     <Col sm={4} md={4} lg={4}>
@@ -98,14 +91,22 @@ export default function UserPropertyDetails({ propertyData }) {
                 </Row>
 
                 <div className="mt-3">
-                    <p className="mb-0 text-primary">Facilities:</p>
-                    <span>{commonFacilityNames.join(", ")}.</span>
+                        <p className="mb-0 text-primary">Facilities:</p>
+                        {propertyData.commonFacilityNames.map((cfn, i) =>
+                            <span key={i} className="facilities">
+                                <i className="fas fa-check"></i> {cfn}{i === propertyData.commonFacilityNames.length - 1 ? "." : ", "}
+                            </span>
+                        )}
                 </div>
 
-                {accessibilityNames &&
+                    {propertyData.accessibilityNames &&
                     <div className="mt-3">
-                        <p className="mb-0 text-primary">Accessibility:</p>
-                        <span>{accessibilityNames.join(", ")}.</span>
+                            <p className="mb-0 text-primary">Accessibility:</p>
+                            {propertyData.accessibilityNames.map((an, i) =>
+                                <span key={i} className="facilities">
+                                    <i className="fab fa-accessible-icon text-primary"></i> {an}{i === propertyData.accessibilityNames.length - 1 ? "." : ", "}
+                                </span>
+                            )}
                     </div>
                 }
             </div>

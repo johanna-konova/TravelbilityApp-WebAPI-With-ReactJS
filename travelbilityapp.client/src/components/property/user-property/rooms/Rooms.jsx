@@ -9,7 +9,7 @@ import { publish } from '../../../../services/propertiesService';
 
 import RoomShortGridView from './Room-Short-Grid-View';
 import AddRoomModal from '../../../create-edit-forms/room-create-edit/Room-Create-Edit-Form-Modal';
-import RoomDetailsModal from './Room-Details-Modal';
+import RoomDetailsModal from '../../../common/Room-Details-Modal';
 import DeleteRoomModal from '../../../modals/Delete-Room-Modal';
 
 import styles from '../User-Property.module.css';

@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import AuthGuard from "./components/common/Auth-Guard";
-import PublisherGuard from "./components/common/Publisher-Guard";
+import AuthGuard from "./components/guards/Auth-Guard";
+import PublisherGuard from "./components/guards/Publisher-Guard";
 
 import AuthContextProvider from "./contexts/Auth-Context";
 import PropertyContextProvider from "./contexts/Property-Context";
 import UserPropertyContextProvider from "./contexts/User-Property-Context";
+import PropertyForEditContextProvider from "./contexts/Property-For-Edit-Context";
 
 import Topbar from "./components/topbar/Topbar";
 import Navbar from "./components/Navbar";
@@ -52,11 +53,11 @@ function App() {
                         <Route path="/list" element={<PropertyCreateEditForm />} />
 
                         <Route path="/edit/:propertyId" element={
-                            <UserPropertyContextProvider>
+                            <PropertyForEditContextProvider>
                                 <PublisherGuard>
                                     <PropertyCreateEditForm />
                                 </PublisherGuard>
-                            </UserPropertyContextProvider>
+                            </PropertyForEditContextProvider>
                         } />
 
                         <Route path="/my-properties" element={<UserProperties />} />

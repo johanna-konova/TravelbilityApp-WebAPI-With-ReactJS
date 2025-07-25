@@ -30,10 +30,10 @@ export default function RoomShortGridView({
                 </Row>
                 <div className={styles["line"]}></div>
             </div>
-            <div className={styles["room-user-actions"]}>
-                <span className={styles["view"]} title="View details" onClick={() => pickRoomHandler(roomData.id, "view")}><i className="fas fa-eye"></i></span>
-                <span className={styles["edit"]} title="Edit" onClick={() => pickRoomHandler(roomData.id, "edit")}> <i className="fas fa-edit"></i></span>
-                <span className={styles["delete"]} title="Delete" onClick={() => pickRoomHandler(roomData.id, "delete")}><i className="fas fa-trash"></i></span>
+            <div className="room-user-actions">
+                <span className="view" title="View details" onClick={() => pickRoomHandler(roomData.id, "view")}><i className="fas fa-eye"></i></span>
+                <span className="edit" title="Edit" onClick={() => pickRoomHandler(roomData.id, "edit")}> <i className="fas fa-edit"></i></span>
+                <span className="delete" title="Delete" onClick={() => pickRoomHandler(roomData.id, "delete")}><i className="fas fa-trash"></i></span>
             </div>
         </div>
     )

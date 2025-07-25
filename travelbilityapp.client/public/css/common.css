@@ -38,3 +38,33 @@
 .x-close span {
     cursor: pointer;
 }
+
+.room-user-actions {
+    display: flex;
+    justify-content: end;
+    margin-top: 0.25rem;
+}
+
+    .room-user-actions span {
+        margin-right: 1rem;
+    }
+
+.view {
+    color: #7ab730;
+    cursor: pointer;
+}
+
+.edit {
+    color: orange;
+    cursor: pointer;
+}
+
+.delete {
+    color: #c82333;
+    cursor: pointer;
+}
+
+.facilities {
+    display: inline-block;
+    margin-right: 0.5rem;
+}

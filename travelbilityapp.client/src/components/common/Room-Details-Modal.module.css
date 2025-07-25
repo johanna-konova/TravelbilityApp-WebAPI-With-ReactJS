@@ -1,0 +1,40 @@
+﻿.room-details-container {
+    display: flex;
+}
+
+.room-details-container .first-image {
+    width: 350px
+}
+
+.room-details-container .no-first-images-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.93fr;
+}
+
+.room-details-container .no-first-image {
+    width: 100px;
+    margin-top: 0.75rem;
+}
+
+.room-type-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #7ab730;
+}
+
+.room-photos {
+    width: 40%;
+    margin-bottom: 2.25rem;
+}
+
+.room-details {
+    width: 60%;
+    margin-left: 0.75rem;
+}
+
+.scrollbox {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 570px;
+    padding-right: 3px;
+}
