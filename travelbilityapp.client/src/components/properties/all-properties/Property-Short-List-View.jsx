@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
-import { List } from "react-content-loader";
 
-import { useBasicGetFetch } from "../../../hooks/use-basic-get-fetch";
 import { generateStarIcons } from "../../../utils/property-utils";
 
 import UserActions from "../../user-actions/User-Actions";
@@ -15,13 +13,9 @@ export default function PropertyShortListView({
     name,
     starsCount,
     address,
-    accessibility,
+    accessibilityNames,
     isLoggedInUserPropertyDataCreator
 }) {
-    /*const {
-        data: propertyAccessibility,
-        isDataLoaded: isPropertyAccessibilityLoaded } = useBasicGetFetch(() => getPropertyAccessibilityById(id));*/
-
     return (
         <div className={styles["property-container"]}>
             <div className={styles["property-img-container"]}>
@@ -40,7 +34,7 @@ export default function PropertyShortListView({
                 <div className={styles["accessibility-container"]}>
                     <i className="fab fa-accessible-icon text-primary"></i> <span className="text-primary">Accessibility:</span>
                     <div className="ml-3">
-                        {accessibility?.map((a, i) =>
+                        {accessibilityNames?.map((a, i) =>
                             <div key={i}>
                                 <i className="fas fa-check text-primary"></i> <span>{a};</span>
                             </div>

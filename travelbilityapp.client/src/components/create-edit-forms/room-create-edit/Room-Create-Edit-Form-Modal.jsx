@@ -8,7 +8,7 @@ import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getAll as getBedTypes } from '../../../services/bedTypesService';
 import { getRoomFacilities } from '../../../services/facilitiesService';
 import { getAll as getRoomTypes } from '../../../services/roomTypesService';
-import { create, edit, getById } from '../../../services/roomsService';
+import { create, edit, getForEditById } from '../../../services/roomsService';
 import { IsSelectedRoomAccessible, constructRoomDataForEditing, formatErrorsData } from '../../../utils/property-utils';
 import { roomSchema } from '../../../validations';
 import CancelModal from '../../modals/Cancel-Modal';
@@ -45,7 +45,7 @@ export default function AddRoomModal({
     useEffect(() => {
         if (roomId !== undefined) {
             (async () => {
-                const roomDataToEdit = await getById(roomId, propertyId);
+                const roomDataToEdit = await getForEditById(roomId, propertyId);
                 reset(constructRoomDataForEditing(roomDataToEdit));
             }
             )()
