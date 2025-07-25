@@ -9,7 +9,8 @@ export default function PropertyDetails({
     starsCount,
     address,
     description,
-    facilities,
+    commonFacilityNames,
+    accessibilityNames
 }) {
     return (
         <Container className="mt-3">
@@ -33,9 +34,9 @@ export default function PropertyDetails({
                     <label className="text-primary">Facilities</label>
 
                     <div>
-                        {facilities.filter(f => f.isForAccessibility === false).map(f =>
-                            <div key={f.id}>
-                                <i className="fas fa-check text-primary"></i> <span>{f.name}</span>
+                        {commonFacilityNames.map((cfn, i) =>
+                            <div key={i}>
+                                <i className="fas fa-check"></i> <span>{cfn}</span>
                             </div>
                         )}
                     </div>
@@ -45,9 +46,9 @@ export default function PropertyDetails({
                     <label className="text-primary">Accessibility</label>
 
                     <div>
-                        {facilities.filter(f => f.isForAccessibility).map(f =>
-                            <div key={f.id}>
-                                <i className="fas fa-check text-primary"></i> <span>{f.name}</span>
+                        {accessibilityNames.map((an, i) =>
+                            <div key={i}>
+                                <i className="fab fa-accessible-icon text-primary"></i> <span>{an}</span>
                             </div>
                         )}
                     </div>

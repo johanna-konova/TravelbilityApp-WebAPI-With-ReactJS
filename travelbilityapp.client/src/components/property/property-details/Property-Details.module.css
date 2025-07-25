@@ -58,3 +58,113 @@
 .facilities span {
   font-size: 1.10rem;
 }
+
+.accessible-room, .non-accessible-room {
+    margin-top: 3rem;
+}
+
+.accessible-room .label, .non-accessible-room .label {
+    padding: 7px;
+    color: white;
+    font-size: 1.10rem;
+    margin: 0;
+}
+
+.accessible-room .label,
+.accessible-room .price-container div {
+    background-color: #7ab730;
+}
+
+.non-accessible-room .label,
+.non-accessible-room .price-container div {
+    background-color: darkcyan;
+}
+
+.room-container {
+    margin: 0.75rem 0.50rem;
+    border-bottom: 5px solid;
+}
+
+.accessible-room .room-container {
+    border-bottom-color: #7ab730;
+}
+
+.non-accessible-room .room-container {
+    border-bottom-color: darkcyan;
+}
+
+.room-type-name {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.column {
+    padding: 0;
+    border-right: 1px solid black;
+}
+
+.line {
+    margin: 0.5rem 0;
+    height: 1px;
+    background-color: gray;
+}
+
+.accessible-room .view-details-btn {
+    background-color: transparent;
+}
+
+.accessible-room .view-details-btn,
+.accessible-room .basic-info-container span {
+    color: #7ab730;
+}
+
+.non-accessible-room .view-details-btn {
+    background-color: transparent;
+}
+
+.accessible-room .view-details-btn:hover {
+    background-color: #7ab730;
+    color: white;
+}
+
+.non-accessible-room .view-details-btn:hover {
+    background-color: darkcyan;
+    color: white;
+}
+
+.non-accessible-room .view-details-btn,
+.non-accessible-room .basic-info-container span {
+    color: darkcyan;
+}
+
+.accessible-room .view-details-btn {
+    border-color: #7ab730;
+}
+
+.non-accessible-room .view-details-btn {
+    border-color: darkcyan;
+}
+
+.basic-info-container, .price-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.price-container {
+    justify-content: center;
+}
+
+.price-container div {
+    padding: 20px 15px;
+    text-align: center;
+    color: white;
+}
+
+.price-container span {
+    display: block;
+}
+
+.price-container span:nth-of-type(2) {
+    font-size: 12px;
+}

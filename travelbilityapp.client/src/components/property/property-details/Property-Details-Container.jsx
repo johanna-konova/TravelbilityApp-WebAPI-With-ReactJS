@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../contexts/Auth-Context';
 import PropertyDetailsImages from './Property-Details-Images';
 import UserActions from '../../user-actions/User-Actions';
 import PropertyDetails from './Property-Details';
+import Rooms from './rooms/Rooms';
 import { WheelchairTireSpinner } from '../../loaders/Loaders';
 
 export default function PropertyDetailsContainer() {
@@ -22,6 +23,8 @@ export default function PropertyDetailsContainer() {
                         {(id === propertyData.publisherId) && <UserActions id={propertyData.id} name={propertyData.name} />}
 
                         <PropertyDetails {...propertyData} />
+
+                        <Rooms propertyId={propertyData.id} />
                     </>
                     : <WheelchairTireSpinner />
                 }
