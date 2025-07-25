@@ -33,11 +33,60 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
+        public async Task<IEnumerable<RoomShortDetailsDto>> GetAllDetailedByPropertyIdAsync(Guid propertyId)
+            => await repository
+                .AllAsNoTracking<Room>()
+                .Where(r => r.PropertyId == propertyId && r.IsDeleted == false)
+                .Select(r => new RoomShortDetailsDto()
+                {
+                    Id = r.Id,
+                    RoomTypeName = r.RoomType.Name,
+                    MainBedTypeName = r.MainBedType.Name,
+                    MaxGuests = r.MaxGuests,
+                    Size = r.SizeInSquareMeters,
+                    PricePerNight = r.PricePerNight,
+                    IsAccessibleRoom = r.RoomType.IsForAccessibility,
+                    CommonFacilityNames = r.Facilities
+                        .Where(f => f.Facility.IsForAccessibility == false)
+                        .Select(f => f.Facility.Name),
+                    AccessibilityNames = r.Facilities
+                        .Where(f => f.Facility.IsForAccessibility == true)
+                        .Select(f => f.Facility.Name),
+                })
+                .ToListAsync();
+
         public async Task<RoomDetailsDto> GetByIdAndPropertyIdAsync(Guid roomId, Guid propertyId)
             => await repository
                 .AllAsNoTracking<Room>()
                 .Where(r => r.Id == roomId && r.PropertyId == propertyId && r.IsDeleted == false)
                 .Select(r => new RoomDetailsDto()
+                {
+                    Id = r.Id,
+                    RoomTypeName = r.RoomType.Name,
+                    MainBedTypeName = r.MainBedType.Name,
+                    PricePerNight = r.PricePerNight,
+                    MaxGuests = r.MaxGuests,
+                    Size = r.SizeInSquareMeters,
+                    NumberOfUnits = r.NumberOfUnits,
+                    Description = r.Description,
+                    IsAccessibleRoom = r.RoomType.IsForAccessibility,
+                    CommonFacilityNames = r.Facilities
+                        .Where(f => f.Facility.IsForAccessibility == false)
+                        .Select(f => f.Facility.Name),
+                    AccessibilityNames = r.Facilities
+                        .Where(f => f.Facility.IsForAccessibility == true)
+                        .Select(f => f.Facility.Name),
+                    PhotoUrls = r.Photos
+                        .Select(p => p.Url),
+                })
+
+                .SingleAsync();
+
+        public async Task<RoomForEditDto> GetForEditByIdAndPropertyIdAsync(Guid roomId, Guid propertyId)
+            => await repository
+                .AllAsNoTracking<Room>()
+                .Where(r => r.Id == roomId && r.PropertyId == propertyId && r.IsDeleted == false)
+                .Select(r => new RoomForEditDto()
                 {
                     Id = r.Id,
                     RoomType = new RoomTypeOptionDto()

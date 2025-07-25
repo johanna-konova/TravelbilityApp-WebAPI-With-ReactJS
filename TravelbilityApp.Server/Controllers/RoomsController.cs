@@ -15,12 +15,24 @@ namespace TravelbilityApp.WebAPI.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<RoomShortInfoDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<MainRoomDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty]
         public async Task<IActionResult> GetAll([FromQuery] Guid propertyId)
         {
             var roomsData = await roomService.GetAllByPropertyIdAsync(propertyId);
+
+            return Ok(roomsData);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("detailed")]
+        [ProducesResponseType(typeof(IEnumerable<RoomShortDetailsDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        public async Task<IActionResult> GetAllDetailed([FromQuery] Guid propertyId)
+        {
+            var roomsData = await roomService.GetAllDetailedByPropertyIdAsync(propertyId);
 
             return Ok(roomsData);
         }
@@ -38,8 +50,21 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(roomData);
         }
 
+        [AllowAnonymous]
+        [HttpGet("{roomId:guid}/for-edit")]
+        [ProducesResponseType(typeof(RoomForEditDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        [ExistingRoom]
+        public async Task<IActionResult> GetForEditById(Guid roomId, [FromQuery] Guid propertyId)
+        {
+            var roomData = await roomService.GetForEditByIdAndPropertyIdAsync(roomId, propertyId);
+
+            return Ok(roomData);
+        }
+
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RoomShortInfoDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MainRoomDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -69,7 +94,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         }
 
         [HttpPut("{roomId:guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RoomShortInfoDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(MainRoomDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
