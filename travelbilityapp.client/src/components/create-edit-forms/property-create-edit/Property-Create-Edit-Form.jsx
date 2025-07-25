@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import toast from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 
-import { usePropertyContext } from '../../../contexts/Property-Context';
+import { usePropertyForEditContext } from '../../../contexts/Property-For-Edit-Context';
 
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getFacilities } from '../../../services/facilitiesService';
@@ -25,7 +25,7 @@ export default function PropertyCreateEditForm() {
     const { data: propertyTypes, isDataLoaded: isPropertyTypesLoaded } = useBasicGetFetch(() => getPropertyTypes());
     const { data: facilities } = useBasicGetFetch(() => getFacilities());
 
-    const { propertyData } = usePropertyContext();
+    const { propertyData } = usePropertyForEditContext();
 
     const [menualErrors, setMenualErrors] = useState({});
     const [step, setStep] = useState(1);

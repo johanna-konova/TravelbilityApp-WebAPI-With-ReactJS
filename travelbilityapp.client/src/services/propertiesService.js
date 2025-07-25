@@ -8,6 +8,8 @@ export const getNewestAdded = async (count) => api.get(`${endpoint}/newest?count
 
 export const getById = async (id) => api.get(`${endpoint}/${id}`);
 
+export const getForEditById = async (id) => api.get(`${endpoint}/${id}/for-edit`);
+
 export const getAllByPublisherId = async () => api.get(`${endpoint}/listed`);
 
 export const getByPublisherId = async (id) => api.get(`${endpoint}/listed/${id}`);
