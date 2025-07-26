@@ -8,7 +8,7 @@ export default function SingleAccessibilityConteiner({
 }) {
     return (
         <div className={styles["single-accessibility-container"]}>
-            <Link to={`/properties/?accessibilityIds=${id}`}>
+            <Link to={`/properties/?propertyAccessibilityIds=${id}`}>
                 <img src={`img/accessibility/${name.replace(":", " -")}.png`} />
                 <div>
                     <span className="mb-0">{name}</span>

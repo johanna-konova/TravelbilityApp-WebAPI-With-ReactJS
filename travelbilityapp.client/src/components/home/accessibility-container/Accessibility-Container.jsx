@@ -17,7 +17,7 @@ export default function AccessibilityConteiner() {
                 <div className="container pt-5 pb-3">
                     <div className="text-center mb-2">
                         <span className={styles["section-title"]}>
-                            Accessibility
+                            Property Accessibility
                         </span>
                         <span className={styles["section-text"]}>
                             Find a property according to your needs
