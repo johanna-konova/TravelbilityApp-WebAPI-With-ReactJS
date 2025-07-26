@@ -66,7 +66,9 @@ namespace TravelbilityApp.Core.Services
         public async Task<IEnumerable<FacilityOptionDto>> GetAccessibilityAsync()
             => await repository
                 .AllAsNoTracking<Facility>()
-                .Where(f => f.IsForAccessibility)
+                .Where(f => f.IsForAccessibility &&
+                            (f.WhereStatus == WhereStatus.OnlyInCommonArea ||
+                             f.WhereStatus == WhereStatus.Both))
                 .Select(f => new FacilityOptionDto()
                 {
                     Id = f.Id,
