@@ -5,7 +5,8 @@ namespace TravelbilityApp.Core.Contracts
 {
     public interface IFacilityService
     {
-        Task<IEnumerable<FacilityOptionDto>> GetAllAsync(
+        Task<IEnumerable<FacilityOptionDto>> GetAllAsync();
+        Task<IEnumerable<FacilityOptionDto>> GetAllInAsync(
             WhereStatus whereStatus = WhereStatus.OnlyInCommonArea);
 
         Task<IEnumerable<FacilityOptionDto>> GetValidSelectedAsync(

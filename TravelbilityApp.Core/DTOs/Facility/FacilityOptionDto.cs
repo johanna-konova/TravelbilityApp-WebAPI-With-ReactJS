@@ -5,5 +5,6 @@
         public int Id { get; init; }
         public string Name { get; init; } = null!;
         public bool IsForAccessibility { get; init; }
+        public string? WhereStatus { get; init; }
     }
 }

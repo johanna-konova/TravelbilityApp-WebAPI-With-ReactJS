@@ -10,7 +10,19 @@ namespace TravelbilityApp.Core.Services
 {
     public class FacilityService(IRepository repository) : IFacilityService
     {
-        public async Task<IEnumerable<FacilityOptionDto>> GetAllAsync(WhereStatus whereStatus)
+        public async Task<IEnumerable<FacilityOptionDto>> GetAllAsync()
+            => await repository
+                .AllAsNoTracking<Facility>()
+                .Select(f => new FacilityOptionDto()
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    IsForAccessibility = f.IsForAccessibility,
+                    WhereStatus = f.WhereStatus.ToString(),
+                })
+                .ToListAsync();
+
+        public async Task<IEnumerable<FacilityOptionDto>> GetAllInAsync(WhereStatus whereStatus)
             => await repository
                 .AllAsNoTracking<Facility>()
                 .Where(f => f.WhereStatus == whereStatus || f.WhereStatus == WhereStatus.Both)

@@ -15,7 +15,17 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(typeof(FacilityOptionDto), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAll()
         {
-            var propertyFacilities = await facilityService.GetAllAsync();
+            var facilities = await facilityService.GetAllAsync();
+
+            return Ok(facilities);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("in-property")]
+        [ProducesResponseType(typeof(FacilityOptionDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAllInProperty()
+        {
+            var propertyFacilities = await facilityService.GetAllInAsync();
 
             return Ok(propertyFacilities);
         }
@@ -25,7 +35,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(typeof(FacilityOptionDto), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAllInRoom()
         {
-            var roomFacilities = await facilityService.GetAllAsync(WhereStatus.OnlyInRoom);
+            var roomFacilities = await facilityService.GetAllInAsync(WhereStatus.OnlyInRoom);
 
             return Ok(roomFacilities);
         }
