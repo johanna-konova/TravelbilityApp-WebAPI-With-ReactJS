@@ -65,7 +65,9 @@ namespace TravelbilityApp.Core.Services
                         .Where(p => p.RoomId == null)
                         .First().Url,
                     AccessibilityNames = p.Facilities
-                        .Where(f => f.Facility.IsForAccessibility)
+                        .Where(f => f.Facility.IsForAccessibility &&
+                                    (f.Facility.WhereStatus == WhereStatus.OnlyInCommonArea ||
+                                     f.Facility.WhereStatus == WhereStatus.Both))
                         .Select(f => f.Facility.Name),
                     PublisherId = p.PublisherId,
                 })

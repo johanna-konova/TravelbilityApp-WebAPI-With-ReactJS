@@ -32,14 +32,13 @@ export default function PropertyShortListView({
                     <i className="fas fa-map-marker-alt"></i> <span className={styles["address"]}>{address}</span>
                 </div>
                 <div className={styles["accessibility-container"]}>
-                    <i className="fab fa-accessible-icon text-primary"></i> <span className="text-primary">Accessibility:</span>
+                    <i className="fab fa-accessible-icon text-primary"></i> <span className="text-primary">Property accessibility:</span>
                     <div className="ml-3">
-                        {accessibilityNames?.map((a, i) =>
+                        {accessibilityNames?.map((an, i) =>
                             <div key={i}>
-                                <i className="fas fa-check text-primary"></i> <span>{a};</span>
+                                <i className="fas fa-check text-primary"></i> <span>{an};</span>
                             </div>
-                            )
-                        }
+                        )}
                     </div>
                 </div>
 
