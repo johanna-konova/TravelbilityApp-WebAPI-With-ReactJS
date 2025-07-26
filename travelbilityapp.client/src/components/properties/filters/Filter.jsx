@@ -1,13 +1,16 @@
 import { useFiltersContext } from '../../../contexts/Filters-Context';
 
-import { AccessibilityFilterLoader, FacilitiesFilterLoader, PropertyTypeFilterLoader } from "../../loaders/Loaders";
+import { PropertyAccessibilityFilterLoader, PropertyFacilitiesFilterLoader, PropertyTypeFilterLoader, RoomAccessibilityFilterLoader, RoomFacilitiesFilterLoader, RoomTypeFilterLoader } from "../../loaders/Loaders";
 
 import styles from './../all-properties/All-Properties.module.css';
 
 const filterLoaders = {
     "Property types": <PropertyTypeFilterLoader />,
-    "Facilities": <FacilitiesFilterLoader />,
-    "Accessibility": <AccessibilityFilterLoader />,
+    "Room types": <RoomTypeFilterLoader />,
+    "Property Facilities": <PropertyFacilitiesFilterLoader />,
+    "Property Accessibility": <PropertyAccessibilityFilterLoader />,
+    "Room Facilities": <RoomFacilitiesFilterLoader />,
+    "Room Accessibility": <RoomAccessibilityFilterLoader />,
 };
 
 export default function Filter({

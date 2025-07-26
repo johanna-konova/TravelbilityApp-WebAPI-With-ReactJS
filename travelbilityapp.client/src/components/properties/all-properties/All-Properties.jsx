@@ -9,6 +9,7 @@ import { PropertiesContext } from '../../../contexts/Properties-Context';
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getAll } from '../../../services/propertiesService';
 import { getAll as getPropertyTypes } from '../../../services/typesServices';
+import { getAll as getRoomTypes } from '../../../services/roomTypesService';
 import { getFacilities } from '../../../services/facilitiesService';
 import { areParamsEqual, constructURLSearchParams, getFilterIds } from '../../../utils/properties-utils';
 
@@ -24,8 +25,11 @@ export default function AllProperties() {
 
     const filters = useMemo(() => ({
         propertyTypeIds: getFilterIds(searchParams, "propertyTypeIds"),
-        facilityIds: getFilterIds(searchParams, "facilityIds"),
-        accessibilityIds: getFilterIds(searchParams, "accessibilityIds"),
+        roomTypeIds: getFilterIds(searchParams, "roomTypeIds"),
+        propertyFacilityIds: getFilterIds(searchParams, "propertyFacilityIds"),
+        roomFacilityIds: getFilterIds(searchParams, "roomFacilityIds"),
+        propertyAccessibilityIds: getFilterIds(searchParams, "propertyAccessibilityIds"),
+        roomAccessibilityIds: getFilterIds(searchParams, "roomAccessibilityIds"),
     }), [searchParams]);
 
     const {
@@ -38,6 +42,11 @@ export default function AllProperties() {
         data: propertyTypes,
         isDataLoaded: arePropertyTypesLoaded,
     } = useBasicGetFetch(() => getPropertyTypes());
+
+    const {
+        data: roomTypes,
+        isDataLoaded: areRoomTypesLoaded,
+    } = useBasicGetFetch(() => getRoomTypes());
 
     const {
         data: facilities,
@@ -67,6 +76,8 @@ export default function AllProperties() {
             <FiltersContext.Provider value={{
                 propertyTypes,
                 arePropertyTypesLoaded,
+                roomTypes,
+                areRoomTypesLoaded,
                 facilities,
                 areFacilitiesLoaded,
                 filters,

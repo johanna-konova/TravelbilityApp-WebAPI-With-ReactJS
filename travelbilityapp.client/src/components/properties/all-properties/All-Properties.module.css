@@ -1,11 +1,9 @@
 .filters-container {
-    width: 32%;
     margin-right: 20px;
     background-color: white;
     border: 1px solid #d4d4d4;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2);
     border-radius: 35px;
-    max-height: 800px;
 }
 
 .filter-by {
@@ -26,6 +24,7 @@
 }
 
 .filter-boxes label {
+    display: block;
     font-weight: bold;
     margin-bottom: 0;
 }
@@ -59,6 +58,7 @@
 .property-img-container {
 	display: flex;
     width: 40%;
+    height: fit-content;
     margin: 20px 5px 20px 20px;
 }
 

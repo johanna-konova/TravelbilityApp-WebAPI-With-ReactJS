@@ -29,39 +29,30 @@ namespace TravelbilityApp.Core.Services
                     .Where(p => dto.PropertyTypeIds.Contains(p.PropertyTypeId));
             }
 
-            if (dto.FacilityIds?.Any() ?? false)
+            if (dto.RoomTypeIds?.Any() ?? false)
             {
-                /*propertiesDataAsQuery = propertiesDataAsQuery
-                    .Where(p => dto.FacilityIds.All(fi => p.Facilities.Any(f => f.FacilityId == fi)));*/
-
-                var facilityIdsCount = dto.FacilityIds.Count();
+                var roomTypeIds = dto.RoomTypeIds.ToList();
 
                 propertiesDataAsQuery = propertiesDataAsQuery
-                    .Where(p => p.Facilities
-                        .Where(f => dto.FacilityIds.Contains(f.FacilityId))
-                        .Select(f => f.FacilityId)
-                        .Distinct()
-                        .Count() == facilityIdsCount);
+                    .Where(p => p.Rooms
+                         .Where(r =>r.IsDeleted == false && roomTypeIds.Contains(r.RoomTypeId))
+                         .Select(r => r.RoomTypeId)
+                         .Distinct()
+                         .Count() == roomTypeIds.Count
+                    );
             }
 
-            if (dto.AccessibilityIds?.Any() ?? false)
-            {
-                /*propertiesDataAsQuery = propertiesDataAsQuery
-                    .Where(p => dto.AccessibilityIds.All(fi => p.Facilities.Any(f => f.FacilityId == fi)));*/
-
-                var accessibilityIdsCount = dto.AccessibilityIds.Count();
-
-                propertiesDataAsQuery = propertiesDataAsQuery
-                    .Where(p => p.Facilities
-                        .Where(f => dto.AccessibilityIds.Contains(f.FacilityId))
-                        .Select(f => f.FacilityId)
-                        .Distinct()
-                        .Count() == accessibilityIdsCount);
-            }
+            propertiesDataAsQuery = FilterBySelectedFacilityIds(
+                propertiesDataAsQuery,
+                (dto.PropertyFacilityIds, true),
+                (dto.PropertyAccessibilityIds, true),
+                (dto.RoomFacilityIds, false),
+                (dto.RoomAccessibilityIds, false)
+            );
 
             var mainPhotoUrl = propertiesDataAsQuery
                 .Select(p => p.Photos
-                        .Where(p => p.RoomId == null));
+                .Where(p => p.RoomId == null));
 
             var propertiesData = await propertiesDataAsQuery
                 .Select(p => new PropertyInAllDto()
@@ -326,6 +317,37 @@ namespace TravelbilityApp.Core.Services
             propertyToSave.Status = PropertyStatus.Saved;
 
             await repository.SaveChangesAsync();
+        }
+
+        private IQueryable<Property> FilterBySelectedFacilityIds(
+            IQueryable<Property> propertiesDataAsQuery,
+            params (IEnumerable<int>? SelectedFacilityIds, bool IsOnlyInCommomArea)[] filters)
+        {
+            foreach (var (selectedFacilityIds, isOnlyInCommomArea) in filters)
+            {
+
+                if (selectedFacilityIds == null ||
+                    selectedFacilityIds.Any() == false)
+                {
+                    continue;
+                }
+
+                var materializedSelectedFacilityIds = selectedFacilityIds.ToList();
+
+                propertiesDataAsQuery = propertiesDataAsQuery
+                    .Where(p => p.Facilities
+                        .Where(f => (isOnlyInCommomArea
+                            ? f.RoomId == null
+                            : f.RoomId != null && f.Room.IsDeleted == false) &&
+                            materializedSelectedFacilityIds.Contains(f.FacilityId)
+                            )
+                        .Select(f => f.FacilityId)
+                        .Distinct()
+                        .Count() == materializedSelectedFacilityIds.Count
+                    );
+            }
+
+            return propertiesDataAsQuery;
         }
     }
 }

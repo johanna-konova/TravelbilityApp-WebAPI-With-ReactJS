@@ -5,8 +5,16 @@ import Filter from "./Filter";
 import styles from './../all-properties/All-Properties.module.css';
 
 export default function FiltersContainer() {
-    const { propertyTypes, arePropertyTypesLoaded, facilities, areFacilitiesLoaded, filters } = useFiltersContext();
-    //console.log(filters["propertyTypeIds"]);
+    const {
+        propertyTypes,
+        arePropertyTypesLoaded,
+        roomTypes,
+        areRoomTypesLoaded,
+        facilities,
+        areFacilitiesLoaded,
+        filters
+    } = useFiltersContext();
+    console.log(roomTypes);
 
     return (
         <div className={styles["filters-container"]}>
@@ -22,19 +30,43 @@ export default function FiltersContainer() {
             />
 
             <Filter
-                filterLabel="Facilities"
-                filterName="facilityIds"
-                filter={facilities.filter(f => f.isForAccessibility === false)}
-                isFilterLoaded={areFacilitiesLoaded}
-                selectedFilterIds={filters["facilityIds"]}
+                filterLabel="Room types"
+                filterName="roomTypeIds"
+                filter={roomTypes}
+                isFilterLoaded={areRoomTypesLoaded}
+                selectedFilterIds={filters["roomTypeIds"]}
             />
 
             <Filter
-                filterLabel="Accessibility"
-                filterName="accessibilityIds"
-                filter={facilities.filter(f => f.isForAccessibility)}
+                filterLabel="Property Facilities"
+                filterName="propertyFacilityIds"
+                filter={facilities.filter(f => f.isForAccessibility === false && (f.whereStatus === "OnlyInCommonArea" || f.whereStatus === "Both"))}
                 isFilterLoaded={areFacilitiesLoaded}
-                selectedFilterIds={filters["accessibilityIds"]}
+                selectedFilterIds={filters["propertyFacilityIds"]}
+            />
+
+            <Filter
+                filterLabel="Property Accessibility"
+                filterName="propertyAccessibilityIds"
+                filter={facilities.filter(f => f.isForAccessibility && (f.whereStatus === "OnlyInCommonArea" || f.whereStatus === "Both"))}
+                isFilterLoaded={areFacilitiesLoaded}
+                selectedFilterIds={filters["propertyAccessibilityIds"]}
+            />
+
+            <Filter
+                filterLabel="Room Facilities"
+                filterName="roomFacilityIds"
+                filter={facilities.filter(f => f.isForAccessibility === false && (f.whereStatus === "OnlyInRoom" || f.whereStatus === "Both"))}
+                isFilterLoaded={areFacilitiesLoaded}
+                selectedFilterIds={filters["roomFacilityIds"]}
+            />
+
+            <Filter
+                filterLabel="Room Accessibility"
+                filterName="roomAccessibilityIds"
+                filter={facilities.filter(f => f.isForAccessibility && (f.whereStatus === "OnlyInRoom" || f.whereStatus === "Both"))}
+                isFilterLoaded={areFacilitiesLoaded}
+                selectedFilterIds={filters["roomAccessibilityIds"]}
             />
         </div>
     )

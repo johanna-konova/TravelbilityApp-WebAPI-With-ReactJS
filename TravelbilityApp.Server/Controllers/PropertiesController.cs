@@ -38,8 +38,11 @@ namespace TravelbilityApp.WebAPI.Controllers
             var serviceDto = new PropertyQueryParamsDto()
             {
                 PropertyTypeIds = dto.PropertyTypeIds,
-                FacilityIds = dto.FacilityIds,
-                AccessibilityIds = dto.AccessibilityIds,
+                RoomTypeIds = dto.RoomTypeIds,
+                PropertyFacilityIds = dto.PropertyFacilityIds,
+                RoomFacilityIds = dto.RoomFacilityIds,
+                PropertyAccessibilityIds = dto.PropertyAccessibilityIds,
+                RoomAccessibilityIds = dto.RoomAccessibilityIds,
             };
 
             var propertiesData = await propertyService.GetAllAsync(serviceDto);
