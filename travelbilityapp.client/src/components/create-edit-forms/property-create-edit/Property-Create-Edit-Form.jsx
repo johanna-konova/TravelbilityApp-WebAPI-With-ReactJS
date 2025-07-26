@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { usePropertyForEditContext } from '../../../contexts/Property-For-Edit-Context';
 
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
-import { getFacilities } from '../../../services/facilitiesService';
+import { getPropertyFacilities } from '../../../services/facilitiesService';
 import { create, edit } from '../../../services/propertiesService';
 import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { constructPropertyDataForEditing, formatErrorsData } from '../../../utils/property-utils';
@@ -23,7 +23,7 @@ import styles from './Property-Create-Edit-Form.module.css';
 
 export default function PropertyCreateEditForm() {
     const { data: propertyTypes, isDataLoaded: isPropertyTypesLoaded } = useBasicGetFetch(() => getPropertyTypes());
-    const { data: facilities } = useBasicGetFetch(() => getFacilities());
+    const { data: facilities } = useBasicGetFetch(() => getPropertyFacilities());
 
     const { propertyData } = usePropertyForEditContext();
 
