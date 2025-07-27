@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Core", "TravelbilityApp.Core\TravelbilityApp.Core.csproj", "{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{042C46BD-3136-4717-B256-641AA4155E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelbilityApp.Services.Tests", "TravelbilityApp.Services.Tests\TravelbilityApp.Services.Tests.csproj", "{315E2102-2A79-4E78-99E0-90262F6096A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{315E2102-2A79-4E78-99E0-90262F6096A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{315E2102-2A79-4E78-99E0-90262F6096A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{315E2102-2A79-4E78-99E0-90262F6096A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{315E2102-2A79-4E78-99E0-90262F6096A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +56,7 @@ Global
 		{2DA95F0C-91E2-4400-86D0-879B14D24477} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
 		{AA3D690E-BABC-4EF7-A83C-9C44D29CE195} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
 		{AEFEEEF1-648C-43A6-9CA5-798C021DE73C} = {1E1A8754-DAD8-4AF7-833C-ACF979537296}
+		{315E2102-2A79-4E78-99E0-90262F6096A1} = {042C46BD-3136-4717-B256-641AA4155E99}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {63FB29C8-8221-4AE0-B2F4-1FDCDB7A3A6E}
