@@ -144,7 +144,7 @@ namespace TravelbilityApp.Core.Services
         public async Task<UserPropertyDetailsDto> GetByUserIdAsync(Guid id, Guid userId, PropertyStatus status)
             => await repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.Id == id && p.Status >= status)
+                .Where(p => p.Id == id && p.PublisherId == userId && p.Status >= status)
                 .Select(p => new UserPropertyDetailsDto()
                 {
                     Id = p.Id,
@@ -170,10 +170,10 @@ namespace TravelbilityApp.Core.Services
                 })
                 .SingleAsync();
 
-        public async Task<PropertyForEditDto> GetForEditByIdAsync(Guid id, PropertyStatus status)
+        public async Task<PropertyForEditDto> GetForEditByIdAsync(Guid id, Guid userId, PropertyStatus status)
             => await repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.Id == id && p.Status >= status)
+                .Where(p => p.Id == id && p.PublisherId == userId && p.Status >= status)
                 .Select(p => new PropertyForEditDto()
                 {
                     Id = p.Id,
@@ -290,9 +290,13 @@ namespace TravelbilityApp.Core.Services
             var propertyToDelete = await repository
                 .GetByIdAsync<Property>(id);
 
-            propertyToDelete!.Status = PropertyStatus.Deleted;
+            if (propertyToDelete != null &&
+                propertyToDelete.Status != PropertyStatus.Deleted)
+            {
+                propertyToDelete.Status = PropertyStatus.Deleted;
 
-            await repository.SaveChangesAsync();
+                await repository.SaveChangesAsync();
+            }
         }
 
         public async Task PublishByIdAsync(Guid id)
@@ -300,9 +304,13 @@ namespace TravelbilityApp.Core.Services
             var propertyToPublish = await repository
                 .GetByIdAsync<Property>(id);
 
-            propertyToPublish!.Status = PropertyStatus.Published;
+            if (propertyToPublish != null &&
+                propertyToPublish.Status != PropertyStatus.Published)
+            {
+                propertyToPublish.Status = PropertyStatus.Published;
 
-            await repository.SaveChangesAsync();
+                await repository.SaveChangesAsync();
+            }
         }
 
         public async Task SaveByIdAsync(Guid id)
@@ -310,15 +318,13 @@ namespace TravelbilityApp.Core.Services
             var propertyToSave = await repository
                 .GetByIdAsync<Property>(id);
 
-            if (propertyToSave == null ||
-                propertyToSave.Status != PropertyStatus.Published)
+            if (propertyToSave != null &&
+                propertyToSave.Status != PropertyStatus.Saved)
             {
-                return;
+                propertyToSave.Status = PropertyStatus.Saved;
+
+                await repository.SaveChangesAsync();
             }
-
-            propertyToSave.Status = PropertyStatus.Saved;
-
-            await repository.SaveChangesAsync();
         }
 
         private IQueryable<Property> FilterBySelectedFacilityIds(

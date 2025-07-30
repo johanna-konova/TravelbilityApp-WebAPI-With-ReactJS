@@ -98,7 +98,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ExistingProperty(PropertyStatus.Published)]
         public async Task<IActionResult> GetForEditById(Guid id)
         {
-            var propertyData = await propertyService.GetForEditByIdAsync(id, PropertyStatus.Published);
+            var propertyData = await propertyService.GetForEditByIdAsync(id, User.Id(), PropertyStatus.Published);
 
             return Ok(propertyData);
         }
