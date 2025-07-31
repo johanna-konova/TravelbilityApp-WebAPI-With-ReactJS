@@ -115,7 +115,6 @@ namespace TravelbilityApp.Core.Services
                     PhotoUrls = r.Photos
                         .Select(p => p.Url),
                 })
-
                 .SingleAsync();
 
         public async Task<bool> HasRoomWithGivenIdAsync(Guid id)
