@@ -95,10 +95,10 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ExistingProperty(PropertyStatus.Published)]
+        [ExistingProperty(PropertyStatus.Saved)]
         public async Task<IActionResult> GetForEditById(Guid id)
         {
-            var propertyData = await propertyService.GetForEditByIdAsync(id, User.Id(), PropertyStatus.Published);
+            var propertyData = await propertyService.GetForEditByIdAsync(id, User.Id(), PropertyStatus.Saved);
 
             return Ok(propertyData);
         }
