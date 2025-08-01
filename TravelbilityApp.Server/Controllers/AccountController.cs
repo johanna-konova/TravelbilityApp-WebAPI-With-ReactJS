@@ -29,7 +29,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
@@ -60,9 +60,13 @@ namespace TravelbilityApp.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var (token, expires, refreshToken) = await GenerateTokensAsync(user);
+            bool isCurrentLoggedInUserAdmin = await IsCurrentLoggedInUserAdmin(user);
 
-            return Created(string.Empty, new { user.Id, user.Email, AccessToken = token, Expires = expires, RefreshToken = refreshToken });
+            var (token, expires, refreshToken) = await GenerateTokensAsync(user, isCurrentLoggedInUserAdmin);
+
+            var responseDto = ConstructResponseDto(user, token, expires, refreshToken, isCurrentLoggedInUserAdmin);
+
+            return Created(string.Empty, responseDto);
         }
 
         [AllowAnonymous]
@@ -86,17 +90,22 @@ namespace TravelbilityApp.WebAPI.Controllers
                 return Unauthorized(new { Message = InvalidCredentials });
             }
 
-            var (token, expires, refreshToken) = await GenerateTokensAsync(user);
+            bool isCurrentLoggedInUserAdmin = await IsCurrentLoggedInUserAdmin(user);
 
-            return Ok(new { user.Id, user.Email, AccessToken = token, Expires = expires, RefreshToken = refreshToken });
+            var (token, expires, refreshToken) = await GenerateTokensAsync(user, isCurrentLoggedInUserAdmin);
+
+            var responseDto = ConstructResponseDto(user, token, expires, refreshToken, isCurrentLoggedInUserAdmin);
+
+            return Ok(responseDto);
         }
+
         [AllowAnonymous]
         [HttpPost("refresh")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Refresh(RefreshRequestDto model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
@@ -115,9 +124,13 @@ namespace TravelbilityApp.WebAPI.Controllers
                 
             await tokenStore.RevokeRefreshTokenAsync(model.RefreshToken);
 
-            var (token, expires, newRefreshToken) = await GenerateTokensAsync(user);
+            bool isCurrentLoggedInUserAdmin = await IsCurrentLoggedInUserAdmin(user);
 
-            return Ok(new { user.Id, user.Email, AccessToken = token, Expires = expires, RefreshToken = newRefreshToken });
+            var (token, expires, refreshToken) = await GenerateTokensAsync(user, isCurrentLoggedInUserAdmin);
+
+            var responseDto = ConstructResponseDto(user, token, expires, refreshToken, isCurrentLoggedInUserAdmin);
+
+            return Ok(responseDto);
         }
 
         [HttpPost("logout")]
@@ -125,7 +138,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Logout(LogoutRequestDto dto)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 return BadRequest(ModelState);
             }
@@ -147,9 +160,11 @@ namespace TravelbilityApp.WebAPI.Controllers
             return NoContent();
         }
 
-        private async Task<(string token, DateTime expires, string refreshToken)> GenerateTokensAsync(ApplicationUser user)
+        private async Task<(string token, DateTime expires, string refreshToken)> GenerateTokensAsync(
+            ApplicationUser user,
+            bool isCurrentLoggedInUserAdmin)
         {
-            var (token, jti, expires) = GenerateJwtToken(user);
+            var (token, jti, expires) = GenerateJwtToken(user, isCurrentLoggedInUserAdmin);
 
             var ttlAccess = expires - DateTime.UtcNow;
             await tokenStore.StoreAccessTokenAsync(jti, ttlAccess);
@@ -162,7 +177,9 @@ namespace TravelbilityApp.WebAPI.Controllers
             return (token, expires, refreshToken);
         }
 
-        private (string token, string jti, DateTime expires) GenerateJwtToken(ApplicationUser user)
+        private (string token, string jti, DateTime expires) GenerateJwtToken(
+            ApplicationUser user,
+            bool isCurrentLoggedInUserAdmin)
         {
             var jti = Guid.NewGuid().ToString();
 
@@ -170,13 +187,14 @@ namespace TravelbilityApp.WebAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, jti),
-                new Claim("uid", user.Id.ToString())
+                new Claim("uid", user.Id.ToString()),
+                new Claim("IsAdmin", isCurrentLoggedInUserAdmin.ToString()),
             };
 
             var keyBytes = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!);
             var creds = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256);
 
-            var expires = DateTime.UtcNow.AddMinutes(35);
+            var expires = DateTime.UtcNow.AddMonths(1);
 
             var tokenDescriptor = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
@@ -197,5 +215,28 @@ namespace TravelbilityApp.WebAPI.Controllers
             rng.GetBytes(randomBytes);
             return Convert.ToBase64String(randomBytes);
         }
+
+        private async Task<bool> IsCurrentLoggedInUserAdmin(ApplicationUser user)
+        {
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            return userRoles.Contains("Administrator");
+        }
+
+        private ResponseDto ConstructResponseDto(
+            ApplicationUser user,
+            string token,
+            DateTime expires,
+            string refreshToken,
+            bool isCurrentLoggedInUserAdmin)
+            => new ResponseDto()
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                AccessToken = token,
+                Expires = expires,
+                RefreshToken = refreshToken,
+                IsAdmin = isCurrentLoggedInUserAdmin
+            };
     }
 }
