@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using TravelbilityApp.Core.Attributes;
+
 using static TravelbilityApp.Core.Constants.ModelsConstants;
-using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Common;
 using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Account;
+using static TravelbilityApp.Core.Constants.ModelsMessagesConstants.Common;
 
 namespace TravelbilityApp.Core.DTOs.Account
 {
@@ -16,6 +18,7 @@ namespace TravelbilityApp.Core.DTOs.Account
         [StringLength(PasswordMaxLength,
             MinimumLength = PasswordMinLength,
             ErrorMessage = InvalidStringLength)]
+        [StrongPassword]
         public string Password { get; init; } = null!;
 
         [Compare(nameof(Password), ErrorMessage = MismatchedPasswords)]
