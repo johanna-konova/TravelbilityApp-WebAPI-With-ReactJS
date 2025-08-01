@@ -29,6 +29,8 @@ namespace Microsoft.Extensions.DependencyInjection
                         configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
                     options.Password.RequireUppercase =
                         configuration.GetValue<bool>("Identity:Password:RequireUppercase");
+                    options.Password.RequiredLength =
+                        configuration.GetValue<int>("Identity:Password:RequiredLength");
                 })
                 .AddEntityFrameworkStores<TravelbilityAppDbContext>()
                 .AddDefaultTokenProviders();

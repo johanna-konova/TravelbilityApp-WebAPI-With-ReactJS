@@ -86,4 +86,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+await app.SeedAdminRoleAsync();
+await app.AssignAdminRoleAsync();
+
 await app.RunAsync();
