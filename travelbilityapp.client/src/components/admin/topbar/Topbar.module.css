@@ -1,0 +1,9 @@
+.navbar {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar a {
+    margin: 20px;
+}

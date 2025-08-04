@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
+import AdminGuard from "./components/guards/AdminGuard";
 import AuthGuard from "./components/guards/Auth-Guard";
 import PublisherGuard from "./components/guards/Publisher-Guard";
 
@@ -9,8 +10,9 @@ import PropertyContextProvider from "./contexts/Property-Context";
 import UserPropertyContextProvider from "./contexts/User-Property-Context";
 import PropertyForEditContextProvider from "./contexts/Property-For-Edit-Context";
 
-import Topbar from "./components/topbar/Topbar";
-import Navbar from "./components/Navbar";
+import PublicLayout from "./layouts/PublicLayout";
+import AdminLayout from "./layouts/AdminLayout";
+
 import Home from "./components/home/Home";
 import RegisterForm from "./components/auth-forms/Register-Form";
 import LoginForm from "./components/auth-forms/Login-Form";
@@ -21,21 +23,16 @@ import PropertyDetailsContainer from "./components/property/property-details/Pro
 import UserProperties from "./components/properties/user-properties/User-Properties";
 import UserProperty from "./components/property/user-property/User-Property";
 import PropertyCreateEditForm from "./components/create-edit-forms/property-create-edit/Property-Create-Edit-Form";
-import Footer from "./components/Footer";
-import BackToTop from "./components/Back-To-Top";
 import NotFound from "./components/not-found/Not-Found";
+import Properties from "./components/admin/properties/Properties";
 
 function App() {
     return (
         <AuthContextProvider>
             <Toaster position="buttom-left" />
 
-            <Topbar />
-
-            <Navbar />
-
-            <main>
-                <Routes>
+            <Routes>
+                <Route element={<PublicLayout />}>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
@@ -73,14 +70,18 @@ function App() {
 
                     <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<NotFound />} />
-                </Routes>
-            </main>
+                </Route>
 
-            <Footer />
-
-            <BackToTop />
+                <Route path="/admin" element={
+                    <AdminGuard>
+                        <AdminLayout />
+                    </AdminGuard>
+                }>
+                    <Route index element={<Properties />} />
+                </Route>
+            </Routes>
         </AuthContextProvider >
-  )
+    )
 }
 
 export default App

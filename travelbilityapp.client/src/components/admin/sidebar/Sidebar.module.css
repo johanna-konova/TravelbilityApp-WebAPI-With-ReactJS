@@ -1,0 +1,28 @@
+.sidebar {
+    min-height: 70vh;
+    background: #fff;
+    font-weight: 500;
+    padding: 0;
+    width: 235px;
+    border-radius: 20px;
+}
+
+.sidebar .sidebar-nav {
+    list-style: none;
+    padding: 20px 13px 0 0;
+    text-align: center;
+}
+
+.sidebar li {
+    display: flex;
+    justify-content: center;
+    color: #7ab730;
+}
+
+.sidebar li a:hover {
+    color: white;
+    background-color: #7ab730;
+    padding: 7px 30px;
+    border-radius: 7px;
+    text-decoration: none;
+}

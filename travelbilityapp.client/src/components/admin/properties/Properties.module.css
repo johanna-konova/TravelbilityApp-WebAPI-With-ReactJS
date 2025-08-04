@@ -1,0 +1,39 @@
+.properties-label {
+    font-size: calc(1.3rem + 0.6vw);
+    font-weight: 600 !important;
+    color: #212121;
+}
+
+.properties-list {
+    text-align: center;
+    background-color: white;
+    padding: 10px;
+    border-radius: 13px;
+    border: 1px solid;
+    margin-bottom: 15px;
+}
+
+.properties-list div:not(:last-child) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.properties-list div:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.properties-list:first-of-type {
+    background-color: #7ab730;
+    color: white;
+    border-color: white;
+    font-weight: bold;
+}
+
+.properties-list button {
+    margin-bottom: 5px;
+}
+
+.properties-list button .x {
+    font-weight: bold;
+}
