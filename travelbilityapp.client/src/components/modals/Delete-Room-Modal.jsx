@@ -21,11 +21,11 @@ export default function DeleteRoomModal({
         try {
             setIsDeleting(true);
             await deleteById(id, propertyId);
-            toast.success("You have successfully deleted the room.");
+            toast.success("You have successfully deleted the room.", { position: "buttom-right" });
             deleteHandler(id);
             // eslint-disable-next-line no-unused-vars
         } catch (error) {
-            toast.error("An unexpected error occurred. Please try again or contact us.");
+            toast.error("An unexpected error occurred. Please try again or contact us.", { position: "buttom-right" });
         } finally {
             closeModalHandler();
         }

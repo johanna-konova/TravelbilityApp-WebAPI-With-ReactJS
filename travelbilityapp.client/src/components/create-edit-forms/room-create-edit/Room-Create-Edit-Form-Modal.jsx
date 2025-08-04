@@ -109,7 +109,7 @@ export default function AddRoomModal({
                 ? await edit(roomId, roomDataToSave)
                 : await create(roomDataToSave);
 
-            toast.success(`You have successfully ${roomId === undefined ? "added" : "edited"} the room.`);
+            toast.success(`You have successfully ${roomId === undefined ? "added" : "edited"} the room.`, { position: "buttom-right" });
 
             addRoomHandler(savedRoomData);
         } catch (errorInfo) {
