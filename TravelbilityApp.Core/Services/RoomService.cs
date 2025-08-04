@@ -250,7 +250,7 @@ namespace TravelbilityApp.Core.Services
             if (wasAccessibleRoom &&
                 await propertyService.HasAccessibleRoom(propertyId) == false)
             {
-                await propertyService.SaveByIdAsync(propertyId);
+                await propertyService.ChangePropertyStatus(propertyId, PropertyStatus.Saved);
             }
         }
 

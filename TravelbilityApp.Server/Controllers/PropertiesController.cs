@@ -22,7 +22,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [HttpGet("newest")]
         [ProducesResponseType(typeof(IEnumerable<PropertyInNewestAddedDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetNewestAdded([FromQuery] int count = 3)
+        public async Task<IActionResult> GetNewestAdded([FromQuery] int count)
         {
             var propertiesData = await propertyService.GetNewestAddedAsync(count);
 
@@ -103,11 +103,25 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(propertyData);
         }
 
+        [HttpGet("admin")]
+        [ProducesResponseType(typeof(IEnumerable<PropertForAdminShortDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Admin]
+        public async Task<IActionResult> GetAllForAdmin()
+        {
+            var propertiesData = await propertyService.GetAllForAdminAsync();
+
+            return Ok(propertiesData);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [NotAdmin]
         public async Task<IActionResult> Create([FromBody] PropertyInputDto dto)
         {
             var result = await validator.ValidateAsync(dto);
@@ -174,12 +188,12 @@ namespace TravelbilityApp.WebAPI.Controllers
         [PropertyPublisher]
         public async Task<IActionResult> DeleteById(Guid id)
         {
-            await propertyService.DeleteByIdAsync(id);
+            await propertyService.ChangePropertyStatus(id, PropertyStatus.Deleted);
 
             return Ok(id);
         }
 
-        [HttpPut("publish/{id:guid}")]
+        [HttpPut("{id:guid}/send-for-approval")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -188,14 +202,46 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty]
         [PropertyPublisher]
-        public async Task<IActionResult> PublishById(Guid id)
+        public async Task<IActionResult> SendForApprovalById(Guid id)
         {
             if (await propertyService.HasAccessibleRoom(id) == false)
             {
                 return BadRequest(RequiredAtLeastAccessibleRoom);
             }
 
-            await propertyService.PublishByIdAsync(id);
+            await propertyService.ChangePropertyStatus(id, PropertyStatus.Pending);
+
+            return Ok(id);
+        }
+
+        [HttpPut("{id:guid}/publish")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        [Admin]
+        public async Task<IActionResult> PublishById(Guid id)
+        {
+            await propertyService.ChangePropertyStatus(id, PropertyStatus.Published);
+
+            return Ok(id);
+        }
+
+        [HttpPut("{id:guid}/reject")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ExistingProperty]
+        [Admin]
+        public async Task<IActionResult> RejectById(Guid id)
+        {
+            await propertyService.ChangePropertyStatus(id, PropertyStatus.Rejected);
 
             return Ok(id);
         }

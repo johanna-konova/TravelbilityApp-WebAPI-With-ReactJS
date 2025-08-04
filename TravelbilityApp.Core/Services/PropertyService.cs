@@ -203,6 +203,21 @@ namespace TravelbilityApp.Core.Services
                 })
                 .SingleAsync();
 
+        public async Task<IEnumerable<PropertForAdminShortDto>> GetAllForAdminAsync()
+            => await repository
+                .AllAsNoTracking<Property>()
+                .Where(p => p.Status != PropertyStatus.Deleted)
+                .Select(p => new PropertForAdminShortDto()
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    TypeName = p.PropertyType.Name,
+                    Address = p.Address,
+                    Publisher = p.Publisher.Email!,
+                    Status = p.Status.ToString(),
+                })
+                .ToListAsync();
+
         public async Task<bool> IsUserPropertyPublisherAsync(Guid propertyId, Guid userId)
             => await repository
                 .AllAsNoTracking<Property>()
@@ -259,6 +274,7 @@ namespace TravelbilityApp.Core.Services
             propertyToEdit.Address = dto.Address;
             propertyToEdit.Description = dto.Description;
             propertyToEdit.PropertyTypeId = (int)dto.TypeId!;
+            propertyToEdit.Status = PropertyStatus.Saved;
             propertyToEdit.UpdatedAt = DateTime.UtcNow;
 
             var validSelectedFacilityIds = await facilityService.GetValidSelectedIdsAsync(dto.FacilityIds);
@@ -284,43 +300,16 @@ namespace TravelbilityApp.Core.Services
             return propertyToEdit.Id;
         }
 
-        public async Task DeleteByIdAsync(Guid id)
+        public async Task ChangePropertyStatus(Guid id, PropertyStatus newStatus)
         {
-            var propertyToDelete = await repository
+            var property = await repository
                 .GetByIdAsync<Property>(id);
 
-            if (propertyToDelete != null &&
-                propertyToDelete.Status != PropertyStatus.Deleted)
+            if (property != null &&
+                property.Status != PropertyStatus.Deleted &&
+                property.Status != newStatus)
             {
-                propertyToDelete.Status = PropertyStatus.Deleted;
-
-                await repository.SaveChangesAsync();
-            }
-        }
-
-        public async Task PublishByIdAsync(Guid id)
-        {
-            var propertyToPublish = await repository
-                .GetByIdAsync<Property>(id);
-
-            if (propertyToPublish != null &&
-                propertyToPublish.Status != PropertyStatus.Published)
-            {
-                propertyToPublish.Status = PropertyStatus.Published;
-
-                await repository.SaveChangesAsync();
-            }
-        }
-
-        public async Task SaveByIdAsync(Guid id)
-        {
-            var propertyToSave = await repository
-                .GetByIdAsync<Property>(id);
-
-            if (propertyToSave != null &&
-                propertyToSave.Status != PropertyStatus.Saved)
-            {
-                propertyToSave.Status = PropertyStatus.Saved;
+                property.Status = newStatus;
 
                 await repository.SaveChangesAsync();
             }

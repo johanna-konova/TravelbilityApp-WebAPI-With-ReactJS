@@ -4,6 +4,8 @@
     {
         Deleted = 1,
         Saved = 2,
-        Published = 3,
+        Pending = 3,
+        Published = 4,
+        Rejected = 5,
     }
 }
