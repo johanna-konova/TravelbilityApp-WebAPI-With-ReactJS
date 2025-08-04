@@ -8,5 +8,12 @@
 
             return idAsString == null ? Guid.Empty : Guid.Parse(idAsString);
         }
+
+        public static bool IsAdmin(this ClaimsPrincipal user)
+        {
+            var isAdminAsString = user.FindFirstValue("IsAdmin");
+
+            return isAdminAsString != null && bool.Parse(isAdminAsString);
+        }
     }
 }
