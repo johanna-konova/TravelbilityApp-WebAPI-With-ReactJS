@@ -16,12 +16,14 @@ export function useBasicGetFetch(getDataCallbackFunction, initialData = [], depe
         )();
     }, dependencies);
 
-    const updateData = (elementData) => {
+    const updateData = (input) => {
         if (Array.isArray(data)) {
             setData(previousData =>
-                previousData.some(pd => pd.id === elementData.id)
-                    ? previousData.map(pd => pd.id === elementData.id ? elementData : pd)
-                    : [...previousData, elementData]
+                typeof input === "function"
+                    ? input(previousData) 
+                    : previousData.some(pd => pd.id === input.id)
+                        ? previousData.map(pd => pd.id === input.id ? input : pd)
+                        : [...previousData, input]
             );
         }
     };
