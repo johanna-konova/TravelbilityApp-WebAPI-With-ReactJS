@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 
 import { useAuthContext } from "../../contexts/Auth-Context";
 
 import { useLogout } from "../../hooks/use-auth";
 
-import styles from './Topbar.module.css';
-
 export default function Topbar() {
-    const { isAuthenticated } = useAuthContext();
+    const { isAuthenticated, isAdmin } = useAuthContext();
     const [isPending, setIsPending] = useState(false);
     const { logoutHandler } = useLogout();
     const navigate = useNavigate();
@@ -32,11 +30,12 @@ export default function Topbar() {
                             <div className="d-inline-flex align-items-center">
                                 {isAuthenticated
                                     ? <>
-                                        {!isPending &&
-                                            <Link to="/my-properties" type="button" className="btn btn-outline-success" >Manage my properties</Link>
-                                        }
+                                        {!isPending && (isAdmin
+                                            ? <Link to="/admin" type="button" className="btn btn-outline-success" >Admin panel</Link>
+                                            : <Link to="/my-properties" type="button" className="btn btn-outline-success" >Manage my properties</Link>
+                                        )}
 
-                                        <Button className={`${styles["logout-btn"]} btn-outline-success`} disabled={isPending} onClick={logout}>
+                                        <button className="btn btn-outline-success" type="button" disabled={isPending} onClick={logout}>
                                         {isPending
                                             ? <>
                                                 <Spinner
@@ -49,7 +48,7 @@ export default function Topbar() {
                                                 Singing out...
                                             </>
                                             : <span>Sing out</span>
-                                        }</Button>
+                                        }</button>
                                     </>
                                     : <>
                                         <Link to="/register" type="button" className="btn btn-outline-success">Sign up</Link>
@@ -60,10 +59,10 @@ export default function Topbar() {
                         </div>
                         <div className="col-lg-6 text-center text-lg-right">
                             <div className="d-inline-flex align-items-center">
-                                {isPending
+                                {isAdmin === false && (isPending
                                     ? <span className="btn btn-link">List your property</span>
                                     : <Link to="/list" type="button" className="btn btn-link">List your property</Link>
-                                }
+                                )}
                             </div>
                         </div>
                     </div>

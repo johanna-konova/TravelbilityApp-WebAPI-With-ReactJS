@@ -7,6 +7,7 @@ export const AuthContext = createContext({
     accessToken: '',
     refreshToken: '',
     isAuthenticated: false,
+    isAdmin: false,
     changeLoggedInUserData: () => {},
 });
 
@@ -21,6 +22,7 @@ export default function AuthContextProvider(props) {
         accessToken: loggedInUserData.accessToken,
         refreshToken: loggedInUserData.refreshToken,
         isAuthenticated: !!loggedInUserData.email,
+        isAdmin: loggedInUserData.isAdmin,
         changeLoggedInUserData,
     };
 

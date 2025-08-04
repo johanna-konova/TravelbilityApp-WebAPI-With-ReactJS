@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { Button, Row, Spinner } from 'react-bootstrap';
 import toast from "react-hot-toast";
-import { useNavigate } from 'react-router-dom';
 
 import { useBasicGetFetch } from '../../../../hooks/use-basic-get-fetch';
 import { getAll as getRooms } from '../../../../services/roomsService';
-import { publish } from '../../../../services/propertiesService';
+import { sendForApproval } from '../../../../services/propertiesService';
 
 import RoomShortGridView from './Room-Short-Grid-View';
 import AddRoomModal from '../../../create-edit-forms/room-create-edit/Room-Create-Edit-Form-Modal';
@@ -25,9 +24,7 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
     const [isAddRoomModalShowed, setIsAddRoomModalShowed] = useState(false);
     const [pickedRoomInfo, setPickedRoomInfo] = useState(undefined);
     const [hasAccessibleRoom, setHasAccessibleRoom] = useState(true);
-    const [isPublishing, setIsPublishing] = useState(false);
-
-    const navigate = useNavigate();
+    const [isSendingForApproval, setIsSendingForApproval] = useState(false);
 
     useEffect(() => {
         setHasAccessibleRoom(false);
@@ -56,20 +53,19 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
         _updatePropertyStatusAndSetToastError(id);
     };
 
-    const publishHandler = async (id) => {
-        setIsPublishing(true);
+    const sendForApprovalHandler = async (id) => {
+        setIsSendingForApproval(true);
 
         try {
             debugger
-            await publish(id);
+            await sendForApproval(id);
 
             setHasAccessibleRoom(true);
-            toast.success(`You have successfully publushed your property.`);
-            navigate(`/properties/${id}`);
+            toast.success(`Thank you for wanting to include your property in our cause! It will be reviewed by an administrator very soon.`, { duration: "750", icon: "🎉", position: "buttom-right" });
         } catch (e) {
-            toast.error("Please, add at least one Accessible Room so you can republish your property.");
+            toast.error("Please, add at least one Accessible Room so you can send your property for approval.", { position: "buttom-right" });
         } finally {
-            setIsPublishing(false);
+            setIsSendingForApproval(false);
         }
     }
 
@@ -80,7 +76,7 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
             wasAccessibleRoom === true &&
             roomsData.filter(rd => rd.id !== roomId).every(rd => rd.isAccessibleRoom === false)) {
             setPropertyStatus("Saved");
-            toast.error("Your property was unpublushed. Please, add at least one Accessible Room so you can republish it again.", { duration: "500" });
+            toast.error("Your property was unpublushed. Please, add at least one Accessible Room so you can republish it again.", { duration: "500", position: "buttom-right" });
         }
     };
 
@@ -88,7 +84,7 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
         <>
             {hasAccessibleRoom === false &&
                 <div className="mb-4 text-center">
-                    <p className={styles["add-room-text"]}>Only one step left to publish your property. Add at least one Accessible Room now.</p>
+                    <p className={styles["add-room-text"]}>Only one step left to send your property for approval. Add at least one Accessible Room now.</p>
                 </div>
             }
 
@@ -111,8 +107,8 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
             </Row>
 
             <Row className="mb-5 justify-content-end">
-                <Button type="button" variant="primary" disabled={hasAccessibleRoom === false || isPublishing} onClick={() => publishHandler(propertyId)}>
-                    {isPublishing
+                <Button type="button" variant="primary" disabled={hasAccessibleRoom === false || isSendingForApproval} onClick={() => sendForApprovalHandler(propertyId)}>
+                    {isSendingForApproval
                         ? <>
                             <Spinner
                                 as="span"
@@ -121,9 +117,9 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
                                 role="status"
                                 aria-hidden="true"
                             />
-                            Publishing...
+                            Sending for Approval...
                         </>
-                        : <span>Publish</span>
+                        : <span>Send for Approval</span>
                     }
                 </Button>
             </Row>
