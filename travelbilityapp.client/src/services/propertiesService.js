@@ -10,9 +10,9 @@ export const getById = async (id) => api.get(`${endpoint}/${id}`);
 
 export const getForEditById = async (id) => api.get(`${endpoint}/${id}/for-edit`);
 
-export const getAllForAdmin = async () => api.get(`${endpoint}/admin`);
+export const getAllForAdmin = async (currenPageNumber) => api.get(`${endpoint}/admin?currenPageNumber=${currenPageNumber}`);
 
-export const getAllByPublisherId = async () => api.get(`${endpoint}/listed`);
+export const getAllByPublisherId = async (currenPageNumber) => api.get(`${endpoint}/listed?currenPageNumber=${currenPageNumber}`);
 
 export const getByPublisherId = async (id) => api.get(`${endpoint}/listed/${id}`);
 

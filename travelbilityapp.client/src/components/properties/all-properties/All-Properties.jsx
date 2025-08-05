@@ -6,6 +6,7 @@ import { useAuthContext } from '../../../contexts/Auth-Context';
 import { FiltersContext } from '../../../contexts/Filters-Context';
 import { PropertiesContext } from '../../../contexts/Properties-Context';
 
+import { usePageParams } from '../../../hooks/use-page-params';
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
 import { getFacilities } from '../../../services/facilitiesService';
 import { getAll } from '../../../services/propertiesService';
@@ -23,6 +24,7 @@ import styles from './All-Properties.module.css';
 export default function AllProperties() {
     const { id } = useAuthContext();
     const [searchParams, setSearchParams] = useSearchParams();
+    const [currentPageNumber, updatecurrentPageNumber] = usePageParams();
 
     const filters = useMemo(() => ({
         propertyTypeIds: getFilterIds(searchParams, "propertyTypeIds"),
@@ -32,8 +34,6 @@ export default function AllProperties() {
         propertyAccessibilityIds: getFilterIds(searchParams, "propertyAccessibilityIds"),
         roomAccessibilityIds: getFilterIds(searchParams, "roomAccessibilityIds"),
     }), [searchParams]);
-
-    const currentPageNumber = parseInt(searchParams.get("page") || "1", 10);
 
     const {
         data: pagedResult,
@@ -76,12 +76,6 @@ export default function AllProperties() {
         }
     }, [filters, searchParams, setSearchParams]);
 
-    const updatecurrentPageNumber = useCallback((nextPageNumber) => {
-        const nextParams = new URLSearchParams(searchParams);
-        nextParams.set("page", nextPageNumber.toString());
-        setSearchParams(nextParams, { replace: true });
-    }, [searchParams, setSearchParams]);
-
     return (
         <Container className="mt-5 d-flex">
             <FiltersContext.Provider value={{
@@ -116,12 +110,12 @@ export default function AllProperties() {
                         </PropertiesContext.Provider>
 
                         <div className="d-flex justify-content-center">
-                        <Paginator
-                            currentPage={currentPageNumber}
-                            totalCount={pagedResult.totalCount}
-                            itemsPerPage={pagedResult.itemsPerPage}
-                            updatecurrentPageNumber={updatecurrentPageNumber}
-                        />
+                            <Paginator
+                                currentPage={currentPageNumber}
+                                totalCount={pagedResult.totalCount}
+                                itemsPerPage={pagedResult.itemsPerPage}
+                                updatecurrentPageNumber={updatecurrentPageNumber}
+                            />
                         </div>
                     </>
                     : <WheelchairTireSpinner style={{ minHeight: "calc(100vh - 270px)" }} />

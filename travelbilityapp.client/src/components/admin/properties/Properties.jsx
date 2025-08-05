@@ -2,19 +2,23 @@ import { useState } from "react";
 import { Button, Col, Container, Row, Spinner } from "react-bootstrap";
 import toast from "react-hot-toast";
 
+import { usePageParams } from "../../../hooks/use-page-params";
 import { useBasicGetFetch } from "../../../hooks/use-basic-get-fetch";
 import { getAllForAdmin, publish, reject } from "../../../services/propertiesService";
 import { getCountryName } from "../../../utils/property-utils";
 
+import Paginator from "../../properties/all-properties/Paginator";
 import { WheelchairTireSpinner } from "../../loaders/Loaders";
 
 import styles from "./Properties.module.css";
 
 export default function Properties() {
+    const [currentPageNumber, updatecurrentPageNumber] = usePageParams();
+
     const {
-        data: propertiesData,
-        isDataLoaded: arePropertiesDataLoaded,
-        updateData: updatePropertiesDataHandler, } = useBasicGetFetch(getAllForAdmin);
+        data: pagedResult,
+        isDataLoaded: isPagedResultLoaded,
+        updateData: updatePropertiesDataHandler, } = useBasicGetFetch(() => getAllForAdmin(currentPageNumber), [], [currentPageNumber]);
 
     const [isPending, setIsPending] = useState(false);
 
@@ -43,7 +47,7 @@ export default function Properties() {
         <Container className="ml-3">
             <p className={styles["properties-label"]}>Properties</p>
 
-            {arePropertiesDataLoaded
+            {isPagedResultLoaded
                 ? <>
                     <Row className={styles["properties-list"]}>
                         <Col sm={2} md={2} lg={2}>
@@ -66,7 +70,7 @@ export default function Properties() {
                         </Col>
                     </Row>
 
-                    {propertiesData.map((pd, i) =>
+                    {pagedResult.items.map((pd, i) =>
                         <Row key={i} className={styles["properties-list"]}>
                             <Col sm={2} md={2} lg={2}>
                                 <span>{pd.name}</span>
@@ -118,6 +122,15 @@ export default function Properties() {
                             </Col>
                         </Row>
                     )}
+
+                    <div className="d-flex justify-content-center">
+                        <Paginator
+                            currentPage={currentPageNumber}
+                            totalCount={pagedResult.totalCount}
+                            itemsPerPage={pagedResult.itemsPerPage}
+                            updatecurrentPageNumber={updatecurrentPageNumber}
+                        />
+                    </div>
                 </>
                 : <WheelchairTireSpinner style={{ minHeight: "calc(125vh - 450px)" }} />
             }
