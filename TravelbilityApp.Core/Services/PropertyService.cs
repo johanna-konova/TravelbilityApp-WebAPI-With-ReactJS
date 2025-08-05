@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using TravelbilityApp.Core.Contracts;
+using TravelbilityApp.Core.DTOs.Common;
 using TravelbilityApp.Core.DTOs.Facility;
 using TravelbilityApp.Core.DTOs.Property;
 using TravelbilityApp.Infrastructure.Common;
@@ -15,7 +16,7 @@ namespace TravelbilityApp.Core.Services
         IRepository repository,
         IFacilityService facilityService) : IPropertyService
     {
-        public async Task<IEnumerable<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto)
+        public async Task<PagedResultDto<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto)
         {
             var propertiesDataAsQuery = repository
                 .AllAsNoTracking<Property>()
@@ -54,7 +55,11 @@ namespace TravelbilityApp.Core.Services
                 .Select(p => p.Photos
                 .Where(p => p.RoomId == null));
 
+            var propertiesCount = await propertiesDataAsQuery.CountAsync();
+
             var propertiesData = await propertiesDataAsQuery
+                .Skip((dto.CurrentPageNumber - 1) * dto.PropertiesPerPage)
+                .Take(dto.PropertiesPerPage)
                 .Select(p => new PropertyInAllDto()
                 {
                     Id = p.Id,
@@ -72,7 +77,13 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
-            return propertiesData;
+            return new PagedResultDto<PropertyInAllDto>()
+            {
+                Items = propertiesData,
+                TotalCount = propertiesCount,
+                CurrentPageNumber = dto.CurrentPageNumber,
+                ItemsPerPage = dto.PropertiesPerPage,
+            };
         }
 
         public async Task<IEnumerable<PropertyInNewestAddedDto>> GetNewestAddedAsync(int count)

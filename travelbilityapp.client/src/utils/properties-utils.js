@@ -1,8 +1,9 @@
 export const getFilterIds = (searchParams, key) =>
     searchParams.get(key)?.split(",").filter(v => /^\d+$/.test(v)).map(Number) ?? [];
 
-export const constructURLSearchParams = (filters) => {
+export const constructURLSearchParams = (currentPageNumber, filters) => {
     const params = new URLSearchParams();
+    params.append("currentPageNumber", currentPageNumber);
 
     Object.entries(filters)
         .forEach(([name, ids]) => ids.forEach(id => params.append(name, id)));

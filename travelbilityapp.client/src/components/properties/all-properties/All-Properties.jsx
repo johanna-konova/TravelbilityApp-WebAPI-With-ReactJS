@@ -1,21 +1,22 @@
-﻿import  { useMemo, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+﻿import { useCallback, useMemo } from 'react';
 import { Container } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 
 import { useAuthContext } from '../../../contexts/Auth-Context';
 import { FiltersContext } from '../../../contexts/Filters-Context';
 import { PropertiesContext } from '../../../contexts/Properties-Context';
 
 import { useBasicGetFetch } from '../../../hooks/use-basic-get-fetch';
-import { getAll } from '../../../services/propertiesService';
-import { getAll as getPropertyTypes } from '../../../services/typesServices';
-import { getAll as getRoomTypes } from '../../../services/roomTypesService';
 import { getFacilities } from '../../../services/facilitiesService';
+import { getAll } from '../../../services/propertiesService';
+import { getAll as getRoomTypes } from '../../../services/roomTypesService';
+import { getAll as getPropertyTypes } from '../../../services/typesServices';
 import { areParamsEqual, constructURLSearchParams, getFilterIds } from '../../../utils/properties-utils';
 
-import FiltersContainer from '../filters/Filters-Container';
-import PropertyShortListView from './Property-Short-List-View';
 import { WheelchairTireSpinner } from '../../loaders/Loaders';
+import FiltersContainer from '../filters/Filters-Container';
+import Paginator from './Paginator';
+import PropertyShortListView from './Property-Short-List-View';
 
 import styles from './All-Properties.module.css';
 
@@ -32,11 +33,13 @@ export default function AllProperties() {
         roomAccessibilityIds: getFilterIds(searchParams, "roomAccessibilityIds"),
     }), [searchParams]);
 
+    const currentPageNumber = parseInt(searchParams.get("page") || "1", 10);
+
     const {
-        data: propertiesData,
-        isDataLoaded: isPropertiesDataLoaded,
+        data: pagedResult,
+        isDataLoaded: isPagedResultLoaded,
         removeDataElement: deletePropertyByIdHandler,
-    } = useBasicGetFetch(() => getAll(constructURLSearchParams(filters)), [], [filters]);
+    } = useBasicGetFetch(() => getAll(constructURLSearchParams(currentPageNumber, filters)), [], [currentPageNumber, filters]);
 
     const {
         data: propertyTypes,
@@ -66,10 +69,18 @@ export default function AllProperties() {
             ? nextParams.set(name, Array.from(current).join(","))
             : nextParams.delete(name);
 
+        nextParams.set("page", "1");
+
         if (areParamsEqual(nextParams, searchParams) === false) {
             setSearchParams(nextParams, { replace: true });
         }
     }, [filters, searchParams, setSearchParams]);
+
+    const updatecurrentPageNumber = useCallback((nextPageNumber) => {
+        const nextParams = new URLSearchParams(searchParams);
+        nextParams.set("page", nextPageNumber.toString());
+        setSearchParams(nextParams, { replace: true });
+    }, [searchParams, setSearchParams]);
 
     return (
         <Container className="mt-5 d-flex">
@@ -81,7 +92,7 @@ export default function AllProperties() {
                 facilities,
                 areFacilitiesLoaded,
                 filters,
-                isPropertiesDataLoaded,
+                isPagedResultLoaded,
                 filterHandler: toggleFilter
             }}
             >
@@ -90,18 +101,29 @@ export default function AllProperties() {
 
             <div className={styles["properties-container"]}>
                 <div className={styles["found"]}>
-                    <span>Found suitable properties: {propertiesData.length}</span>
+                    <span>Found suitable properties: {pagedResult.totalCount}</span>
                 </div>
-                {isPropertiesDataLoaded
-                    ? <PropertiesContext.Provider value={{ deletePropertyByIdHandler }}>
-                        {propertiesData.map(pd =>
-                            <PropertyShortListView
-                                key={pd.id}
-                                {...pd}
-                                isLoggedInUserPropertyDataCreator={id === pd.publisherId}
-                            />
-                        )}
-                    </PropertiesContext.Provider>
+                {isPagedResultLoaded
+                    ? <>
+                        <PropertiesContext.Provider value={{ deletePropertyByIdHandler }}>
+                            {pagedResult.items.map(pd =>
+                                <PropertyShortListView
+                                    key={pd.id}
+                                    {...pd}
+                                    isLoggedInUserPropertyDataCreator={id === pd.publisherId}
+                                />
+                            )}
+                        </PropertiesContext.Provider>
+
+                        <div className="d-flex justify-content-center">
+                        <Paginator
+                            currentPage={currentPageNumber}
+                            totalCount={pagedResult.totalCount}
+                            itemsPerPage={pagedResult.itemsPerPage}
+                            updatecurrentPageNumber={updatecurrentPageNumber}
+                        />
+                        </div>
+                    </>
                     : <WheelchairTireSpinner style={{ minHeight: "calc(100vh - 270px)" }} />
                 }
             </div>

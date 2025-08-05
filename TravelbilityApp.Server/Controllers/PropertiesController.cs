@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 using TravelbilityApp.Core.Contracts;
+using TravelbilityApp.Core.DTOs.Common;
 using TravelbilityApp.Core.DTOs.Property;
 using TravelbilityApp.Infrastructure.Data.Models.Enums;
 using TravelbilityApp.WebAPI.Filters;
@@ -31,7 +32,7 @@ namespace TravelbilityApp.WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<PropertyInAllDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResultDto<PropertyInAllDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll([FromQuery] DTOs.PropertyQueryParamsDto dto)
         {
@@ -43,6 +44,8 @@ namespace TravelbilityApp.WebAPI.Controllers
                 RoomFacilityIds = dto.RoomFacilityIds,
                 PropertyAccessibilityIds = dto.PropertyAccessibilityIds,
                 RoomAccessibilityIds = dto.RoomAccessibilityIds,
+                CurrentPageNumber = dto.CurrentPageNumber,
+                PropertiesPerPage = dto.PropertiesPerPage,
             };
 
             var propertiesData = await propertyService.GetAllAsync(serviceDto);

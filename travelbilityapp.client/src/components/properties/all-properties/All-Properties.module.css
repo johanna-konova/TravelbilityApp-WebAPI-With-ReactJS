@@ -185,3 +185,8 @@ button {
   .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
     display: block;
   }
+
+.active-page {
+    background-color: #7ab730 !important;
+    color: white !important;
+}

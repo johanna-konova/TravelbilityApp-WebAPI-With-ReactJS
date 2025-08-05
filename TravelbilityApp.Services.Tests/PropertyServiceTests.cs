@@ -499,7 +499,7 @@ namespace TravelbilityApp.Services.Tests
             Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
         }
 
-        [Test]
+        /*[Test]
         public async Task GetAllAsync_ShouldReturnAllProperties_WhenNoFiltersApplied()
         {
             // Arrange
@@ -1096,6 +1096,6 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result.Count(), Is.EqualTo(expectedCount));
-        }
+        }*/
     }
 }

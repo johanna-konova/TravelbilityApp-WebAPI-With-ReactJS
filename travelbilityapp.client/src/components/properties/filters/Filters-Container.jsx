@@ -14,7 +14,6 @@ export default function FiltersContainer() {
         areFacilitiesLoaded,
         filters
     } = useFiltersContext();
-    console.log(roomTypes);
 
     return (
         <div className={styles["filters-container"]}>

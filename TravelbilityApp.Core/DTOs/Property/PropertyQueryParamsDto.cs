@@ -8,5 +8,7 @@
         public IEnumerable<int>? RoomFacilityIds { get; init; }
         public IEnumerable<int>? PropertyAccessibilityIds { get; init; }
         public IEnumerable<int>? RoomAccessibilityIds { get; init; }
+        public int CurrentPageNumber { get; init; }
+        public int PropertiesPerPage { get; init; }
     }
 }

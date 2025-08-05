@@ -20,7 +20,7 @@ export default function Filter({
     filter,
     selectedFilterIds,
 }) {
-    const { isPropertiesDataLoaded, filterHandler } = useFiltersContext();
+    const { isPagedResultLoaded, filterHandler } = useFiltersContext();
 
     return (
         <div className={styles["filter-boxes"]}>
@@ -33,11 +33,11 @@ export default function Filter({
                                 type="checkbox"
                                 value={f.id}
                                 checked={selectedFilterIds.includes(f.id)}
-                                disabled={!isPropertiesDataLoaded}
+                                disabled={!isPagedResultLoaded}
                                 onChange={() => filterHandler(filterName, f.id)}
                             />
                             <span className={styles["checkmark"]}></span>
-                            <span style={{ color: isPropertiesDataLoaded ? "#656565" : "lightgray" }}>{f.name}</span>
+                            <span style={{ color: isPagedResultLoaded ? "#656565" : "lightgray" }}>{f.name}</span>
                         </label>
                     </div>
                   )

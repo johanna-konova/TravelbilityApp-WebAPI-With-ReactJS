@@ -12,5 +12,7 @@ namespace TravelbilityApp.WebAPI.DTOs
         public IEnumerable<int>? RoomFacilityIds { get; init; }
         public IEnumerable<int>? PropertyAccessibilityIds { get; init; }
         public IEnumerable<int>? RoomAccessibilityIds { get; init; }
+        public int CurrentPageNumber { get; init; } = 1;
+        public int PropertiesPerPage { get; init; } = 1;
     }
 }

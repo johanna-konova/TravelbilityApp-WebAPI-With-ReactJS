@@ -1,11 +1,12 @@
-﻿using TravelbilityApp.Core.DTOs.Property;
+﻿using TravelbilityApp.Core.DTOs.Common;
+using TravelbilityApp.Core.DTOs.Property;
 using TravelbilityApp.Infrastructure.Data.Models.Enums;
 
 namespace TravelbilityApp.Core.Contracts
 {
     public interface IPropertyService
     {
-        Task<IEnumerable<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto);
+        Task<PagedResultDto<PropertyInAllDto>> GetAllAsync(PropertyQueryParamsDto dto);
         Task<IEnumerable<PropertyInNewestAddedDto>> GetNewestAddedAsync(int count);
         Task<IEnumerable<UserPropertyDto>> GetAllByUserIdAsync(Guid userId);
         Task<PropertyDetailsDto> GetByIdAsync(Guid id, PropertyStatus status = PropertyStatus.Saved);

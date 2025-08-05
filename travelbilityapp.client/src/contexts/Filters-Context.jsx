@@ -8,7 +8,7 @@ export const FiltersContext = createContext({
     facilities: [],
     areFacilitiesLoaded: false,
     filters: {},
-    isPropertiesDataLoaded: false,
+    isPagedResultLoaded: false,
     filterHandler: () => {},
 });
 
