@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Button, Col, Form, Image, Row } from 'react-bootstrap';
 import { useFieldArray } from 'react-hook-form';
 
-
 import styles from './Common-Styles.module.css';
 
 export default function Photos({
@@ -22,11 +21,11 @@ export default function Photos({
         const trimmedCurrentImageUrl = currentImageUrl.trim();
 
         try {
-            /*await imageUrlSchema.validate(trimmedCurrentImageUrl);
+            await imageUrlSchema.validate(trimmedCurrentImageUrl);
 
             if (photoUrls.some(iu => iu.url === trimmedCurrentImageUrl)) {
                 throw new Error("You have already added this photo. Please, upload a new URL.");
-            }*/
+            }
 
             append({ url: trimmedCurrentImageUrl });
             setCurrentImageUrl("");

@@ -78,10 +78,10 @@ export default function AddRoomModal({
             } else {
                 const selectedAccessibilityIds = getValues("step-2.accessibilityIds");
 
-                /*if (selectedAccessibilityIds.length === 0) {
+                if (selectedAccessibilityIds.length === 0) {
                     setError("step-2.accessibilityIds", { message: "Please, select at least 1 Accessibility." });
                     return;
-                }*/
+                }
             }
         }
 
