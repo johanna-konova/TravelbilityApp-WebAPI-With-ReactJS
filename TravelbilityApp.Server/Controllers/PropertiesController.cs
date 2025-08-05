@@ -54,12 +54,12 @@ namespace TravelbilityApp.WebAPI.Controllers
         }
 
         [HttpGet("listed")]
-        [ProducesResponseType(typeof(IEnumerable<UserPropertyDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResultDto<UserPropertyDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllByUserId()
+        public async Task<IActionResult> GetAllByUserId([FromQuery] int currenPageNumber = 1)
         {
-            var propertiesData = await propertyService.GetAllByUserIdAsync(User.Id());
+            var propertiesData = await propertyService.GetAllByUserIdAsync(User.Id(), currenPageNumber);
 
             return Ok(propertiesData);
         }
@@ -107,14 +107,14 @@ namespace TravelbilityApp.WebAPI.Controllers
         }
 
         [HttpGet("admin")]
-        [ProducesResponseType(typeof(IEnumerable<PropertForAdminShortDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResultDto<PropertForAdminShortDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Admin]
-        public async Task<IActionResult> GetAllForAdmin()
+        public async Task<IActionResult> GetAllForAdmin([FromQuery] int currenPageNumber = 1)
         {
-            var propertiesData = await propertyService.GetAllForAdminAsync();
+            var propertiesData = await propertyService.GetAllForAdminAsync(currenPageNumber);
 
             return Ok(propertiesData);
         }

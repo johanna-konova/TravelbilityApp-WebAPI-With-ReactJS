@@ -106,10 +106,20 @@ namespace TravelbilityApp.Core.Services
                 })
                 .ToListAsync();
 
-        public async Task<IEnumerable<UserPropertyDto>> GetAllByUserIdAsync(Guid userId)
-            => await repository
+        public async Task<PagedResultDto<UserPropertyDto>> GetAllByUserIdAsync(
+            Guid userId,
+            int currenPageNumber,
+            int propertiesPerPage)
+        {
+            var propertiesDataAsQuery = repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.PublisherId == userId && p.Status != PropertyStatus.Deleted)
+                .Where(p => p.PublisherId == userId && p.Status != PropertyStatus.Deleted);
+
+            var propertiesCount = await propertiesDataAsQuery.CountAsync();
+
+            var propertiesData = await propertiesDataAsQuery
+                .Skip((currenPageNumber - 1) * propertiesPerPage)
+                .Take(propertiesPerPage)
                 .Select(p => new UserPropertyDto()
                 {
                     Id = p.Id,
@@ -124,6 +134,15 @@ namespace TravelbilityApp.Core.Services
                     PublisherId = p.PublisherId,
                 })
                 .ToListAsync();
+
+            return new PagedResultDto<UserPropertyDto>()
+            {
+                Items = propertiesData,
+                TotalCount = propertiesCount,
+                CurrentPageNumber = currenPageNumber,
+                ItemsPerPage = propertiesPerPage,
+            };
+        }
 
         public async Task<PropertyDetailsDto> GetByIdAsync(Guid id, PropertyStatus status)
             => await repository
@@ -214,10 +233,19 @@ namespace TravelbilityApp.Core.Services
                 })
                 .SingleAsync();
 
-        public async Task<IEnumerable<PropertForAdminShortDto>> GetAllForAdminAsync()
-            => await repository
+        public async Task<PagedResultDto<PropertForAdminShortDto>> GetAllForAdminAsync(
+            int currenPageNumber,
+            int propertiesPerPage)
+        {
+            var propertiesDataAsQuery = repository
                 .AllAsNoTracking<Property>()
-                .Where(p => p.Status != PropertyStatus.Deleted)
+                .Where(p => p.Status != PropertyStatus.Deleted);
+
+            var propertiesCount = await propertiesDataAsQuery.CountAsync();
+
+            var propertiesData = await propertiesDataAsQuery
+                .Skip((currenPageNumber - 1) * propertiesPerPage)
+                .Take(propertiesPerPage)
                 .Select(p => new PropertForAdminShortDto()
                 {
                     Id = p.Id,
@@ -228,6 +256,15 @@ namespace TravelbilityApp.Core.Services
                     Status = p.Status.ToString(),
                 })
                 .ToListAsync();
+
+            return new PagedResultDto<PropertForAdminShortDto>()
+            {
+                Items = propertiesData,
+                TotalCount = propertiesCount,
+                CurrentPageNumber = currenPageNumber,
+                ItemsPerPage = propertiesPerPage,
+            };
+        }
 
         public async Task<bool> IsUserPropertyPublisherAsync(Guid propertyId, Guid userId)
             => await repository
