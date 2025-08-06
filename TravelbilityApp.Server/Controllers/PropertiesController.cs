@@ -87,6 +87,7 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty]
+        [PropertyPublisher]
         public async Task<IActionResult> GetByUserId(Guid id)
         {
             var propertyData = await propertyService.GetByUserIdAsync(id, User.Id());

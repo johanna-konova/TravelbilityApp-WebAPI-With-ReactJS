@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Button, Col, Form, Image, Row } from 'react-bootstrap';
 import { useFieldArray } from 'react-hook-form';
 
+import { imageUrlSchema } from '../../../validations';
+
 import styles from './Common-Styles.module.css';
 
 export default function Photos({
