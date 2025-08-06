@@ -35,9 +35,12 @@ export default function Properties() {
             ? await publish(id)
             : await reject(id);
 
-        updatePropertiesDataHandler(previousPropertiesData =>
-            previousPropertiesData.map(ppd => id === ppd.id ? { ...ppd, status } : ppd
-        ));
+        updatePropertiesDataHandler(previousPagedResult => ({
+            ...previousPagedResult,
+            items: previousPagedResult.items.map(ppd =>
+                id === ppd.id ? { ...ppd, status } : ppd
+            )
+        }));
 
         toast.success(`You have successfully ${status === "Published" ? "approved" : "rejected"} the ${name}.`, { position: "buttom-right" });
         setIsPending(false);

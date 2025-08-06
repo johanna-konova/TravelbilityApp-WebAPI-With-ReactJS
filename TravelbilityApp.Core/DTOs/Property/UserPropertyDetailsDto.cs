@@ -5,5 +5,6 @@
         public string TypeName { get; init; } = null!;
         public string CheckIn { get; init; } = null!;
         public string CheckOut { get; init; } = null!;
+        public string Status { get; init; } = null!;
     }
 }

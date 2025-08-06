@@ -184,6 +184,7 @@ namespace TravelbilityApp.Core.Services
                     CheckOut = p.CheckOut.ToString("HH:ss"),
                     Address = p.Address,
                     Description = p.Description,
+                    Status = p.Status.ToString(),
                     PublisherId = p.PublisherId,
                     CommonFacilityNames = p.Facilities
                         .Where(f => f.RoomId == null &&

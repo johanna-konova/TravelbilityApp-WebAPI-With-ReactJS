@@ -36,6 +36,8 @@ namespace TravelbilityApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll([FromQuery] DTOs.PropertyQueryParamsDto dto)
         {
+            //throw new Exception();
+
             var serviceDto = new PropertyQueryParamsDto()
             {
                 PropertyTypeIds = dto.PropertyTypeIds,
@@ -92,13 +94,13 @@ namespace TravelbilityApp.WebAPI.Controllers
             return Ok(propertyData);
         }
 
-        [AllowAnonymous]
         [HttpGet("{id:guid}/for-edit")]
         [ProducesResponseType(typeof(PropertyForEditDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ExistingProperty(PropertyStatus.Saved)]
+        [PropertyPublisher]
         public async Task<IActionResult> GetForEditById(Guid id)
         {
             var propertyData = await propertyService.GetForEditByIdAsync(id, User.Id(), PropertyStatus.Saved);

@@ -145,7 +145,7 @@ export default function Rooms({ propertyId, inputPropertyStatus }) {
             {pickedRoomInfo && pickedRoomInfo.status === "delete" &&
                 <DeleteRoomModal
                     id={pickedRoomInfo.id}
-                    typeName={roomsData.find(rd => rd.id === pickedRoomInfo.id).roomTypeName}
+                    typeName={roomsData?.find(rd => rd.id === pickedRoomInfo.id)?.roomTypeName}
                     propertyId={propertyId}
                     isModalShowed={true}
                     viewRoomDetailsHandler={() => updatePickedRoomData(pickedRoomInfo.id, "view")}

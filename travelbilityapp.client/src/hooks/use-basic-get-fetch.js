@@ -25,6 +25,8 @@ export function useBasicGetFetch(getDataCallbackFunction, initialData = [], depe
                         ? previousData.map(pd => pd.id === input.id ? input : pd)
                         : [...previousData, input]
             );
+        } else if (typeof input === "function") {
+            setData(previousData => input(previousData))
         }
     };
 
