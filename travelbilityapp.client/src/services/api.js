@@ -1,4 +1,5 @@
 import { getLoggedInUserAccessToken } from "../utils/auth-utils";
+import { triggerError } from "../navigation";
 
 const host = import.meta.env.VITE_API_URL;
 
@@ -20,12 +21,20 @@ export async function requester(method, url, body) {
     }
 
     const request = await fetch(`${host}/${url}`, options);
-    const response = await request.json();
+    debugger
+    let response;
+
+    try {
+        response = await request.json()
+    } catch {
+        response = null;
+    }
 
     if (!request.ok) {
         debugger
         console.log(response);
 
+        triggerError({ status: request.status, errorsData: response });
         throw { status: request.status, errorsData: response };
     }
 

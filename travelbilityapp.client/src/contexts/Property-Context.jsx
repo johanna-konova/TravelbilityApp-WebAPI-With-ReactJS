@@ -1,5 +1,5 @@
 ﻿import { createContext, useContext, useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { getById } from "../services/propertiesService";
 
@@ -19,23 +19,15 @@ export default function PropertyContextProvider({
     const [propertyData, setPropertyData] = useState({});
     const [isPropertyDataLoaded, setIsPropertyDataLoaded] = useState(false);
 
-    const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         if (propertyId !== undefined) {
             (async () => {
-                try {
-                    const propertyData = await getDataCallbackFunction(propertyId);
-                    
-                    setPropertyData(propertyData);
-                    setIsPropertyDataLoaded(true);
-                } catch (error) {
-                    if (error.status === 400 ||
-                        error.status === 404) {
-                        navigate("/404");
-                    }
-                }
+                const propertyData = await getDataCallbackFunction(propertyId);
+
+                setPropertyData(propertyData);
+                setIsPropertyDataLoaded(true);
             }
             )()
         }
