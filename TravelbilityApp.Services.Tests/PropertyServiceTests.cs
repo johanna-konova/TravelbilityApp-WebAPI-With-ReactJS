@@ -124,10 +124,22 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var userId = Guid.NewGuid();
             var otherUserId = Guid.NewGuid();
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
-                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel A", Address = "Address A", StarsCount = 3, Description = "Desc A", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "photo1.jpg" } } },
+                new Property
+                {
+                    Id = Guid.NewGuid(),
+                    PublisherId = userId,
+                    Status = PropertyStatus.Published,
+                    Name = "Hotel A",
+                    Address = "Address A",
+                    StarsCount = 3,
+                    Description = "Desc A",
+                    Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "photo1.jpg" } }
+                },
                 new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Deleted, Name = "Hotel B" },
                 new Property { Id = Guid.NewGuid(), PublisherId = otherUserId, Status = PropertyStatus.Published, Name = "Hotel C" }
             }.BuildMock();
@@ -137,16 +149,58 @@ namespace TravelbilityApp.Services.Tests
                 .Returns(mockedProperties);
 
             // Act
-            var result = await propertyService.GetAllByUserIdAsync(userId);
+            var result = await propertyService.GetAllByUserIdAsync(userId, currentPage, itemsPerPage);
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.Any(p => p.Name == "Hotel A"), Is.True);
-                Assert.That(result.Any(p => p.Name == "Hotel B"), Is.False);
-                Assert.That(result.Any(p => p.Name == "Hotel C"), Is.False);
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.Any(p => p.Name == "Hotel A"), Is.True);
+                Assert.That(result.Items.Any(p => p.Name == "Hotel B"), Is.False);
+                Assert.That(result.Items.Any(p => p.Name == "Hotel C"), Is.False);
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
+        }
+
+        [Test]
+        public async Task GetAllByUserIdAsync_ShouldReturnCorrectPageData()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var currentPage = 2;
+            var itemsPerPage = 2;
+
+            var mockedProperties = new List<Property>
+            {
+                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel 1", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p1.jpg" } } },
+                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel 2", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p2.jpg" } } },
+                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel 3", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p3.jpg" } } },
+                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel 4", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p4.jpg" } } },
+                new Property { Id = Guid.NewGuid(), PublisherId = userId, Status = PropertyStatus.Published, Name = "Hotel 5", Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p5.jpg" } } }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            // Act
+            var result = await propertyService.GetAllByUserIdAsync(userId, currentPage, itemsPerPage);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.TotalCount, Is.EqualTo(5));
+                Assert.That(result.Items.Count(), Is.EqualTo(2));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel 3"));
+                Assert.That(result.Items.Last().Name, Is.EqualTo("Hotel 4"));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -155,6 +209,8 @@ namespace TravelbilityApp.Services.Tests
         {
             // Arrange
             var userId = Guid.NewGuid();
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -167,12 +223,17 @@ namespace TravelbilityApp.Services.Tests
                 .Returns(mockedProperties);
 
             // Act
-            var result = await propertyService.GetAllByUserIdAsync(userId);
+            var result = await propertyService.GetAllByUserIdAsync(userId, currentPage, itemsPerPage);
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count(), Is.EqualTo(0));
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.That(result.Items.Count(), Is.EqualTo(0));
+            Assert.That(result.TotalCount, Is.EqualTo(0));
+            Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+            Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
         }
+
 
         [Test]
         public async Task GetNewestAddedAsync_ShouldReturnLatestProperties_LimitedByCount()
@@ -499,10 +560,13 @@ namespace TravelbilityApp.Services.Tests
             Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
         }
 
-        /*[Test]
+        [Test]
         public async Task GetAllAsync_ShouldReturnAllProperties_WhenNoFiltersApplied()
         {
             // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 10;
+
             var mockedProperties = new List<Property>
             {
                 new Property
@@ -544,7 +608,9 @@ namespace TravelbilityApp.Services.Tests
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage,
             };
 
             // Act
@@ -552,11 +618,15 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(2));
-                Assert.That(result.Any(p => p.Name == "Hotel A"), Is.True);
-                Assert.That(result.Any(p => p.Name == "Hotel B"), Is.True);
+                Assert.That(result.Items.Count(), Is.EqualTo(2));
+                Assert.That(result.Items.Any(p => p.Name == "Hotel A"), Is.True);
+                Assert.That(result.Items.Any(p => p.Name == "Hotel B"), Is.True);
+                Assert.That(result.TotalCount, Is.EqualTo(2));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -564,6 +634,9 @@ namespace TravelbilityApp.Services.Tests
         public async Task GetAllAsync_ShouldReturnOnlyPropertiesMatchingPropertyTypeIds()
         {
             // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 10;
+
             var mockedProperties = new List<Property>
             {
                 new Property
@@ -603,7 +676,9 @@ namespace TravelbilityApp.Services.Tests
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -611,10 +686,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -624,6 +703,8 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var firstRoomTypeId = 10;
             var secondRoomTypeId = 20;
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -671,7 +752,9 @@ namespace TravelbilityApp.Services.Tests
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -679,10 +762,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -692,6 +779,8 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var firstFacilityId = 100;
             var secondFacilityId = 200;
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -737,7 +826,9 @@ namespace TravelbilityApp.Services.Tests
                 RoomTypeIds = null,
                 RoomFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -745,10 +836,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel A"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -758,6 +853,8 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var firstFacilityId = 100;
             var secondFacilityId = 200;
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -818,7 +915,9 @@ namespace TravelbilityApp.Services.Tests
                 RoomTypeIds = null,
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -826,10 +925,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Accessible Hotel A"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Accessible Hotel A"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -839,6 +942,8 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var firstFacilityId = 100;
             var secondFacilityId = 200;
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -899,7 +1004,9 @@ namespace TravelbilityApp.Services.Tests
                 RoomTypeIds = null,
                 PropertyFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -907,10 +1014,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Hotel With All Room Facilities"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel With All Room Facilities"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -920,6 +1031,8 @@ namespace TravelbilityApp.Services.Tests
             // Arrange
             var firstFacilityId = 100;
             var secondFacilityId = 200;
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var mockedProperties = new List<Property>
             {
@@ -983,7 +1096,9 @@ namespace TravelbilityApp.Services.Tests
                 RoomTypeIds = null,
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
-                PropertyAccessibilityIds = null
+                PropertyAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -991,10 +1106,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Count(), Is.EqualTo(1));
-                Assert.That(result.First().Name, Is.EqualTo("Accessible Hotel With All Room Facilities"));
+                Assert.That(result.Items.Count(), Is.EqualTo(1));
+                Assert.That(result.Items.First().Name, Is.EqualTo("Accessible Hotel With All Room Facilities"));
+                Assert.That(result.TotalCount, Is.EqualTo(1));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
             });
         }
 
@@ -1002,6 +1121,9 @@ namespace TravelbilityApp.Services.Tests
         public async Task GetAllAsync_ShouldReturnEmpty_WhenNoPropertiesExist()
         {
             // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 10;
+
             var mockedProperties = new List<Property>().BuildMock();
 
             mockedRepository
@@ -1015,7 +1137,9 @@ namespace TravelbilityApp.Services.Tests
                 PropertyFacilityIds = null,
                 RoomFacilityIds = null,
                 PropertyAccessibilityIds = null,
-                RoomAccessibilityIds = null
+                RoomAccessibilityIds = null,
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
@@ -1023,7 +1147,14 @@ namespace TravelbilityApp.Services.Tests
 
             // Assert
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Count(), Is.EqualTo(0));
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Items.Count(), Is.EqualTo(0));
+                Assert.That(result.TotalCount, Is.EqualTo(0));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
         }
 
         [Test]
@@ -1032,7 +1163,7 @@ namespace TravelbilityApp.Services.Tests
         [TestCase(true, false, true, true, true, true, 0)]   // Липсва RoomType → 0
         [TestCase(true, true, false, true, true, true, 0)]   // Липсва PropertyFacility → 0
         [TestCase(true, true, true, false, true, true, 0)]   // Липсва PropertyAccessibility → 0
-        [TestCase(true, true,true, true,  false, true, 0)]   // Липсва RoomFacility → 0
+        [TestCase(true, true, true, true, false, true, 0)]   // Липсва RoomFacility → 0
         [TestCase(true, true, true, true, true, false, 0)]   // Липсва RoomAccessibility → 0
         [TestCase(false, false, false, false, false, false, 0)] // Всички филтри грешни → 0
         public async Task GetAllAsync_ShouldReturnCorrectResults_WhenMultipleFiltersApplied(
@@ -1046,6 +1177,8 @@ namespace TravelbilityApp.Services.Tests
         {
             // Arrange
             var roomId = Guid.NewGuid();
+            var currentPage = 1;
+            var itemsPerPage = 10;
 
             var propertyTypeId = hasCorrectPropertyType ? 1 : 99;
             var roomTypeId = hasCorrectRoomType ? 10 : 99;
@@ -1088,14 +1221,313 @@ namespace TravelbilityApp.Services.Tests
                 PropertyFacilityIds = new List<int> { propertyFacilityId },
                 PropertyAccessibilityIds = new List<int> { propertyAccessibilityId },
                 RoomFacilityIds = new List<int> { roomFacilityId },
-                RoomAccessibilityIds = new List<int> { roomAccessibilityId }
+                RoomAccessibilityIds = new List<int> { roomAccessibilityId },
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
             };
 
             // Act
             var result = await propertyService.GetAllAsync(queryDto);
 
             // Assert
-            Assert.That(result.Count(), Is.EqualTo(expectedCount));
-        }*/
+            Assert.That(result.Items.Count(), Is.EqualTo(expectedCount));
+            Assert.That(result.TotalCount, Is.EqualTo(expectedCount));
+            Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+            Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+        }
+
+        [Test]
+        public async Task GetAllAsync_ShouldReturnCorrectPageData_WhenPagingApplied()
+        {
+            // Arrange
+            var currentPage = 2;
+            var itemsPerPage = 2;
+
+            var mockedProperties = new List<Property>
+            {
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 1", Address = "Addr 1", StarsCount = 3, Status = PropertyStatus.Published, Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p1.jpg" } }, Facilities = new List<PropertyFacility>() },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 2", Address = "Addr 2", StarsCount = 4, Status = PropertyStatus.Published, Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p2.jpg" } }, Facilities = new List<PropertyFacility>() },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 3", Address = "Addr 3", StarsCount = 5, Status = PropertyStatus.Published, Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p3.jpg" } }, Facilities = new List<PropertyFacility>() },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 4", Address = "Addr 4", StarsCount = 3, Status = PropertyStatus.Published, Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p4.jpg" } }, Facilities = new List<PropertyFacility>() },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 5", Address = "Addr 5", StarsCount = 2, Status = PropertyStatus.Published, Photos = new List<PropertyPhoto>{ new PropertyPhoto { Url = "p5.jpg" } }, Facilities = new List<PropertyFacility>() }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            var queryDto = new PropertyQueryParamsDto
+            {
+                CurrentPageNumber = currentPage,
+                PropertiesPerPage = itemsPerPage
+            };
+
+            // Act
+            var result = await propertyService.GetAllAsync(queryDto);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.TotalCount, Is.EqualTo(5));                 // общо 5 имота
+                Assert.That(result.Items.Count(), Is.EqualTo(2));              // втора страница с по 2 имота
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel 3")); // 3-ти и 4-ти имот
+                Assert.That(result.Items.Last().Name, Is.EqualTo("Hotel 4"));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
+        }
+
+        [Test]
+        public async Task GetAllForAdminAsync_ShouldReturnAllNonDeletedProperties()
+        {
+            // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 10;
+
+            var mockedProperties = new List<Property>
+            {
+                new Property
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hotel A",
+                    Address = "Center",
+                    Status = PropertyStatus.Published,
+                    PropertyType = new PropertyType { Name = "Type A" },
+                    Publisher = new ApplicationUser { Email = "publisherA@example.com" }
+                },
+                new Property
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hotel B",
+                    Address = "Beach",
+                    Status = PropertyStatus.Saved,
+                    PropertyType = new PropertyType { Name = "Type B" },
+                    Publisher = new ApplicationUser { Email = "publisherB@example.com" }
+                },
+                new Property
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hotel C",
+                    Address = "Mountain",
+                    Status = PropertyStatus.Deleted,  // Този трябва да се филтрира
+                    PropertyType = new PropertyType { Name = "Type C" },
+                    Publisher = new ApplicationUser { Email = "publisherC@example.com" }
+                }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            // Act
+            var result = await propertyService.GetAllForAdminAsync(currentPage, itemsPerPage);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Items.Count(), Is.EqualTo(2)); // Deleted е изключен
+                Assert.That(result.Items.Any(p => p.Name == "Hotel A"), Is.True);
+                Assert.That(result.Items.Any(p => p.Name == "Hotel B"), Is.True);
+                Assert.That(result.Items.Any(p => p.Name == "Hotel C"), Is.False);
+                Assert.That(result.TotalCount, Is.EqualTo(2));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
+        }
+
+        [Test]
+        public async Task GetAllForAdminAsync_ShouldReturnCorrectPageData()
+        {
+            // Arrange
+            var currentPage = 2;
+            var itemsPerPage = 2;
+
+            var mockedProperties = new List<Property>
+            {
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 1", Status = PropertyStatus.Published, PropertyType = new PropertyType { Name = "Type 1" }, Publisher = new ApplicationUser { Email = "p1@mail.com" } },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 2", Status = PropertyStatus.Saved, PropertyType = new PropertyType { Name = "Type 2" }, Publisher = new ApplicationUser { Email = "p2@mail.com" } },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 3", Status = PropertyStatus.Pending, PropertyType = new PropertyType { Name = "Type 3" }, Publisher = new ApplicationUser { Email = "p3@mail.com" } },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 4", Status = PropertyStatus.Rejected, PropertyType = new PropertyType { Name = "Type 4" }, Publisher = new ApplicationUser { Email = "p4@mail.com" } },
+                new Property { Id = Guid.NewGuid(), Name = "Hotel 5", Status = PropertyStatus.Published, PropertyType = new PropertyType { Name = "Type 5" }, Publisher = new ApplicationUser { Email = "p5@mail.com" } }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            // Act
+            var result = await propertyService.GetAllForAdminAsync(currentPage, itemsPerPage);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.TotalCount, Is.EqualTo(5));                 // Всички без Deleted
+                Assert.That(result.Items.Count(), Is.EqualTo(2));              // Втора страница с 2 елемента
+                Assert.That(result.Items.First().Name, Is.EqualTo("Hotel 3")); // Очакваме 3-ти и 4-ти елемент
+                Assert.That(result.Items.Last().Name, Is.EqualTo("Hotel 4"));
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
+        }
+
+        [Test]
+        public async Task GetAllForAdminAsync_ShouldReturnEmpty_WhenAllPropertiesAreDeleted()
+        {
+            // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 5;
+
+            var mockedProperties = new List<Property>
+            {
+                new Property { Id = Guid.NewGuid(), Name = "Deleted Hotel 1", Status = PropertyStatus.Deleted, PropertyType = new PropertyType { Name = "Type X" }, Publisher = new ApplicationUser { Email = "d1@mail.com" } },
+                new Property { Id = Guid.NewGuid(), Name = "Deleted Hotel 2", Status = PropertyStatus.Deleted, PropertyType = new PropertyType { Name = "Type Y" }, Publisher = new ApplicationUser { Email = "d2@mail.com" } }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            // Act
+            var result = await propertyService.GetAllForAdminAsync(currentPage, itemsPerPage);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Items.Count(), Is.EqualTo(0));  // Няма резултати
+                Assert.That(result.TotalCount, Is.EqualTo(0));     // Броят също е 0
+                Assert.That(result.CurrentPageNumber, Is.EqualTo(currentPage));
+                Assert.That(result.ItemsPerPage, Is.EqualTo(itemsPerPage));
+            });
+        }
+
+        [Test]
+        public async Task GetAllForAdminAsync_ShouldMapNavigationPropertiesCorrectly()
+        {
+            // Arrange
+            var currentPage = 1;
+            var itemsPerPage = 5;
+
+            var propertyId = Guid.NewGuid();
+
+            var mockedProperties = new List<Property>
+            {
+                new Property
+                {
+                    Id = propertyId,
+                    Name = "Mapped Hotel",
+                    Address = "Some Address",
+                    Status = PropertyStatus.Published,
+                    PropertyType = new PropertyType { Name = "Resort" },
+                    Publisher = new ApplicationUser { Email = "publisher@example.com" }
+                }
+            }.BuildMock();
+
+            mockedRepository
+                .Setup(r => r.AllAsNoTracking<Property>())
+                .Returns(mockedProperties);
+
+            // Act
+            var result = await propertyService.GetAllForAdminAsync(currentPage, itemsPerPage);
+
+            // Assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Items, Is.Not.Null);
+            var item = result.Items.First();
+            Assert.Multiple(() =>
+            {
+                Assert.That(item.Id, Is.EqualTo(propertyId));
+                Assert.That(item.Name, Is.EqualTo("Mapped Hotel"));
+                Assert.That(item.Address, Is.EqualTo("Some Address"));
+                Assert.That(item.TypeName, Is.EqualTo("Resort"));               // Навигационно свойство
+                Assert.That(item.Publisher, Is.EqualTo("publisher@example.com")); // Навигационно свойство
+                Assert.That(item.Status, Is.EqualTo(PropertyStatus.Published.ToString()));
+            });
+        }
+
+        [Test]
+        [TestCase(PropertyStatus.Saved)]
+        [TestCase(PropertyStatus.Pending)]
+        [TestCase(PropertyStatus.Published)]
+        [TestCase(PropertyStatus.Rejected)]
+        [TestCase(PropertyStatus.Deleted)]
+        public async Task ChangePropertyStatus_ShouldUpdateStatus_WhenPropertyExistsAndIsNotDeleted(PropertyStatus newStatus)
+        {
+            // Arrange
+            var propertyId = Guid.NewGuid();
+
+            var existingProperty = new Property
+            {
+                Id = propertyId,
+                Status = PropertyStatus.Saved // текущият статус е Saved
+            };
+
+            mockedRepository
+                .Setup(r => r.GetByIdAsync<Property>(propertyId))
+                .ReturnsAsync(existingProperty);
+
+            // Act
+            await propertyService.ChangePropertyStatus(propertyId, newStatus);
+
+            // Assert
+            if (newStatus != PropertyStatus.Saved) // ако новият е различен
+            {
+                Assert.That(existingProperty.Status, Is.EqualTo(newStatus));
+                mockedRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+            }
+            else
+            {
+                // ако е същият, не трябва да се вика SaveChangesAsync
+                mockedRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+            }
+        }
+
+        [Test]
+        public async Task ChangePropertyStatus_ShouldDoNothing_WhenPropertyIsDeleted()
+        {
+            // Arrange
+            var propertyId = Guid.NewGuid();
+            
+            var existingProperty = new Property
+            {
+                Id = propertyId,
+                Status = PropertyStatus.Deleted
+            };
+
+            mockedRepository
+                .Setup(r => r.GetByIdAsync<Property>(propertyId))
+                .ReturnsAsync(existingProperty);
+
+            // Act
+            await propertyService.ChangePropertyStatus(propertyId, PropertyStatus.Published);
+
+            // Assert
+            Assert.That(existingProperty.Status, Is.EqualTo(PropertyStatus.Deleted)); // без промяна
+            mockedRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        }
+
+        [Test]
+        public async Task ChangePropertyStatus_ShouldDoNothing_WhenPropertyDoesNotExist()
+        {
+            // Arrange
+            var propertyId = Guid.NewGuid();
+
+            mockedRepository
+                .Setup(r => r.GetByIdAsync<Property>(propertyId))
+                .ReturnsAsync((Property)null!);
+
+            // Act
+            await propertyService.ChangePropertyStatus(propertyId, PropertyStatus.Published);
+
+            // Assert
+            mockedRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        }
     }
 }
